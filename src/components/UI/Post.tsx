@@ -6,7 +6,7 @@ import PostImages from "./PostComponents/PostImages";
 import PostLikes from "./PostComponents/PostLikes";
 const Post = () => {
   return (
-    <div className="w-[630px] pb-4 border-b border-b-slate-300 ">
+    <div className="w-full pb-4 border-b border-b-slate-300 ">
       <PostHeader />
       <PostImages />
       <PostAction />

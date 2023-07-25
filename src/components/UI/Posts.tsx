@@ -6,7 +6,7 @@ interface PostsProps {
 
 const Posts: FC<PostsProps> = ({ posts }) => {
   return (
-    <div className="flex flex-col gap-5">
+    <div className="w-[470px] mx-auto flex flex-col gap-5">
       {posts.map((post) => (
         <Post key={post.id} />
       ))}
