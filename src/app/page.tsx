@@ -1,9 +1,11 @@
-import Post from "@/components/UI/Post";
+import Posts from "@/components/UI/Posts";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const posts = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
   return (
     <div>
-      <Post />
+      <Posts posts={posts} />
     </div>
   );
 }

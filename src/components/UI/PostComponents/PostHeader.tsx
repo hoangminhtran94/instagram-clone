@@ -1,7 +1,7 @@
 import Image from "next/image";
 const PostHeader = () => {
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex justify-between items-center px-2 py-3">
       <div className="flex items-center gap-2">
         <div>
           <Image
