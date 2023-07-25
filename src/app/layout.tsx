@@ -17,9 +17,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`flex ${inter.className}`}>
+      <body
+        className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
+      >
         <SideBar />
-        <main className="container mx-auto">{children}</main>
+        <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
+          {children}
+        </main>
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import SideBarDropdown from "./SideBarDropdown";
 
 const SideBar = () => {
   return (
-    <div className="w-[350px] border-r border-slate-300 flex flex-col p-5 h-screen">
+    <div className="w-[350px] fixed left-0 top-0 border-r border-slate-300 flex flex-col p-5 h-screen">
       <Logo />
       <div className="flex flex-col gap-2 flex-1">
         <SideBarItem href="/">Home</SideBarItem>
