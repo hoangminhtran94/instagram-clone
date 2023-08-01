@@ -1,4 +1,4 @@
-import SideBar from "@/components/UI/Sidebar";
+import SideBar from "@/components/UI/SideBarComponents/Sidebar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -24,6 +24,7 @@ export default function RootLayout({
         <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
           {children}
         </main>
+        <div id="modal-hook"></div>
       </body>
     </html>
   );
