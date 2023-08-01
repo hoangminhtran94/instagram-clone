@@ -2,10 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .sidebar-item svg {
+    @apply scale-110 transition-all;
+  }
+}
+
 a {
   text-decoration: none;
 }
 
 li {
   list-style: none;
+}
+
+.home.active > svg > path {
+  fill: black !important;
+}
+
+.search.active > svg > path,
+.search.active > svg > line {
+  stroke-width: 3 !important;
+}
+
+.notifications.active > svg > path {
+  fill: black !important;
 }

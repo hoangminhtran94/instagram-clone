@@ -15,7 +15,7 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
   const [isHovering, setIsHovering] = useState(false);
   return (
     <div
-      className={`relative pb-[100%] ${containerClass}`}
+      className={`relative pb-[100%] cursor-pointer ${containerClass}`}
       onMouseEnter={() => {
         setIsHovering(true);
       }}

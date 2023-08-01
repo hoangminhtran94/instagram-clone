@@ -1,8 +1,16 @@
+import Image from "next/image";
+import Link from "next/link";
 const Logo = () => {
   return (
-    <div className="text-xl px-4 py-10 font-bold cursor-pointer">
-      Instaclone
-    </div>
+    <Link className=" px-4 py-10 w-full h-fit cursor-pointer" href={"/"}>
+      <Image
+        src={"/images/fontbolt.png"}
+        alt="logo"
+        width={600}
+        height={130}
+        className="object-cover w-1/2 h-full"
+      />
+    </Link>
   );
 };
 
