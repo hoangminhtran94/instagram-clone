@@ -21,7 +21,6 @@ const SideBar = () => {
   const [viewNotifications, setViewNotifications] = useState(false);
   const path = usePathname();
   const params = useParams();
-  console.log(params);
   const secondaryMode = searching || viewNotifications;
 
   const toggleFirstMode = () => {

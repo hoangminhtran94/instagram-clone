@@ -28,8 +28,17 @@
   .btn-primary-light {
     @apply text-white justify-center bg-[#1da1f2] hover:bg-[#1da1f2]/90 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center;
   }
+  .btn-grey {
+    @apply text-gray-900 bg-gray-100 hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-1.5 text-center inline-flex items-center font-semibold dark:focus:ring-gray-500;
+  }
   .input-search {
     @apply bg-gray-100 placeholder:font-thin outline-none text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white;
+  }
+  .post-tab {
+    @apply py-4 text-xs flex gap-2 items-center opacity-60;
+  }
+  .post-tab.active {
+    @apply opacity-100 relative before:top-0 before:w-[80%] before:left-[10%] before:content-[""] before:absolute before:h-[1px]  before:bg-black;
   }
 }
 
