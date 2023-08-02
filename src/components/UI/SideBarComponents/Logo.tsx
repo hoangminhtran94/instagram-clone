@@ -4,7 +4,7 @@ import { FC } from "react";
 const Logo: FC<{ secondaryMode: boolean }> = ({ secondaryMode }) => {
   return (
     <Link
-      className={`px-4 py-10 ${
+      className={`px-4 z-10 py-10 ${
         !secondaryMode ? "w-full" : "w-fit"
       }  cursor-pointer h-[120px]  `}
       href={"/"}

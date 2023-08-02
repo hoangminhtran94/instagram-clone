@@ -1,5 +1,6 @@
 "use client";
 import SideBarItem from "./SideBarItem";
+import { AnimatePresence, motion } from "framer-motion";
 import Logo from "./Logo";
 import SideBarDropdown from "./SideBarDropdown";
 import CreatePostButton from "./CreatePostButton";
@@ -26,11 +27,11 @@ const SideBar = () => {
     <div
       className={` ${
         !secondaryMode ? "w-[350px]" : "w-fit items-center"
-      }  fixed left-0 top-0 border-r border-slate-300 flex flex-col p-5 h-screen`}
+      }  fixed box-border left-0 top-0 border-r border-slate-300 flex flex-col p-5 h-screen`}
     >
       <Logo secondaryMode={secondaryMode} />
       <div
-        className={`flex flex-col gap-2 flex-1 ${
+        className={`flex z-5 flex-col gap-2 flex-1 ${
           secondaryMode && "items-center"
         }`}
       >
@@ -88,6 +89,31 @@ const SideBar = () => {
         </SideBarItem>
       </div>
       <SideBarDropdown secondaryMode={secondaryMode} />
+      <AnimatePresence mode="sync">
+        {searching && (
+          <motion.div
+            key={"search"}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -500, opacity: 0, z: -20 }}
+            transition={{ duration: 0.3 }}
+            className="-z-10 w-[400px] h-full top-0 absolute left-full bg-white shadow-right-lg border-l "
+          ></motion.div>
+        )}
+        {viewNotifications && (
+          <motion.div
+            key={"view"}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -500, opacity: 0, z: -20 }}
+            transition={{ duration: 0.3 }}
+            className="-z-10 w-[500px] h-full top-0 absolute left-full bg-white shadow-right-lg border-l "
+          ></motion.div>
+        )}
+      </AnimatePresence>
+      {/* <AnimatePresence mode="wait">
+        
+      </AnimatePresence> */}
     </div>
   );
 };
