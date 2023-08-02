@@ -1,16 +1,15 @@
-"use client";
 import Link from "next/link";
-
-import { usePathname } from "next/navigation";
 import SideBarIcon from "./SideBarIcon";
 import type { FC, ReactNode, MouseEventHandler } from "react";
 import SideBarImage from "./SidebarImage";
 interface SideBarItemProps {
   href?: string;
+  btnActive?: boolean;
   className?: string;
   children: ReactNode;
   icon?: ReactNode;
   activeIcon?: ReactNode;
+  path?: string;
   variant?:
     | "home"
     | "search"
@@ -31,16 +30,25 @@ const SideBarItem: FC<SideBarItemProps> = ({
   variant,
   activeIcon,
   onClick,
+  btnActive = false,
   image,
+  path,
 }) => {
-  const path = usePathname();
   if (!href) {
     return (
       <button
         className={`p-4 hover:sidebar-item hover:bg-slate-100 rounded-lg transition-all text-base cursor-pointer flex gap-3 ${className}`}
         onClick={onClick}
       >
-        {icon && <SideBarIcon icon={icon} />}
+        {icon && activeIcon && (
+          <SideBarIcon
+            active={btnActive}
+            icon={btnActive ? activeIcon : icon}
+          />
+        )}
+        {icon && !activeIcon && (
+          <SideBarIcon active={btnActive} icon={icon} className={variant} />
+        )}
 
         {children}
       </button>
@@ -49,6 +57,7 @@ const SideBarItem: FC<SideBarItemProps> = ({
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`p-4 ${
         path === href && "font-bold"
       } hover:bg-slate-100 hover:sidebar-item rounded-lg transition-all text-base cursor-pointer flex items-center gap-3 ${className}`}

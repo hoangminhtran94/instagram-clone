@@ -10,7 +10,15 @@ const SideBarIcon: FC<SideBarIconProps> = ({
   icon,
   className = "",
 }) => {
-  return <div className={`${className} ${active ? "active" : ""}`}>{icon}</div>;
+  return (
+    <div
+      className={`${className} ${
+        active ? "active" : ""
+      } w-8 flex justify-center`}
+    >
+      {icon}
+    </div>
+  );
 };
 
 export default SideBarIcon;
