@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-5xl font-extrabold dark:text-white;
+  }
+  h2 {
+    @apply text-4xl font-bold dark:text-white;
+  }
+  h3 {
+    @apply text-3xl font-bold dark:text-white;
+  }
+  h4 {
+    @apply text-2xl font-bold dark:text-white;
+  }
+  h5 {
+    @apply text-xl font-bold dark:text-white;
+  }
+}
+
 @layer components {
   .sidebar-item svg {
     @apply scale-110 transition-all;
@@ -9,6 +27,9 @@
 
   .btn-primary-light {
     @apply text-white justify-center bg-[#1da1f2] hover:bg-[#1da1f2]/90 focus:ring-4 focus:outline-none focus:ring-[#1da1f2]/50 font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center;
+  }
+  .input-search {
+    @apply bg-gray-100 placeholder:font-thin outline-none text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white;
   }
 }
 
