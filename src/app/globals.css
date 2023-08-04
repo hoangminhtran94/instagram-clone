@@ -56,7 +56,7 @@ li {
 
 .search.active > svg > path,
 .search.active > svg > line {
-  stroke-width: 3 !important;
+  strokewidth: 3 !important;
 }
 
 .notifications.active > svg > path {
