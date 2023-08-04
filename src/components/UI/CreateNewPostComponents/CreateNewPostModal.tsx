@@ -5,6 +5,8 @@ interface CreateNewPostModalProps {
   onCancel: MouseEventHandler;
 }
 const CreateNewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
+  const sendPost = async () => {};
+
   return (
     <Modal
       className="rounded-xl"

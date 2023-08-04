@@ -65,7 +65,7 @@ const ExploreButton: FC<ExploreButtonProps> = ({
       href="/explore"
       path={secondaryMode ? "#" : path}
     >
-      {secondaryMode ? "" : "Home"}
+      {secondaryMode ? "" : "Explore"}
     </SideBarItem>
   );
 };

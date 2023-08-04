@@ -1,0 +1,205 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  content        String
+  owner          User        @relation(fields: [ownerId], references: [id])
+  ownerId        String      @db.ObjectId
+  images         PostImage[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  likes          Like[]
+  comments       Comment[]
+  shared         Shared[]
+  video          Video?
+  tags           Tag[]
+  hideLikeView   Boolean     @default(false)
+  turnOffComment Boolean     @default(false)
+  location       Location?   @relation(fields: [locationId], references: [id])
+  saved          Saved[]     @ignore
+  locationId     String?     @db.ObjectId
+  views          View[]
+}
+
+model Location {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  lat         Float
+  long        Float
+  description String
+  Post        Post[]
+}
+
+model ReelPost {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  owner          User      @relation(fields: [ownerId], references: [id])
+  ownerId        String    @db.ObjectId
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  likes          Like[]
+  comments       Comment[]
+  shared         Shared[]
+  video          Video     @relation(fields: [videoId], references: [id])
+  videoId        String    @unique @db.ObjectId
+  saved          Saved[]   @ignore
+  views          View[]
+  hideLikeView   Boolean   @default(false)
+  turnOffComment Boolean   @default(false)
+}
+
+model User {
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String
+  username      String
+  fullName      String
+  password      String
+  postImages    PostImage[]
+  profileImages ProfileImage[]
+  videos        Video[]
+  posts         Post[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  likes         Like[]
+  comments      Comment[]
+  shared        Shared[]
+  replies       Reply[]
+  saved         Saved[]
+  isAdmin       Boolean        @default(false)
+  taggedPosts   Tag[]          @relation(name: "tagged-post")
+  yourTags      Tag[]          @relation(name: "tagging-post")
+  reelPosts     ReelPost[]
+  views         View[]
+  followers     Follow[]       @relation(name: "follower-relation")
+  following     Follow[]       @relation(name: "following-relation")
+}
+
+model Follow {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  following   User   @relation(name: "following-relation", fields: [followingId], references: [id])
+  follower    User   @relation(name: "follower-relation", fields: [followerId], references: [id])
+  followerId  String @db.ObjectId
+  followingId String @db.ObjectId
+}
+
+model ProfileImage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  alt       String
+  src       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  owner     User     @relation(fields: [ownerId], references: [id])
+  ownerId   String   @db.ObjectId
+}
+
+model PostImage {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  alt         String
+  src         String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  post        Post     @relation(fields: [postId], references: [id])
+  postId      String   @db.ObjectId
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String   @db.ObjectId
+}
+
+model Video {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  alt         String
+  src         String
+  description String
+  owner       User?     @relation(fields: [ownerId], references: [id])
+  ownerId     String?   @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  post        Post?     @relation(fields: [postId], references: [id])
+  postId      String?   @unique @db.ObjectId
+  reelPost    ReelPost?
+}
+
+model Like {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  post       Post?     @relation(fields: [postId], references: [id])
+  owner      User      @relation(fields: [ownerId], references: [id])
+  postId     String?   @db.ObjectId
+  ownerId    String    @db.ObjectId
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
+  reelPostId String?   @db.ObjectId
+}
+
+model Comment {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  post       Post?     @relation(fields: [postId], references: [id])
+  owner      User      @relation(fields: [ownerId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  postId     String?   @db.ObjectId
+  ownerId    String    @db.ObjectId
+  replies    Reply[]
+  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
+  reelPostId String?   @db.ObjectId
+}
+
+model Shared {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  post       Post      @relation(fields: [postId], references: [id])
+  owner      User      @relation(fields: [ownerId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  postId     String    @db.ObjectId
+  ownerId    String    @db.ObjectId
+  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
+  reelPostId String?   @db.ObjectId
+}
+
+model Reply {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ownerId   String   @db.ObjectId
+  commentId String   @db.ObjectId
+}
+
+model Saved {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  owner      User      @relation(fields: [ownerId], references: [id])
+  ownerId    String    @db.ObjectId
+  posts      Post?     @relation(fields: [postId], references: [id])
+  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
+  postId     String?   @db.ObjectId
+  reelPostId String?   @db.ObjectId
+}
+
+model Tag {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  post         Post   @relation(fields: [postId], references: [id])
+  taggedUser   User   @relation(name: "tagged-post", fields: [taggedUserId], references: [id])
+  owner        User   @relation(name: "tagging-post", fields: [ownerId], references: [id])
+  ownerId      String @db.ObjectId
+  taggedUserId String @db.ObjectId
+  postId       String @db.ObjectId
+}
+
+model View {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  post       Post?     @relation(fields: [postId], references: [id])
+  owner      User      @relation(fields: [ownerId], references: [id])
+  postId     String?   @db.ObjectId
+  ownerId    String    @db.ObjectId
+  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
+  reelPostId String?   @db.ObjectId
+}
