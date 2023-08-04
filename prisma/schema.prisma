@@ -32,11 +32,11 @@ model Post {
 }
 
 model Location {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  lat         Float
-  long        Float
-  description String
-  Post        Post[]
+  id                  String @id @default(auto()) @map("_id") @db.ObjectId
+  lat                 Float
+  long                Float
+  locationDescription String
+  posts               Post[]
 }
 
 model ReelPost {
@@ -101,16 +101,15 @@ model ProfileImage {
 }
 
 model PostImage {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  alt         String
-  src         String
-  description String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  post        Post     @relation(fields: [postId], references: [id])
-  postId      String   @db.ObjectId
-  owner       User     @relation(fields: [ownerId], references: [id])
-  ownerId     String   @db.ObjectId
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  src              String
+  imageDescription String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  post             Post     @relation(fields: [postId], references: [id])
+  postId           String   @db.ObjectId
+  owner            User     @relation(fields: [ownerId], references: [id])
+  ownerId          String   @db.ObjectId
 }
 
 model Video {
