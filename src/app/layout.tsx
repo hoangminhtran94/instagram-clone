@@ -25,18 +25,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
-      >
-        <AuthContextProvider>
-          <SideBar />
-          <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
-            {children}
-          </main>
-
+      <AuthContextProvider>
+        <body
+          className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
+        >
+          {children}
           <div id="modal-hook"></div>
-        </AuthContextProvider>
-      </body>
+        </body>
+      </AuthContextProvider>
     </html>
   );
 }
