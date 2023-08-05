@@ -1,6 +1,7 @@
-import SideBar from "@/components/UI/SideBarComponents/Sidebar";
+import { verifyToken } from "@/lib/verifytoken";
 
-const NoSideBarLayout = ({ children }: { children: React.ReactNode }) => {
+const NoSideBarLayout = async ({ children }: { children: React.ReactNode }) => {
+  await verifyToken({ redirectIf: "authenticated", path: "/" });
   return (
     <>
       <main className="w-screen min-h-screen flex items-center justify-center">

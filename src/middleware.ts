@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { redirect } from "next/navigation";
 export const middleware = async (req: NextRequest) => {
   const jwt_token = req.cookies.get("jwt_token");
   const token = jwt_token?.value;
@@ -12,16 +11,19 @@ export const middleware = async (req: NextRequest) => {
     const data = await response.json();
     const user = data?.user;
     if (!user) {
-      return NextResponse.redirect(new URL("/accounts/login", req.url));
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 403 }
+      );
     }
     (req as any).user = user;
   } catch (error) {
-    return NextResponse.redirect(new URL("/accounts/login", req.url));
+    return NextResponse.json({ messages: "Authentication failed" });
   }
 
   return NextResponse.next();
 };
 
 export const config = {
-  matcher: ["/api/post", "/"],
+  matcher: ["/api/post"],
 };

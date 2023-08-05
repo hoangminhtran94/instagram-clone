@@ -7,18 +7,17 @@ import { useAuthContext } from "@/context/authContext";
 
 const Login = () => {
   const authContext = useAuthContext();
-  const signup = async (e: FormEvent) => {
+  const login = async (e: FormEvent) => {
     e.preventDefault();
     const formdata = new FormData(e.target as HTMLFormElement);
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch("/api/auth/login", {
         body: formdata,
         method: "POST",
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
         authContext.login(data.user, data.token);
       }
     } catch (error) {
@@ -38,9 +37,9 @@ const Login = () => {
         </div>
 
         <div>
-          <form className="flex flex-col gap-2" onSubmit={signup}>
+          <form className="flex flex-col gap-2" onSubmit={login}>
             <FloatingInput
-              name="email"
+              name="emailOrUsername"
               label="Phone number, username or email"
             />
             <FloatingInput name="password" label="Password" type="password" />

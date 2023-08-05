@@ -1,8 +1,9 @@
-import SideBar from "@/components/UI/SideBarComponents/Sidebar";
+
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthContextProvider } from "@/context/authContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

@@ -1,6 +1,11 @@
 import SideBar from "@/components/UI/SideBarComponents/Sidebar";
-
-const WithSideBarLayout = ({ children }: { children: React.ReactNode }) => {
+import { verifyToken } from "@/lib/verifytoken";
+const WithSideBarLayout = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  await verifyToken({ redirectIf: "unauthenticated", path: "/accounts/login" });
   return (
     <>
       <SideBar />
