@@ -1,8 +1,30 @@
-import { FC } from "react";
+"use client";
+import { FC, FormEvent } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import FloatingInput from "@/components/UI/InputComponents/FloatingInput";
+import { useAuthContext } from "@/context/authContext";
+
 const EmailSignup = () => {
+  const authContext = useAuthContext();
+  const signup = async (e: FormEvent) => {
+    e.preventDefault();
+    const formdata = new FormData(e.target as HTMLFormElement);
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        body: formdata,
+        method: "POST",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        authContext.login(data.user, data.token);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="flex flex-col w-[350px] gap-5">
       <div className=" p-10 border flex flex-col gap-3 ">
@@ -26,11 +48,7 @@ const EmailSignup = () => {
           <div className="h-[1px] bg-slate-400 flex-1"></div>
         </div>
         <div>
-          <form
-            className="flex flex-col gap-2"
-            action="/api/auth/register"
-            method="POST"
-          >
+          <form className="flex flex-col gap-2" onSubmit={signup}>
             <FloatingInput name="email" label="Mobile Number or Email" />
             <FloatingInput name="fullName" label="Full Name" />
             <FloatingInput name="username" label="Username" />

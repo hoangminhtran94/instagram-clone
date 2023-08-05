@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 
 export const POST = async (req: NextRequest) => {
   const formData = await req.formData();
-  console.log(formData);
   const data = Object.fromEntries(formData) as unknown as User;
   const hashedPassword = bcrypt.hashSync(data.password, 8);
   const secret = process.env.JWT_SECRET;
@@ -28,9 +27,9 @@ export const POST = async (req: NextRequest) => {
       },
     });
     const token = jwt.sign({ userId: user.id }, secret, { expiresIn: "12h" });
+
     return NextResponse.json({ user, token }, { status: 201 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       { message: "Something wrong happened" },
       { status: 500 }
