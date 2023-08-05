@@ -1,24 +1,21 @@
-"use server";
 import { prisma } from "@/lib/prisma";
-import { checkAuth } from "@/lib/auth.middleware";
-import { createEdgeRouter } from "next-connect";
-import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
-import { HttpError } from "http-errors";
+import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { Post, Location, User, PostImage } from "@prisma/client";
-const router = createEdgeRouter<NextRequest, { params?: unknown }>();
 
 interface ImagesData {
   imageDescription: string;
   filename: string;
   src: string;
 }
-router.use(checkAuth);
-router.post(async (req) => {
+
+export async function POST(req: NextRequest) {
   const formdata = await req.formData();
+
   const files: File[] | null = formdata.getAll(
     "postImages"
   ) as unknown as File[];
+
   let imageData: ImagesData[] = formdata.getAll(
     "postImageData"
   ) as unknown as ImagesData[];
@@ -35,7 +32,7 @@ router.post(async (req) => {
         imageData[index] = { ...currentImageData, src: path };
       });
     } catch (error) {
-      console.log(error);
+      return NextResponse.json({ message: "Error" }, { status: 403 });
     }
   }
   const data = Object.fromEntries(formdata) as unknown as Post &
@@ -86,19 +83,4 @@ router.post(async (req) => {
   } catch (error) {
     return NextResponse.json({ message: "Error" }, { status: 400 });
   }
-});
-
-export async function GET(request: NextRequest, ctx: { params?: unknown }) {
-  return router.run(request, ctx);
 }
-
-export async function POST(request: NextRequest, ctx: { params?: unknown }) {
-  return router.run(request, ctx);
-}
-
-export default router.handler({
-  onError(err, req, ctx) {
-    const error = err as HttpError;
-    NextResponse.json({ message: error });
-  },
-});

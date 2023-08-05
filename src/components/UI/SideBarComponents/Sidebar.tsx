@@ -15,12 +15,14 @@ import ChatButton from "./ChatButton";
 import SearchBox from "./SearchBox";
 import NotificationBox from "./NotificationBox";
 import ProfileButton from "./ProfileButton";
-
+import { useAuthContext } from "@/context/authContext";
 const SideBar = () => {
+  const authContext = useAuthContext();
   const [searching, setSearching] = useState(false);
   const [viewNotifications, setViewNotifications] = useState(false);
   const path = usePathname();
   const params = useParams();
+
   const secondaryMode = searching || viewNotifications;
 
   const toggleFirstMode = () => {

@@ -2,7 +2,7 @@ import SideBar from "@/components/UI/SideBarComponents/Sidebar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-
+import { AuthContextProvider } from "@/context/authContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,11 +28,14 @@ export default function RootLayout({
       <body
         className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
       >
-        <SideBar />
-        <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
-          {children}
-        </main>
-        <div id="modal-hook"></div>
+        <AuthContextProvider>
+          <SideBar />
+          <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
+            {children}
+          </main>
+
+          <div id="modal-hook"></div>
+        </AuthContextProvider>
       </body>
     </html>
   );
