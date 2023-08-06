@@ -38,6 +38,7 @@ export const POST = async (req: NextRequest) => {
     const token = jwt.sign({ userId: user.id }, secret!, { expiresIn: "12h" });
     return NextResponse.json({ user: returnUser, token }, { status: 201 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { message: "Something wrong happened" },
       { status: 500 }
