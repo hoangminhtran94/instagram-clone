@@ -1,45 +1,31 @@
 import { useMemo, useState } from "react";
 import { FC } from "react";
-import AvatarEditor from "react-avatar-editor";
-import { useRef } from "react";
+import ImageFilter from "./ImageFilter";
 import CropImageCarousel from "./CropImageCarousel";
-
-const PostImageEditor: FC<{ files: File[] }> = ({ files }) => {
-  const ref = useRef<AvatarEditor>(null);
-  const images = useMemo(
-    () => files.map((file) => URL.createObjectURL(file)),
-    [files]
+import FilterImageCarousel from "./FilterImageCarousel";
+const PostImageEditor: FC<{
+  files: File[];
+  currentEditPage: number;
+}> = ({ files, currentEditPage }) => {
+  const [croppedImages, setCroppedImages] = useState<HTMLCanvasElement[]>(
+    new Array(files.length)
+  );
+  const [filteredImages, setFilteredImages] = useState<string[]>(
+    new Array(files.length)
   );
 
-  const [newFile, setNewFile] = useState<string>("");
-  const [filter, setFilter] = useState("");
-
-  function editCanvasColor(filter: string) {
-    const canvas = document.getElementsByClassName(
-      "this-canvas"
-    )[0] as unknown as HTMLCanvasElement;
-    const ctx = canvas?.getContext("2d");
-    setFilter(filter);
-
-    if (ctx && canvas) {
-      ctx.filter = filter;
-    }
-    return canvas;
-  }
-  const saveChanges = async (canvas: HTMLCanvasElement) => {
-    const blob = await new Promise<Blob | null>((resolve) => {
-      canvas?.toBlob((blob) => {
-        resolve(blob);
-      }, "image/jpeg");
-    });
-
-    if (blob) {
-      setNewFile(canvas.toDataURL());
-    }
-  };
   return (
     <div className="flex-1 flex items-center justify-center relative">
-      <CropImageCarousel files={files} />
+      {currentEditPage === 0 && (
+        <CropImageCarousel setCroppedImages={setCroppedImages} files={files} />
+      )}
+      {currentEditPage === 1 && (
+        <FilterImageCarousel
+          canvasImages={croppedImages}
+          filterImages={filteredImages}
+          setFilteredImages={setFilteredImages}
+        />
+      )}
     </div>
   );
 };

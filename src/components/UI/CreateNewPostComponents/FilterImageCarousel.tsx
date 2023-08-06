@@ -1,13 +1,14 @@
 import { FC, useState } from "react";
-import CropImage from "./CropImage";
-const CropImageCarousel: FC<{
-  files: File[];
-  setCroppedImages: (prev: any) => void;
-}> = ({ files, setCroppedImages }) => {
+import ImageFilter from "./ImageFilter";
+const FilterImageCarousel: FC<{
+  canvasImages: HTMLCanvasElement[];
+  filterImages: string[];
+  setFilteredImages: (prev: any) => void;
+}> = ({ canvasImages, setFilteredImages, filterImages }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const nextHandler = () => {
     setCurrentImage((prev) => {
-      if (prev === files.length - 1) {
+      if (prev === canvasImages.length - 1) {
         return 0;
       }
       return prev + 1;
@@ -16,13 +17,13 @@ const CropImageCarousel: FC<{
   const prevHandler = () => {
     setCurrentImage((prev) => {
       if (prev === 0) {
-        return files.length - 1;
+        return canvasImages.length - 1;
       }
       return prev - 1;
     });
   };
   return (
-    <div className="w-full pb-[calc(100%-45px)] relative ">
+    <div className="w-full pb-[calc(100%-245px)] relative ">
       <button
         className="absolute select-none top-[calc(50%-8px)] right-3  z-10 cursor-pointer p-2 rounded-full bg-[rgba(0,0,0,0.4)]"
         onClick={nextHandler}
@@ -70,17 +71,18 @@ const CropImageCarousel: FC<{
           ></polyline>
         </svg>
       </button>
-      {files.map((file, index) => (
+      {canvasImages.map((canvas, index) => (
         <div
-          key={file.name}
+          key={index}
           className={`absolute top-0 right-0 h-full w-full ${
             currentImage !== index && "hidden"
           }`}
         >
-          <CropImage
-            setCroppedImages={setCroppedImages}
-            file={files[index]}
+          <ImageFilter
+            filteredImage={filterImages[index]}
+            canvasImage={canvas}
             index={index}
+            setFilteredImages={setFilteredImages}
           />
         </div>
       ))}
@@ -88,4 +90,4 @@ const CropImageCarousel: FC<{
   );
 };
 
-export default CropImageCarousel;
+export default FilterImageCarousel;

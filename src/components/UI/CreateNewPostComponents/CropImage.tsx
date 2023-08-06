@@ -2,20 +2,42 @@ import { useMemo, useState } from "react";
 import { FC } from "react";
 import AvatarEditor from "react-avatar-editor";
 
-const CropImage: FC<{ file: File; index: number }> = ({ file, index }) => {
+const CropImage: FC<{
+  file: File;
+  index: number;
+  setCroppedImages: (prev: any) => void;
+}> = ({ file, index, setCroppedImages }) => {
   const image = useMemo(() => URL.createObjectURL(file), [file]);
   //Base64 img url
-  const [croppedImage, setCroppedImage] = useState<string>("");
+  const [croppedImage, setCroppedImage] = useState<HTMLCanvasElement | null>(
+    null
+  );
 
-  function getCroppedCanvasImage() {
+  const getCroppedCanvasImage = () => {
     const canvas = document.getElementsByClassName(
       `editing-canvas-${index}`
     )[0] as unknown as HTMLCanvasElement;
-    setCroppedImage(canvas.toDataURL());
-  }
+    setCroppedImages((prev: any) => {
+      const copied = [...prev];
+      copied[index] = canvas;
+
+      return copied;
+    });
+  };
+  const onImageReady = () => {
+    const canvas = document.getElementsByClassName(
+      `editing-canvas-${index}`
+    )[0] as unknown as HTMLCanvasElement;
+    setCroppedImages((prev: any) => {
+      const copied = [...prev];
+      copied[index] = canvas;
+      return copied;
+    });
+  };
   return (
     <AvatarEditor
-      onMouseUp={() => getCroppedCanvasImage()}
+      onMouseUp={getCroppedCanvasImage}
+      onImageReady={onImageReady}
       width={500}
       height={500}
       image={image}
