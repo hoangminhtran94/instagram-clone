@@ -6,13 +6,12 @@ import FilterImageCarousel from "./FilterImageCarousel";
 const PostImageEditor: FC<{
   files: File[];
   currentEditPage: number;
-}> = ({ files, currentEditPage }) => {
-  const [croppedImages, setCroppedImages] = useState<HTMLCanvasElement[]>(
-    new Array(files.length)
-  );
-  const [filteredImages, setFilteredImages] = useState<string[]>(
-    new Array(files.length)
-  );
+  croppedImages:HTMLCanvasElement[],
+  filteredImages:string[]
+  setCroppedImages:(img:any)=>void
+  setFilteredImages:(filtered:any)=>void
+}> = ({ files, currentEditPage,croppedImages,filteredImages,setCroppedImages,setFilteredImages }) => {
+
 
   return (
     <div className="flex-1 flex items-center justify-center relative">

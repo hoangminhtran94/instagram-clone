@@ -4,14 +4,14 @@ const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
   setCurrentFilter,
 }) => {
   return (
-    <div className="w-[200px] grid grid-cols-2 p-5 gap-5 h-fit">
+    <div className="flex-1 grid grid-cols-3 p-5 gap-4 h-fit text-xs">
       <div
-        className="w-full flex flex-col gap-5"
+        className="w-full flex flex-col gap-2 items-center"
         onClick={() =>
           setCurrentFilter("sepia(.2) brightness(1.15) saturate(1.4)")
         }
       >
-        <div className="w-[88px] h-[88px]">
+        <div className="w-[88px] h-[88px] ">
           <Image
             className="pointer-events-none"
             src="/images/Aden.jpg"
@@ -23,7 +23,7 @@ const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
         <p>Eden</p>
       </div>
       <div
-        className="w-full flex flex-col gap-5"
+        className="w-full flex flex-col gap-2 items-center"
         onClick={() =>
           setCurrentFilter(
             "brightness(1.4) contrast(.95) saturate(0) sepia(.35)"
@@ -42,7 +42,7 @@ const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
         <p>Moon</p>
       </div>
       <div
-        className="w-full flex flex-col gap-5"
+        className="w-full flex flex-col gap-2 items-center"
         onClick={() => setCurrentFilter("blur(0px)")}
       >
         <div className="w-[88px] h-[88px]">

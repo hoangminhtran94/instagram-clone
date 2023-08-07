@@ -1,6 +1,6 @@
 "use client";
 import Modal from "../Modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewPostFileUpload from "./NewPostFileUpload";
 import PostImageEditor from "./PostImageEditor";
 import { FC, MouseEventHandler } from "react";
@@ -15,9 +15,19 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [currentEditPage, setCurrentEditPage] = useState(0);
+  const [croppedImages, setCroppedImages] = useState<HTMLCanvasElement[]>([]);
+  const [filteredImages, setFilteredImages] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCroppedImages(new Array(imageFiles.length));
+    setFilteredImages(new Array(imageFiles.length));
+  }, [imageFiles]);
+
   const noImage = imageFiles.length === 0;
-  const croppingImage = currentEditPage === 0;
-  const editingImage = currentEditPage === 1;
+  const croppingImage = !noImage && currentEditPage === 0;
+  const editingImage = !noImage && currentEditPage === 1;
+  const creatingPost = currentEditPage === 2;
+
   const nextPageHandler = () => {
     setCurrentEditPage((prev) => prev + 1);
   };
@@ -62,7 +72,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
       <div
         className={`${
           currentEditPage === 1 && imageFiles.length > 0
-            ? "w-[1000px] pb-[calc(100%-200px)] "
+            ? "w-[1100px] pb-[calc(100%-300px)] "
             : "w-[800px] pb-[100%] "
         } relative`}
       >
@@ -74,11 +84,13 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
             onNextPage={nextPageHandler}
             onPreviousPage={previousPageHandler}
           />
-          {imageFiles.length === 0 && (
-            <NewPostFileUpload setImageFiles={setImageFiles} />
-          )}
-          {imageFiles.length > 0 && (
+          {noImage && <NewPostFileUpload setImageFiles={setImageFiles} />}
+          {(croppingImage || editingImage) && (
             <PostImageEditor
+              setCroppedImages={setCroppedImages}
+              setFilteredImages={setFilteredImages}
+              croppedImages={croppedImages}
+              filteredImages={filteredImages}
               files={imageFiles}
               currentEditPage={currentEditPage}
             />
