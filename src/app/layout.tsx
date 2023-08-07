@@ -1,9 +1,9 @@
-
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { AuthContextProvider } from "@/context/authContext";
-
+import GlobalModalContextProvider from "@/context/globalModalContext";
+import GlobalModal from "@/components/UI/Modal/GlobalModal";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,12 +27,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthContextProvider>
-        <body
-          className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
-        >
-          {children}
-          <div id="modal-hook"></div>
-        </body>
+        <GlobalModalContextProvider>
+          <body
+            className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
+          >
+            {children}
+            <GlobalModal />
+            <div id="modal-hook"></div>
+            <div id="modal-hook-global"></div>
+          </body>
+        </GlobalModalContextProvider>
       </AuthContextProvider>
     </html>
   );

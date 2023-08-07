@@ -1,9 +1,7 @@
 import { ComponentPropsWithoutRef, FC } from "react";
-const PostFirstPage: FC<ComponentPropsWithoutRef<"input">> = ({
-  className,
-  type,
-  ...props
-}) => {
+const PostFirstPage: FC<
+  ComponentPropsWithoutRef<"input"> & { setImageFiles: (files: any) => void }
+> = ({ className, type, onChange, setImageFiles, ...props }) => {
   return (
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col gap-4 items-center">
@@ -40,6 +38,19 @@ const PostFirstPage: FC<ComponentPropsWithoutRef<"input">> = ({
           <input
             className="hidden"
             {...props}
+            onChange={(e) => {
+              const filelist = e.target.files;
+              const files: File[] = [];
+              if (filelist) {
+                for (let i = 0; i < filelist.length; i++) {
+                  const file = filelist.item(i);
+                  if (file) {
+                    files.push(file);
+                  }
+                }
+                setImageFiles(files);
+              }
+            }}
             type="file"
             multiple
             accept=".jpg,.jpeg,.png,.webp"

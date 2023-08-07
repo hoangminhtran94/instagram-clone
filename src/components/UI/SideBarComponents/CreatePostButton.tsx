@@ -1,7 +1,7 @@
 "use client";
 import { FC, useState } from "react";
 import SideBarItem from "./SideBarItem";
-import CreateNewPostModal from "../CreateNewPostComponents/CreateNewPostModal";
+import NewPostModal from "../CreateNewPostComponents/NewPostModal";
 const CreatePostButton: FC<{ secondaryMode: boolean }> = ({
   secondaryMode,
 }) => {
@@ -74,7 +74,7 @@ const CreatePostButton: FC<{ secondaryMode: boolean }> = ({
         {!secondaryMode ? "Create" : ""}
       </SideBarItem>
       {toggleModal && (
-        <CreateNewPostModal
+        <NewPostModal
           onCancel={() => {
             setToggleModal(false);
           }}

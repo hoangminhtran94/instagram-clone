@@ -7,8 +7,7 @@ interface BackdropProps {
 }
 interface ModalProps {
   children?: ReactNode;
-  width?: string;
-  height?: string;
+  rootElement?: string;
   className?: string;
   onCancel?: MouseEventHandler;
 }
@@ -27,22 +26,18 @@ const Backdrop: FC<BackdropProps> = ({ children, onCancel }) => {
 const Modal: FC<ModalProps> = ({
   children,
   className,
+  rootElement,
   onCancel,
-  width = "500px",
-  height = "500px",
 }) => {
   return (
     <>
       {createPortal(
         <Backdrop onCancel={onCancel}>
-          <div
-            style={{ width, height }}
-            className={` bg-white z-50 ${className}`}
-          >
+          <div className={` bg-white z-50 overflow-hidden ${className}`}>
             {children}
           </div>
         </Backdrop>,
-        document.getElementById("modal-hook") as Element
+        document.getElementById(rootElement ?? "modal-hook") as Element
       )}
     </>
   );
