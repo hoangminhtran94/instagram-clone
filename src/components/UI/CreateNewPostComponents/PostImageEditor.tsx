@@ -1,30 +1,13 @@
-import { useMemo, useState } from "react";
 import { FC } from "react";
-import ImageFilter from "./ImageFilter";
-import CropImageCarousel from "./CropImageCarousel";
-import FilterImageCarousel from "./FilterImageCarousel";
+import CropImagePage from "./CropImagePage";
+import FilterImagePage from "./FilterImagePage";
 const PostImageEditor: FC<{
-  files: File[];
   currentEditPage: number;
-  croppedImages:HTMLCanvasElement[],
-  filteredImages:string[]
-  setCroppedImages:(img:any)=>void
-  setFilteredImages:(filtered:any)=>void
-}> = ({ files, currentEditPage,croppedImages,filteredImages,setCroppedImages,setFilteredImages }) => {
-
-
+}> = ({ currentEditPage }) => {
   return (
     <div className="flex-1 flex items-center justify-center relative">
-      {currentEditPage === 0 && (
-        <CropImageCarousel setCroppedImages={setCroppedImages} files={files} />
-      )}
-      {currentEditPage === 1 && (
-        <FilterImageCarousel
-          canvasImages={croppedImages}
-          filterImages={filteredImages}
-          setFilteredImages={setFilteredImages}
-        />
-      )}
+      {currentEditPage === 0 && <CropImagePage />}
+      {currentEditPage === 1 && <FilterImagePage />}
     </div>
   );
 };

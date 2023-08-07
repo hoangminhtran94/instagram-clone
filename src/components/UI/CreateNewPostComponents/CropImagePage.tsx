@@ -1,13 +1,13 @@
 import { FC, useState } from "react";
 import CropImage from "./CropImage";
-const CropImageCarousel: FC<{
-  files: File[];
-  setCroppedImages: (prev: any) => void;
-}> = ({ files, setCroppedImages }) => {
+import { useCreatePostContext } from "@/context/createPostContext";
+const CropImagePage: FC = () => {
+  const { imageFiles } = useCreatePostContext();
   const [currentImage, setCurrentImage] = useState(0);
+
   const nextHandler = () => {
     setCurrentImage((prev) => {
-      if (prev === files.length - 1) {
+      if (prev === imageFiles.length - 1) {
         return 0;
       }
       return prev + 1;
@@ -16,14 +16,14 @@ const CropImageCarousel: FC<{
   const prevHandler = () => {
     setCurrentImage((prev) => {
       if (prev === 0) {
-        return files.length - 1;
+        return imageFiles.length - 1;
       }
       return prev - 1;
     });
   };
   return (
     <div className="w-full pb-[calc(100%-45px)] relative ">
-      {files.length > 1 && (
+      {imageFiles.length > 1 && (
         <>
           {" "}
           <button
@@ -74,22 +74,18 @@ const CropImageCarousel: FC<{
           </button>
         </>
       )}
-      {files.map((file, index) => (
+      {imageFiles.map((file, index) => (
         <div
           key={file.name}
           className={`absolute top-0 right-0 h-full w-full ${
             currentImage !== index && "hidden"
           }`}
         >
-          <CropImage
-            setCroppedImages={setCroppedImages}
-            file={files[index]}
-            index={index}
-          />
+          <CropImage file={file} index={index} />
         </div>
       ))}
     </div>
   );
 };
 
-export default CropImageCarousel;
+export default CropImagePage;

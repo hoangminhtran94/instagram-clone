@@ -3,13 +3,15 @@ interface NewPostModalHeaderProps {
   noImage: boolean;
   croppingImage: boolean;
   editingImage: boolean;
+  creatingPost: boolean;
   onNextPage: () => any;
   onPreviousPage: () => any;
 }
-const NewPostModalHeader: FC<NewPostModalHeaderProps> = ({
+const NewPostHeader: FC<NewPostModalHeaderProps> = ({
   noImage,
   croppingImage,
   editingImage,
+  creatingPost,
   onNextPage,
   onPreviousPage,
 }) => {
@@ -25,6 +27,7 @@ const NewPostModalHeader: FC<NewPostModalHeaderProps> = ({
     <div className="text-center relative p-3 border-b  border-b-slate-200 text-sm font-semibold">
       {croppingImage && "Crop"}
       {editingImage && "Edit"}
+      {creatingPost && "Create new post"}
       <button className="absolute left-3" onClick={onPreviousPage}>
         <svg
           aria-label="Back"
@@ -64,4 +67,4 @@ const NewPostModalHeader: FC<NewPostModalHeaderProps> = ({
   );
 };
 
-export default NewPostModalHeader;
+export default NewPostHeader;

@@ -32,11 +32,11 @@ model Post {
 }
 
 model Location {
-  id                  String @id @default(auto()) @map("_id") @db.ObjectId
-  lat                 Float
-  long                Float
-  locationDescription String
-  posts               Post[]
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  lat     Float
+  long    Float
+  address String
+  posts   Post[]
 }
 
 model ReelPost {

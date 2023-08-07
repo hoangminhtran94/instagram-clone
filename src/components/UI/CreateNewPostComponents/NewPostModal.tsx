@@ -1,34 +1,32 @@
 "use client";
 import Modal from "../Modal/Modal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NewPostFileUpload from "./NewPostFileUpload";
 import PostImageEditor from "./PostImageEditor";
 import { FC, MouseEventHandler } from "react";
-import NewPostModalHeader from "./NewPostModalHeader";
+import NewPostHeader from "./NewPostHeader";
 import { useGlobalModalContext } from "@/context/globalModalContext";
 import CancelNewPostModal from "./CancelNewPostModal";
+import { useCreatePostContext } from "./../../../context/createPostContext";
+import CreatePostPage from "./CreatePostPage";
 interface CreateNewPostModalProps {
   onCancel: MouseEventHandler;
 }
 const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const globalModalContext = useGlobalModalContext();
-
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [currentEditPage, setCurrentEditPage] = useState(0);
-  const [croppedImages, setCroppedImages] = useState<HTMLCanvasElement[]>([]);
-  const [filteredImages, setFilteredImages] = useState<string[]>([]);
-
-  useEffect(() => {
-    setCroppedImages(new Array(imageFiles.length));
-    setFilteredImages(new Array(imageFiles.length));
-  }, [imageFiles]);
+  const { imageFiles, setImageFiles, saveCroppedImages } =
+    useCreatePostContext();
 
   const noImage = imageFiles.length === 0;
   const croppingImage = !noImage && currentEditPage === 0;
   const editingImage = !noImage && currentEditPage === 1;
-  const creatingPost = currentEditPage === 2;
+  const creatingPost = !noImage && currentEditPage === 2;
 
   const nextPageHandler = () => {
+    if (croppingImage) {
+      saveCroppedImages();
+    }
     setCurrentEditPage((prev) => prev + 1);
   };
   const cancelCreationHandler = (discardAction: () => void) => {
@@ -71,30 +69,25 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
     >
       <div
         className={`${
-          currentEditPage === 1 && imageFiles.length > 0
+          editingImage || creatingPost
             ? "w-[1100px] pb-[calc(100%-300px)] "
             : "w-[800px] pb-[100%] "
         } relative`}
       >
         <div className=" absolute top-0 right-0 w-full h-full flex flex-col">
-          <NewPostModalHeader
+          <NewPostHeader
             noImage={noImage}
+            creatingPost={creatingPost}
             croppingImage={croppingImage}
             editingImage={editingImage}
             onNextPage={nextPageHandler}
             onPreviousPage={previousPageHandler}
           />
-          {noImage && <NewPostFileUpload setImageFiles={setImageFiles} />}
+          {noImage && <NewPostFileUpload />}
           {(croppingImage || editingImage) && (
-            <PostImageEditor
-              setCroppedImages={setCroppedImages}
-              setFilteredImages={setFilteredImages}
-              croppedImages={croppedImages}
-              filteredImages={filteredImages}
-              files={imageFiles}
-              currentEditPage={currentEditPage}
-            />
+            <PostImageEditor currentEditPage={currentEditPage} />
           )}
+          {creatingPost && <CreatePostPage />}
         </div>
       </div>
     </Modal>

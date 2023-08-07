@@ -1,17 +1,14 @@
 import { useMemo, useState } from "react";
 import { FC } from "react";
 import AvatarEditor from "react-avatar-editor";
-
+import { useCreatePostContext } from "@/context/createPostContext";
 const CropImage: FC<{
   file: File;
   index: number;
-  setCroppedImages: (prev: any) => void;
-}> = ({ file, index, setCroppedImages }) => {
+}> = ({ file, index }) => {
+  const { setCroppedImages } = useCreatePostContext();
   const image = useMemo(() => URL.createObjectURL(file), [file]);
   //Base64 img url
-  const [croppedImage, setCroppedImage] = useState<HTMLCanvasElement | null>(
-    null
-  );
 
   const getCroppedCanvasImage = () => {
     const canvas = document.getElementsByClassName(
@@ -28,7 +25,7 @@ const CropImage: FC<{
     const canvas = document.getElementsByClassName(
       `editing-canvas-${index}`
     )[0] as unknown as HTMLCanvasElement;
-    setCroppedImages((prev: any) => {
+    setCroppedImages((prev) => {
       const copied = [...prev];
       copied[index] = canvas;
       return copied;

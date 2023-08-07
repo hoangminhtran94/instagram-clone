@@ -1,7 +1,12 @@
 import { ComponentPropsWithoutRef, FC } from "react";
-const PostFirstPage: FC<
-  ComponentPropsWithoutRef<"input"> & { setImageFiles: (files: any) => void }
-> = ({ className, type, onChange, setImageFiles, ...props }) => {
+import { useCreatePostContext } from "@/context/createPostContext";
+const PostFirstPage: FC<ComponentPropsWithoutRef<"input">> = ({
+  className,
+  type,
+  onChange,
+  ...props
+}) => {
+  const { setImageFiles } = useCreatePostContext();
   return (
     <div className="flex-1 flex items-center justify-center">
       <div className="flex flex-col gap-4 items-center">

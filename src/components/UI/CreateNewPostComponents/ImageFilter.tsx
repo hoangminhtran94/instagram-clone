@@ -1,74 +1,36 @@
-import Image from "next/image";
-import { FC, useState, useCallback, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo } from "react";
 import ImageFilterSidebar from "./ImageFilterSidebar";
-
+import { useCreatePostContext } from "@/context/createPostContext";
+import { applyFilterToCanvas } from "@/lib/imageFilter";
 const ImageFilter: FC<{
-  filteredImage: string;
   disableNavigation: boolean;
   canvasImage: HTMLCanvasElement;
   index: number;
   onNext: () => void;
   onPrevious: () => void;
-  setFilteredImages: (cb: any) => void;
 }> = ({
   canvasImage,
-  setFilteredImages,
   index,
-  filteredImage,
   onNext,
   onPrevious,
   disableNavigation = false,
 }) => {
-  const [filter, setFilter] = useState("blur(0px)");
-
+  const { setFilteredImages, filteredImages } = useCreatePostContext();
   const canvas = useMemo(() => canvasImage, [canvasImage]);
 
-  const applyFilterToCanvas = useCallback(
-    async (canvasElement: HTMLCanvasElement, selectedFilter: string) => {
-      const newCanvas = document.createElement("canvas");
-      newCanvas.width = canvasElement.width;
-      newCanvas.height = canvasElement.height;
-
-      const ctx = newCanvas.getContext("2d");
-      if (ctx) {
-        ctx.filter = selectedFilter;
-        ctx.drawImage(canvasElement, 0, 0);
-      }
-
-      return newCanvas;
-    },
-    []
-  );
-
-  const saveChanges = useCallback(
-    async (canvasEdited: HTMLCanvasElement) => {
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvasEdited.toBlob((blob) => {
-          resolve(blob);
-        }, "image/jpeg");
+  const editCanvasColor = useCallback(
+    (filter: string) => {
+      const editedCanvas = applyFilterToCanvas(canvas, filter);
+      setFilteredImages((prev) => {
+        const copied = [...prev];
+        copied[index] = { img: editedCanvas.toDataURL(), alt: "" };
+        return copied;
       });
-      if (blob) {
-        setFilteredImages((prev: any) => {
-          const copied = [...prev];
-          copied[index] = canvasEdited.toDataURL();
-          return copied;
-        });
-      }
     },
-    [index]
+    [canvas, index, setFilteredImages]
   );
 
-  const editCanvasColor = useCallback(async () => {
-    const editedCanvas = await applyFilterToCanvas(canvas, filter);
-    return editedCanvas;
-  }, [applyFilterToCanvas, canvas, filter]);
-  useEffect(() => {
-    editCanvasColor().then((canvasEdited) => {
-      saveChanges(canvasEdited);
-    });
-  }, [editCanvasColor, saveChanges]);
-
-  if (!filteredImage) {
+  if (!filteredImages[index]) {
     return <div>Loading</div>;
   }
   return (
@@ -129,13 +91,17 @@ const ImageFilter: FC<{
         )}
 
         <img
-          src={filteredImage}
+          src={filteredImages[index].img}
           className="w-full h-full object-cover pointer-events-none"
           alt="image"
         />
       </div>
 
-      <ImageFilterSidebar setCurrentFilter={setFilter} />
+      <ImageFilterSidebar
+        onChangeFilter={(filter) => {
+          editCanvasColor(filter);
+        }}
+      />
     </div>
   );
 };

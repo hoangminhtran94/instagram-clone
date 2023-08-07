@@ -2,6 +2,7 @@
 import { FC, useState } from "react";
 import SideBarItem from "./SideBarItem";
 import NewPostModal from "../CreateNewPostComponents/NewPostModal";
+import NewPostContextProvider from "@/context/createPostContext";
 const CreatePostButton: FC<{ secondaryMode: boolean }> = ({
   secondaryMode,
 }) => {
@@ -74,11 +75,13 @@ const CreatePostButton: FC<{ secondaryMode: boolean }> = ({
         {!secondaryMode ? "Create" : ""}
       </SideBarItem>
       {toggleModal && (
-        <NewPostModal
-          onCancel={() => {
-            setToggleModal(false);
-          }}
-        />
+        <NewPostContextProvider>
+          <NewPostModal
+            onCancel={() => {
+              setToggleModal(false);
+            }}
+          />
+        </NewPostContextProvider>
       )}
     </>
   );

@@ -1,14 +1,14 @@
 import Image from "next/image";
 import { FC } from "react";
-const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
-  setCurrentFilter,
+const ImageFilterSidebar: FC<{ onChangeFilter: (filter: string) => void }> = ({
+  onChangeFilter,
 }) => {
   return (
     <div className="flex-1 grid grid-cols-3 p-5 gap-4 h-fit text-xs">
       <div
         className="w-full flex flex-col gap-2 items-center"
         onClick={() =>
-          setCurrentFilter("sepia(.2) brightness(1.15) saturate(1.4)")
+          onChangeFilter("sepia(.2) brightness(1.15) saturate(1.4)")
         }
       >
         <div className="w-[88px] h-[88px] ">
@@ -25,9 +25,7 @@ const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
       <div
         className="w-full flex flex-col gap-2 items-center"
         onClick={() =>
-          setCurrentFilter(
-            "brightness(1.4) contrast(.95) saturate(0) sepia(.35)"
-          )
+          onChangeFilter("brightness(1.4) contrast(.95) saturate(0) sepia(.35)")
         }
       >
         <div className="w-[88px] h-[88px]">
@@ -43,7 +41,7 @@ const ImageFilterSidebar: FC<{ setCurrentFilter: (cb: any) => void }> = ({
       </div>
       <div
         className="w-full flex flex-col gap-2 items-center"
-        onClick={() => setCurrentFilter("blur(0px)")}
+        onClick={() => onChangeFilter("blur(0px)")}
       >
         <div className="w-[88px] h-[88px]">
           <Image
