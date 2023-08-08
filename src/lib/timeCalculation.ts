@@ -13,18 +13,18 @@ export const timeAgoOrDayAgo = (datetime: Date) => {
     return days + " days ago";
   } else if (hours >= 1) {
     if (hours === 1) {
-      return "1 hour ago";
+      return "1h";
     }
-    return hours + " hours ago";
+    return hours + "h";
   } else if (minutes >= 1) {
     if (minutes === 1) {
-      return "1 minute ago";
+      return "1 min";
     }
-    return minutes + " minutes ago";
+    return minutes + " mins";
   } else {
     if (seconds <= 10) {
       return "just now";
     }
-    return seconds + " seconds ago";
+    return seconds + " seconds";
   }
 };
