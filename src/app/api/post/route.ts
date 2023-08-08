@@ -4,7 +4,7 @@ import { writeFile } from "fs/promises";
 import { Post, Location, User, PostImage } from "@prisma/client";
 
 interface ImagesData {
-  imageDescription: string;
+  alt: string;
   filename: string;
   src: string;
 }
@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
     await prisma.$transaction(async (ctx) => {
       const post = await ctx.post.create({
         data: {
-          content: data.content,
+          caption: data.caption,
           owner: { connect: { id: user.id } },
         },
       });
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
         try {
           await ctx.location.create({
             data: {
-              locationDescription: data.locationDescription,
+              address: data.address,
               lat: data.lat,
               long: data.long,
               posts: { connect: { id: post.id } },
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
           imageData.forEach(async (img) => {
             await ctx.postImage.create({
               data: {
-                imageDescription: img.imageDescription,
+                alt: img.alt,
                 src: img.src,
                 owner: { connect: { id: user.id } },
                 post: { connect: { id: post.id } },

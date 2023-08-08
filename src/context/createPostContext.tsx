@@ -16,12 +16,12 @@ interface NewPostContextState {
   imageFiles: File[];
   croppedImages: HTMLCanvasElement[];
   filteredImages: { img: string; alt: string }[];
-  content: string;
+  caption: string;
   location: { lat?: number; long?: number; address: string } | null;
   setImageFiles: Dispatch<SetStateAction<File[]>>;
   setCroppedImages: Dispatch<SetStateAction<HTMLCanvasElement[]>>;
   setFilteredImages: Dispatch<SetStateAction<{ img: string; alt: string }[]>>;
-  setContent: Dispatch<SetStateAction<string>>;
+  setCaption: Dispatch<SetStateAction<string>>;
   setLocation: Dispatch<
     SetStateAction<{
       lat?: number;
@@ -47,8 +47,8 @@ const NewPostContext = createContext<NewPostContextState>({
   setTurnOffComment: () => {},
   saveCroppedImages: () => {},
   setLocation: () => {},
-  setContent: () => {},
-  content: "",
+  setCaption: () => {},
+  caption: "",
   location: null,
   hideLikeView: false,
   turnOffComment: false,
@@ -63,7 +63,7 @@ const NewPostContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [filteredImages, setFilteredImages] = useState<
     { img: string; alt: string }[]
   >([]);
-  const [content, setContent] = useState<string>("");
+  const [caption, setCaption] = useState<string>("");
   const [location, setLocation] = useState<{
     lat?: number;
     long?: number;
@@ -103,9 +103,9 @@ const NewPostContextProvider: FC<{ children: ReactNode }> = ({ children }) => {
         setTurnOffComment,
         location,
         setLocation,
-        content,
+        caption,
         setImageFiles,
-        setContent,
+        setCaption,
         imageFiles,
         croppedImages,
         filteredImages,

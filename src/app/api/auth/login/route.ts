@@ -32,6 +32,7 @@ export const POST = async (req: NextRequest) => {
     const returnUser = {
       username: user.username,
       id: user.id,
+      currentProfileImage: user.currentProfileImage,
       email: user.email,
       fullName: user.fullName,
     };

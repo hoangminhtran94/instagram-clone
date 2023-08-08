@@ -18,7 +18,6 @@ const EmailSignup = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
         authContext.login(data.user, data.token);
       }
     } catch (error) {

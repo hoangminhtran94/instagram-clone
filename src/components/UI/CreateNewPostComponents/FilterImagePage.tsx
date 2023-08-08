@@ -4,7 +4,6 @@ import { useCreatePostContext } from "@/context/createPostContext";
 const FilterImagePage: FC<{}> = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const { croppedImages } = useCreatePostContext();
-  console.log(croppedImages);
   const disableNavigation = croppedImages.length === 1;
   const nextHandler = () => {
     setCurrentImage((prev) => {
