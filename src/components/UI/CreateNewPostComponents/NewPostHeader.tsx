@@ -60,8 +60,8 @@ const NewPostHeader: FC<NewPostModalHeaderProps> = ({
           ></polyline>
         </svg>
       </button>
-      <button className="absolute right-3" onClick={onNextPage}>
-        Next
+      <button className="absolute right-3  text-sky-500 " onClick={onNextPage}>
+        {!creatingPost ? "Next" : "Share"}
       </button>
     </div>
   );

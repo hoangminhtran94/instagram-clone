@@ -16,7 +16,6 @@ export const middleware = async (req: NextRequest) => {
         { status: 403 }
       );
     }
-    (req as any).user = user;
   } catch (error) {
     return NextResponse.json({ messages: "Authentication failed" });
   }

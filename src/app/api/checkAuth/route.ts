@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
 export const POST = async (req: NextRequest) => {
   const data = await req.json();
@@ -12,19 +13,23 @@ export const POST = async (req: NextRequest) => {
       { status: 403 }
     );
   }
+
   try {
-    const decoded = jwt.verify(token, secret);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, secret);
+    } catch (error) {
+      throw error;
+    }
 
     const userId = (decoded as { [key: string]: string }).userId;
-    try {
-      const user = await prisma.user.findFirstOrThrow({
-        where: { id: userId },
-      });
-      return NextResponse.json({ user }, { status: 200 });
-    } catch (error) {
-      return NextResponse.json({ user: null }, { status: 403 });
-    }
+
+    const user = await prisma.user.findFirstOrThrow({
+      where: { id: userId },
+    });
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
+    cookies().delete("jwt_token");
     return NextResponse.json({ meesage: "Error" }, { status: 403 });
   }
 };

@@ -1,19 +1,29 @@
+import { User } from "@prisma/client";
 import Image from "next/image";
-const PostHeader = () => {
+import { FC } from "react";
+import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
+const PostHeader: FC<{ creator: User; createdDate: Date }> = ({
+  creator,
+  createdDate,
+}) => {
   return (
     <div className="flex justify-between items-center px-2 py-3">
       <div className="flex items-center gap-2">
         <div>
           <Image
-            width={32}
-            height={32}
-            src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODJ8fGF2YXRhcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
+            width={44}
+            height={44}
+            src={
+              creator.currentProfileImage
+                ? creator.currentProfileImage
+                : "/images/default-avatar.jpg"
+            }
             alt="profile-image"
             className=" w-8 h-8 rounded-full object-cover bg-center"
           />
         </div>
         <div className="flex gap-2 items-center">
-          Minh Hoang Tran
+          {creator.username}
           <svg
             aria-label="Verified"
             color="rgb(0, 149, 246)"
@@ -31,7 +41,7 @@ const PostHeader = () => {
           </svg>
         </div>
         <span>•</span>
-        <span>5h</span>
+        <span>{timeAgoOrDayAgo(createdDate)}</span>
       </div>
       <div>
         <svg

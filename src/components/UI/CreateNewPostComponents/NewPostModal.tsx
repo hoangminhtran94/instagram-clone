@@ -9,23 +9,68 @@ import { useGlobalModalContext } from "@/context/globalModalContext";
 import CancelNewPostModal from "./CancelNewPostModal";
 import { useCreatePostContext } from "./../../../context/createPostContext";
 import CreatePostPage from "./CreatePostPage";
+import { v4 } from "uuid";
+
+const MIME_TYPES = {
+  "image/jpg": "jpg",
+  "image/jpeg": "jpeg",
+  "image/png": "png",
+  "image/gif": "gif",
+  "image/bmp": "bmp",
+  "image/webp": "webp",
+  "image/svg+xml": "svg",
+  "image/tiff": "tif",
+};
 interface CreateNewPostModalProps {
   onCancel: MouseEventHandler;
 }
 const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const globalModalContext = useGlobalModalContext();
   const [currentEditPage, setCurrentEditPage] = useState(0);
-  const { imageFiles, setImageFiles, saveCroppedImages } =
-    useCreatePostContext();
+  const {
+    imageFiles,
+    setImageFiles,
+    saveCroppedImages,
+    filteredImages,
+    caption,
+  } = useCreatePostContext();
 
   const noImage = imageFiles.length === 0;
   const croppingImage = !noImage && currentEditPage === 0;
   const editingImage = !noImage && currentEditPage === 1;
   const creatingPost = !noImage && currentEditPage === 2;
 
-  const nextPageHandler = () => {
+  const nextPageHandler = async () => {
     if (croppingImage) {
       saveCroppedImages();
+    }
+    if (creatingPost) {
+      try {
+        const promises: Promise<Blob>[] = [];
+        filteredImages.forEach((img) =>
+          promises.push(fetch(img.img).then((res) => res.blob()))
+        );
+        const blobs = await Promise.all(promises);
+        const formData = new FormData();
+        blobs.forEach((blob, index) => {
+          const filename = `${v4()}.${MIME_TYPES[blob.type as "image/png"]}`;
+          formData.append("postImages", blob, filename);
+          formData.append(
+            "postImageData",
+            JSON.stringify({ alt: filteredImages[index].alt, filename })
+          );
+        });
+
+        formData.append("caption", caption);
+        const res = await fetch("/api/post", {
+          method: "POST",
+          body: formData,
+        });
+        console.log(res);
+        return;
+      } catch (error) {
+        console.log(error);
+      }
     }
     setCurrentEditPage((prev) => prev + 1);
   };
