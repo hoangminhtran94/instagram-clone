@@ -21,7 +21,6 @@ const CreatePostSideBar: FC<{}> = ({}) => {
     caption,
   } = useCreatePostContext();
   const { user } = useAuthContext();
-  console.log(user);
   const textBoxRef = useRef<HTMLTextAreaElement>(null);
   const [enteredCaption, setEnteredCaption] = useState(caption);
   const emojiRef = useRef<HTMLDivElement>(null);
@@ -33,63 +32,80 @@ const CreatePostSideBar: FC<{}> = ({}) => {
       className="flex-1 
      max-h-[755px] overflow-y-scroll flex flex-col text-sm"
     >
-      <div>Image</div>
-      <div className="">
-        <div className="">
-          <textarea
-            ref={textBoxRef}
-            value={enteredCaption}
-            onChange={(e) => {
-              setEnteredCaption(e.target.value);
-            }}
-            onBlur={(e) => {
-              setCaption(e.target.value);
-            }}
-            rows={10}
-            maxLength={2200}
-            className="resize-none w-full outline-none placeholder:font-light px-4 py-3"
-            placeholder="Write a caption..."
-          />
-        </div>
-        <div className="flex justify-between items-center py-3 px-4 border-b text-xs">
-          <div ref={emojiRef} className="relative">
-            <svg
-              onClick={() => {
-                setToggleEmoji((prev) => !prev);
-              }}
-              className="cursor-pointer"
-              aria-label="Emoji"
-              color="rgb(115, 115, 115)"
-              fill="rgb(115, 115, 115)"
-              height="20"
-              role="img"
-              viewBox="0 0 24 24"
-              width="20"
-            >
-              <title>Emoji</title>
-              <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
-            </svg>
-            {toggleEmoji && (
-              <div className="absolute top-[110%] left-1/2 z-10">
-                <EmojiPicker
-                  searchDisabled
-                  skinTonesDisabled
-                  emojiStyle={EmojiStyle.NATIVE}
-                  previewConfig={{ showPreview: false }}
-                  onEmojiClick={(e) => {
-                    setEnteredCaption((prev) => prev + e.emoji);
-                    textBoxRef.current?.focus();
-                    setToggleEmoji(false);
-                  }}
-                  width={300}
-                  height={300}
-                />
-              </div>
-            )}
+      <div className="py-3">
+        <div className="px-4 flex gap-3 items-center font-semibold text-sm">
+          <div className="w-[28px] h-[28px]">
+            <Image
+              width={44}
+              height={44}
+              alt={user?.username ?? "Not available"}
+              className="w-full h-full object-contain"
+              src={
+                user?.currentProfileImage
+                  ? user?.currentProfileImage
+                  : "/images/default-avatar.jpg"
+              }
+            />
           </div>
-          <p className="opacity-40">{caption.length}/2200</p>
+          {user?.username}
         </div>
       </div>
+
+      <div className="">
+        <textarea
+          ref={textBoxRef}
+          value={enteredCaption}
+          onChange={(e) => {
+            setEnteredCaption(e.target.value);
+          }}
+          onBlur={(e) => {
+            setCaption(e.target.value);
+          }}
+          rows={10}
+          maxLength={2200}
+          className="resize-none w-full outline-none placeholder:font-light px-4"
+          placeholder="Write a caption..."
+        />
+      </div>
+      <div className="flex justify-between items-center py-3 px-4 border-b text-xs">
+        <div ref={emojiRef} className="relative">
+          <svg
+            onClick={() => {
+              setToggleEmoji((prev) => !prev);
+            }}
+            className="cursor-pointer"
+            aria-label="Emoji"
+            color="rgb(115, 115, 115)"
+            fill="rgb(115, 115, 115)"
+            height="20"
+            role="img"
+            viewBox="0 0 24 24"
+            width="20"
+          >
+            <title>Emoji</title>
+            <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
+          </svg>
+          {toggleEmoji && (
+            <div className="absolute top-[110%] left-1/2 z-10">
+              <EmojiPicker
+                searchDisabled
+                skinTonesDisabled
+                emojiStyle={EmojiStyle.NATIVE}
+                previewConfig={{ showPreview: false }}
+                onEmojiClick={(e) => {
+                  setEnteredCaption((prev) => prev + e.emoji);
+                  textBoxRef.current?.focus();
+                  setToggleEmoji(false);
+                }}
+                width={300}
+                height={300}
+              />
+            </div>
+          )}
+        </div>
+        <p className="opacity-40">{caption.length}/2200</p>
+      </div>
+
       <div className="border-b">
         <input
           className="px-4 py-3 w-full outline-none placeholder:font-light"
