@@ -17,6 +17,9 @@ const getPosts = async (): Promise<
 
   try {
     posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
       include: {
         owner: {
           select: {

@@ -4,12 +4,16 @@ interface NewPostModalHeaderProps {
   croppingImage: boolean;
   editingImage: boolean;
   creatingPost: boolean;
+  uploading: boolean;
+  loadingPage: boolean;
   onNextPage: () => any;
   onPreviousPage: () => any;
 }
 const NewPostHeader: FC<NewPostModalHeaderProps> = ({
   noImage,
   croppingImage,
+  uploading,
+  loadingPage,
   editingImage,
   creatingPost,
   onNextPage,
@@ -28,6 +32,8 @@ const NewPostHeader: FC<NewPostModalHeaderProps> = ({
       {croppingImage && "Crop"}
       {editingImage && "Edit"}
       {creatingPost && "Create new post"}
+      {loadingPage && uploading && "Sharing post"}
+      {loadingPage && !uploading && "Post shared"}
       <button className="absolute left-3" onClick={onPreviousPage}>
         <svg
           aria-label="Back"
@@ -60,9 +66,14 @@ const NewPostHeader: FC<NewPostModalHeaderProps> = ({
           ></polyline>
         </svg>
       </button>
-      <button className="absolute right-3  text-sky-500 " onClick={onNextPage}>
-        {!creatingPost ? "Next" : "Share"}
-      </button>
+      {!loadingPage && (
+        <button
+          className="absolute right-3  text-sky-500 "
+          onClick={onNextPage}
+        >
+          {!creatingPost ? "Next" : "Share"}
+        </button>
+      )}
     </div>
   );
 };

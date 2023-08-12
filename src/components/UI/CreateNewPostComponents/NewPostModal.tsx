@@ -10,6 +10,7 @@ import CancelNewPostModal from "./CancelNewPostModal";
 import { useCreatePostContext } from "./../../../context/createPostContext";
 import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
+import LoadingPage from "./LoadingPage";
 
 const MIME_TYPES = {
   "image/jpg": "jpg",
@@ -27,6 +28,7 @@ interface CreateNewPostModalProps {
 const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const globalModalContext = useGlobalModalContext();
   const [currentEditPage, setCurrentEditPage] = useState(0);
+  const [uploading, setUploading] = useState(false);
   const {
     imageFiles,
     setImageFiles,
@@ -39,12 +41,18 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const croppingImage = !noImage && currentEditPage === 0;
   const editingImage = !noImage && currentEditPage === 1;
   const creatingPost = !noImage && currentEditPage === 2;
+  const loadingPage = !noImage && currentEditPage === 3;
 
   const nextPageHandler = async () => {
+    if (!loadingPage) {
+      setCurrentEditPage((prev) => prev + 1);
+    }
+
     if (croppingImage) {
       saveCroppedImages();
     }
     if (creatingPost) {
+      setUploading(true);
       try {
         const promises: Promise<Blob>[] = [];
         filteredImages.forEach((img) =>
@@ -66,13 +74,12 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
           method: "POST",
           body: formData,
         });
-        console.log(res);
-        return;
+
+        setUploading(false);
       } catch (error) {
         console.log(error);
       }
     }
-    setCurrentEditPage((prev) => prev + 1);
   };
   const cancelCreationHandler = (discardAction: () => void) => {
     globalModalContext.toggleModal({
@@ -110,6 +117,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
             onCancel(e);
           });
         }
+        onCancel(e);
       }}
     >
       <div
@@ -122,10 +130,12 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
         <div className=" absolute top-0 right-0 w-full h-full flex flex-col">
           <NewPostHeader
             noImage={noImage}
+            uploading={uploading}
             creatingPost={creatingPost}
             croppingImage={croppingImage}
             editingImage={editingImage}
             onNextPage={nextPageHandler}
+            loadingPage={loadingPage}
             onPreviousPage={previousPageHandler}
           />
           {noImage && <NewPostFileUpload />}
@@ -133,6 +143,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
             <PostImageEditor currentEditPage={currentEditPage} />
           )}
           {creatingPost && <CreatePostPage />}
+          {loadingPage && <LoadingPage uploading={uploading} />}
         </div>
       </div>
     </Modal>
