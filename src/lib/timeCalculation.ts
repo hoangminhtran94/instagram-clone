@@ -1,6 +1,6 @@
 export const timeAgoOrDayAgo = (datetime: Date) => {
   const now = new Date();
-  const timeDifference = now.getTime() - datetime.getTime();
+  const timeDifference = now.getTime() - new Date(datetime).getTime();
   const seconds = Math.floor(timeDifference / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);

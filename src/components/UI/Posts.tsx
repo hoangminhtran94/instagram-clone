@@ -1,13 +1,10 @@
+"use client";
 import { FC } from "react";
 import Post from "./Post";
-import type { Post as PostType, User } from "@prisma/client";
-import { PostProps } from "./Post";
+import { useHomePageContext } from "@/context/homeContext";
 
-interface PostsProps {
-  posts: PostProps[];
-}
-
-const Posts: FC<PostsProps> = ({ posts }) => {
+const Posts: FC = () => {
+  const { posts } = useHomePageContext();
   return (
     <div className="w-[470px] mx-auto flex flex-col gap-5">
       {posts.map((post) => (

@@ -11,6 +11,7 @@ import { useCreatePostContext } from "./../../../context/createPostContext";
 import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
 import LoadingPage from "./LoadingPage";
+import { useHomePageContext } from "@/context/homeContext";
 
 const MIME_TYPES = {
   "image/jpg": "jpg",
@@ -36,6 +37,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
     filteredImages,
     caption,
   } = useCreatePostContext();
+  const { addNewPost } = useHomePageContext();
 
   const noImage = imageFiles.length === 0;
   const croppingImage = !noImage && currentEditPage === 0;
@@ -74,6 +76,11 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
           method: "POST",
           body: formData,
         });
+        if (res.ok) {
+          const newPost = await res.json();
+
+          addNewPost(newPost);
+        }
 
         setUploading(false);
       } catch (error) {

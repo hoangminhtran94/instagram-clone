@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { Post, Location, User, PostImage } from "@prisma/client";
 import jwt from "jsonwebtoken";
+import { revalidateTag } from "next/cache";
+
 import path from "path";
 interface ImagesData {
   alt: string;
@@ -65,7 +67,7 @@ export async function POST(req: NextRequest) {
     PostImage;
 
   try {
-    await prisma.$transaction(async (ctx) => {
+    const newPost = await prisma.$transaction(async (ctx) => {
       const post = await ctx.post.create({
         data: {
           caption: data.caption,
@@ -82,6 +84,25 @@ export async function POST(req: NextRequest) {
                   },
                 }
               : undefined,
+        },
+        include: {
+          owner: {
+            select: {
+              username: true,
+              currentProfileImage: true,
+              id: true,
+              _count: {
+                select: {
+                  followers: true,
+                  following: true,
+                  posts: true,
+                },
+              },
+            },
+          },
+          images: true,
+          likes: { where: { post: { hideLikeView: false } } },
+          comments: { where: { post: { turnOffComment: false } } },
         },
       });
       if (data.address) {
@@ -101,9 +122,41 @@ export async function POST(req: NextRequest) {
 
       return post;
     });
-    return NextResponse.json({ message: "Created" }, { status: 200 });
+    return NextResponse.json(newPost, { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ message: "Error" }, { status: 500 });
   }
 }
+
+export const GET = async (req: NextRequest) => {
+  let posts = [];
+  try {
+    posts = await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        owner: {
+          select: {
+            username: true,
+            currentProfileImage: true,
+            id: true,
+            _count: {
+              select: {
+                followers: true,
+                following: true,
+                posts: true,
+              },
+            },
+          },
+        },
+        images: true,
+        likes: { where: { post: { hideLikeView: false } } },
+        comments: { where: { post: { turnOffComment: false } } },
+      },
+    });
+    return NextResponse.json(posts, { status: 200 });
+  } catch (error) {
+    return NextResponse.json([], { status: 200 });
+  }
+};
