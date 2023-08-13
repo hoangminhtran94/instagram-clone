@@ -1,10 +1,10 @@
 "use client";
 import { FC } from "react";
 import Post from "./Post";
-import { useHomePageContext } from "@/context/homeContext";
+import { useRootContext } from "@/context/RootContext";
 
 const Posts: FC = () => {
-  const { posts } = useHomePageContext();
+  const { posts } = useRootContext();
   return (
     <div className="w-[470px] mx-auto flex flex-col gap-5">
       {posts.map((post) => (

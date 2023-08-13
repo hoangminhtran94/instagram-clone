@@ -1,5 +1,5 @@
 import SideBar from "@/components/UI/SideBarComponents/Sidebar";
-import HomePageContextProvider from "@/context/homeContext";
+import RootContextProvider from "@/context/RootContext";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/verifytoken";
 import { Like, Post, PostImage, Comment } from "@prisma/client";
@@ -52,12 +52,12 @@ const WithSideBarLayout = async ({
   await verifyToken({ redirectIf: "unauthenticated", path: "/accounts/login" });
   const posts = await getPosts();
   return (
-    <HomePageContextProvider posts={posts}>
+    <RootContextProvider posts={posts}>
       <SideBar />
       <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
         {children}
       </main>
-    </HomePageContextProvider>
+    </RootContextProvider>
   );
 };
 

@@ -9,12 +9,12 @@ import {
 } from "react";
 import { PostProps } from "@/components/UI/Post";
 
-interface HomePageContextProps {
+interface RootContextProps {
   posts: PostProps[];
   setPosts: Dispatch<SetStateAction<PostProps[]>>;
   addNewPost: (post: PostProps) => void;
 }
-const HomePageContext = createContext<HomePageContextProps>({
+const RootContext = createContext<RootContextProps>({
   posts: [],
   setPosts: () => {},
   addNewPost: () => {},
@@ -32,7 +32,7 @@ const HomePageContextProvider = ({
     setAllPosts((prev) => [post, ...prev]);
   };
   return (
-    <HomePageContext.Provider
+    <RootContext.Provider
       value={{
         posts: allPosts,
         setPosts: setAllPosts,
@@ -40,9 +40,9 @@ const HomePageContextProvider = ({
       }}
     >
       {children}
-    </HomePageContext.Provider>
+    </RootContext.Provider>
   );
 };
 
 export default HomePageContextProvider;
-export const useHomePageContext = () => useContext(HomePageContext);
+export const useRootContext = () => useContext(RootContext);

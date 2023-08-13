@@ -17,11 +17,10 @@ import NotificationBox from "./NotificationBox";
 import ProfileButton from "./ProfileButton";
 import { useAuthContext } from "@/context/authContext";
 const SideBar = () => {
-  const authContext = useAuthContext();
+  const { user } = useAuthContext();
   const [searching, setSearching] = useState(false);
   const [viewNotifications, setViewNotifications] = useState(false);
   const path = usePathname();
-  const params = useParams();
 
   const secondaryMode = searching || viewNotifications;
 
@@ -84,11 +83,11 @@ const SideBar = () => {
             active={viewNotifications}
           />
           <CreatePostButton secondaryMode={secondaryMode} />
-          <ProfileButton
-            href={"/1"}
+          {user && <ProfileButton
+            user={user}
             path={path}
             secondaryMode={secondaryMode}
-          />
+          />}
         </div>
         <SideBarDropdown secondaryMode={secondaryMode} />
       </div>

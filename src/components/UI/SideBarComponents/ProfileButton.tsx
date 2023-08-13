@@ -1,23 +1,26 @@
 import { FC } from "react";
 import SideBarItem from "./SideBarItem";
+import { User } from "@/models/auth.models";
 
 interface ProfileButtonProps {
   path: string;
   secondaryMode: boolean;
-  href: string;
+  user: User;
 }
 const ProfileButton: FC<ProfileButtonProps> = ({
   path,
   secondaryMode,
-  href,
+  user,
 }) => {
   return (
     <SideBarItem
       image={{
-        src: "https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80",
+        src: user.currentProfileImage
+          ? user.currentProfileImage
+          : "/images/default-avatar.jpg",
         alt: "profileImage",
       }}
-      href={href}
+      href={user.id}
       path={path}
     >
       {!secondaryMode && "Profile"}

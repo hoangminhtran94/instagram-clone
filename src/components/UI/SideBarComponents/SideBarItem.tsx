@@ -58,7 +58,6 @@ const SideBarItem: FC<SideBarItemProps> = ({
     <Link
       href={href}
       onClick={onClick}
-      as={image ? "image" : undefined}
       className={`p-4 ${
         path === href && "font-bold"
       } hover:bg-slate-100 hover:sidebar-item rounded-lg transition-all text-base cursor-pointer flex items-center gap-3 ${className}`}
