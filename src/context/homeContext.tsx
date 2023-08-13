@@ -29,7 +29,6 @@ const HomePageContextProvider = ({
 }) => {
   const [allPosts, setAllPosts] = useState<PostProps[]>(posts);
   const addNewPostHandler = (post: PostProps) => {
-    console.log(post);
     setAllPosts((prev) => [post, ...prev]);
   };
   return (
