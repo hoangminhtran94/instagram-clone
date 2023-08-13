@@ -5,27 +5,42 @@ import { FC, useState } from "react";
 
 interface ExploreImageProps {
   containerClass?: string;
+  commentCount?: number;
+  likeCount?: number;
 }
 const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
   containerClass,
   src,
   alt,
+  commentCount = 0,
+  likeCount,
   ...otherProps
 }) => {
-  const [isHovering, setIsHovering] = useState(false);
   return (
     <div
-      className={`relative pb-[100%] cursor-pointer ${containerClass}`}
-      onMouseEnter={() => {
-        setIsHovering(true);
-      }}
-      onMouseLeave={() => {
-        setIsHovering(false);
-      }}
+      className={`relative pb-[100%] cursor-pointer group ${containerClass}`}
     >
       <Image src={src} alt={alt} {...otherProps} />
-      {isHovering && (
-        <div className=" absolute top-0 right-0 w-full h-full bg-[rgba(0,0,0,0.3)] z-10 text-white flex items-center justify-center gap-2 text-sm">
+
+      <div className=" group-hover:flex absolute top-0 right-0 w-full h-full bg-[rgba(0,0,0,0.3)] z-10 text-white hidden items-center justify-center gap-10 text-sm">
+        {!!likeCount && likeCount > 0 && (
+          <div className="flex gap-2 ">
+            <svg
+              width="21"
+              viewBox="0 0 33 28"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M30.8024 14.59C28.8024 18.38 20.2224 24.96 17.1324 27.26C16.8093 27.5032 16.4168 27.6364 16.0124 27.64C15.6075 27.6393 15.2141 27.5058 14.8924 27.26C11.8024 24.96 3.24239 18.38 1.21239 14.59C0.0137136 12.3603 -0.310302 9.76373 0.303671 7.30784C0.917644 4.85194 2.42547 2.71331 4.5324 1.31002C5.87176 0.458388 7.42521 0.00413587 9.0124 1.39846e-05C10.3813 0.0181791 11.727 0.355831 12.9423 0.986052C14.1576 1.61627 15.2089 2.52164 16.0124 3.63002C16.8143 2.51993 17.8652 1.61328 19.0809 0.982871C20.2965 0.352458 21.6431 0.0158303 23.0124 1.39846e-05C24.6131 -0.00290633 26.1813 0.451604 27.5324 1.31002C29.6327 2.71938 31.1318 4.86146 31.7365 7.31742C32.3412 9.77338 32.0082 12.3666 30.8024 14.59V14.59Z"
+                fill="white"
+              />
+            </svg>
+
+            <span>{likeCount}</span>
+          </div>
+        )}
+        <div className="flex gap-2 ">
           <svg
             width="21"
             height="17"
@@ -40,9 +55,9 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
               fill="white"
             />
           </svg>
-          0
+          <span>{commentCount}</span>
         </div>
-      )}
+      </div>
     </div>
   );
 };
