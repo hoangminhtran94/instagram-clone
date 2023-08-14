@@ -4,7 +4,7 @@ import PostDate from "./PostDate";
 import PostDetailsComment from "./PostDetailsComment";
 import PostAction from "../PostComponents/PostActions";
 import { FC } from "react";
-import { PostDetail } from "@/app/(withsidebar)/[profileId]/[postId]/page";
+import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
 const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
   return (
     <div className="flex flex-col max-w-[500px] min-w-[405px]">

@@ -2,7 +2,8 @@ import PostDetailModal from "@/components/UI/PostDetailsComponents/PostDetailsMo
 import { FC } from "react";
 import { prisma } from "@/lib/prisma";
 import { PostImage, Tag } from "@prisma/client";
-
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 interface Props {
   params: {
     postId: string;
@@ -11,6 +12,7 @@ interface Props {
 
 export interface PostLike {
   owner: {
+    id: string;
     username: string;
     currentProfileImage: string;
     posts: {
@@ -35,9 +37,12 @@ export interface PostComment {
   };
 }
 export interface PostDetail {
+  id: string;
+  yourPost: boolean;
   caption: string;
   createdAt: Date;
   owner: {
+    id: string;
     username: string;
     currentProfileImage: string;
   };
@@ -51,10 +56,14 @@ export interface PostDetail {
 }
 
 const getPostDetail = async (id: string): Promise<PostDetail | null> => {
+  const jwt_token = cookies().get("jwt_token")?.value;
+  const secret = process.env.JWT_SECRET;
+
   try {
     const post = await prisma.post.findFirstOrThrow({
       where: { id },
       select: {
+        id: true,
         images: true,
         tags: true,
         caption: true,
@@ -64,6 +73,7 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
           select: {
             owner: {
               select: {
+                id: true,
                 username: true,
                 currentProfileImage: true,
                 posts: {
@@ -89,11 +99,18 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
             _count: { select: { replies: true, likes: true } },
           },
         },
-        owner: { select: { currentProfileImage: true, username: true } },
+        owner: {
+          select: { id: true, currentProfileImage: true, username: true },
+        },
         _count: { select: { likes: true } },
       },
     });
-    return post;
+    let yourPost = false;
+    if (jwt_token && secret) {
+      const verifiedToken = jwt.verify(jwt_token, secret) as { userId: string };
+      yourPost = verifiedToken.userId === post.owner.id;
+    }
+    return { ...post, yourPost };
   } catch (error) {
     return null;
   }

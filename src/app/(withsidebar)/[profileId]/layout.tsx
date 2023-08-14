@@ -4,8 +4,9 @@ import { cookies } from "next/headers";
 import { FC, ReactNode } from "react";
 import jwt from "jsonwebtoken";
 import ProfileContextProvider from "@/context/ProfileContext";
-import ProfileMainPage from "@/components/UI/ProfileComponents/ProfileMainPage";
+
 export interface UserData {
+  yourProfile: boolean;
   saved: {
     id: string;
     ownerId: string;
@@ -31,50 +32,48 @@ export interface UserData {
   };
 }
 
-const getUserData = async (): Promise<UserData | null> => {
+const getUserData = async (profileId: string): Promise<UserData | null> => {
   const jwt_token = cookies().get("jwt_token")?.value;
   const secret = process.env.JWT_SECRET;
-
+  let yourProfile = false;
   if (jwt_token && secret) {
     const verifiedToken = jwt.verify(jwt_token, secret) as { userId: string };
-    let user;
-    try {
-      user = await prisma.user.findFirstOrThrow({
-        select: {
-          username: true,
-          fullName: true,
-          currentProfileImage: true,
-          posts: {
-            select: {
-              images: true,
-              id: true,
-              _count: { select: { likes: true, comments: true } },
-            },
-          },
-          saved: true,
-          taggedPosts: true,
-          _count: { select: { posts: true, followers: true, following: true } },
-        },
-        where: { id: verifiedToken.userId },
-      });
-      return user;
-    } catch (error) {
-      return null;
-    }
+    yourProfile = verifiedToken.userId === profileId;
   }
-
-  return null;
+  let user;
+  try {
+    user = await prisma.user.findFirstOrThrow({
+      select: {
+        username: true,
+        fullName: true,
+        currentProfileImage: true,
+        posts: {
+          select: {
+            images: true,
+            id: true,
+            _count: { select: { likes: true, comments: true } },
+          },
+        },
+        saved: true,
+        taggedPosts: true,
+        _count: { select: { posts: true, followers: true, following: true } },
+      },
+      where: { id: profileId },
+    });
+    return { ...user, yourProfile };
+  } catch (error) {
+    return null;
+  }
 };
 
-const ProfileLayout: FC<{ children: ReactNode }> = async ({ children }) => {
-  const userData = await getUserData();
+const ProfileLayout: FC<{
+  children: ReactNode;
+  params: { profileId: string };
+}> = async ({ children, params }) => {
+  const profileId = params.profileId;
+  const userData = await getUserData(profileId);
   return (
-    <ProfileContextProvider user={userData}>
-      <div className="w-[calc(630px+319px)] mx-auto mt-4">
-        <ProfileMainPage />
-      </div>
-      {children}
-    </ProfileContextProvider>
+    <ProfileContextProvider user={userData}>{children}</ProfileContextProvider>
   );
 };
 
