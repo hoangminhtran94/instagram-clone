@@ -26,5 +26,5 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/api/post"],
+  matcher: ["/api/post", "/api/comment"],
 };

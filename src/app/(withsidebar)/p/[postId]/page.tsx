@@ -14,9 +14,9 @@ export interface PostLike {
   owner: {
     id: string;
     username: string;
+    fullName: string;
     currentProfileImage: string;
     posts: {
-      id: string;
       images: {
         src: string;
       }[];
@@ -29,12 +29,25 @@ export interface PostLike {
   };
 }
 export interface PostComment {
-  message: string;
+  id: string;
   createdAt: Date;
   owner: {
-    currentProfileImage: string;
+    id: string;
+    _count: {
+      posts: number;
+      followers: number;
+      following: number;
+    };
     username: string;
+    fullName: string;
+    currentProfileImage: string;
+    posts: {
+      images: {
+        src: string;
+      }[];
+    }[];
   };
+  message: string;
 }
 export interface PostDetail {
   id: string;
@@ -48,7 +61,6 @@ export interface PostDetail {
   };
   likes: PostLike[];
   images: PostImage[];
-  comments: PostComment[];
   tags: Tag[];
   _count: {
     likes: number;
@@ -71,15 +83,16 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
         likes: {
           take: 1,
           select: {
+            id: true,
             owner: {
               select: {
                 id: true,
                 username: true,
+                fullName: true,
                 currentProfileImage: true,
                 posts: {
                   take: 3,
                   select: {
-                    id: true,
                     images: { take: 1, select: { src: true } },
                   },
                 },
@@ -88,15 +101,6 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
                 },
               },
             },
-          },
-        },
-        comments: {
-          take: 20,
-          select: {
-            message: true,
-            createdAt: true,
-            owner: { select: { currentProfileImage: true, username: true } },
-            _count: { select: { replies: true, likes: true } },
           },
         },
         owner: {
