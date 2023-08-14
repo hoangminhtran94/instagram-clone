@@ -3,7 +3,18 @@ import Link from "next/link";
 import { useState, useEffect, useRef, FC } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { Comment } from "@prisma/client";
-const PostComment: FC<{ comments: Comment[] }> = ({ comments }) => {
+const PostComment: FC<{
+  comments:
+    | Comment[]
+    | {
+        message: string;
+        createdAt: Date;
+        owner: {
+          currentProfileImage: string;
+          username: string;
+        };
+      }[];
+}> = ({ comments }) => {
   const [value, setValue] = useState("");
   const [toggleEmoji, setToggleEmoji] = useState(false);
 
