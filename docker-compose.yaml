@@ -1,13 +1,16 @@
 version: '3.9'
 services:
   mongo:
-    image: mongo
+    build: "./Dockerfiles/mongodb"
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: instaclone
+      MONGO_REPLICA_HOST: localhost
+      MONGO_REPLICA_PORT: 27020
     ports:
-      - 27020:27017
+      - 27020:27020
   adminer:
     image: dockette/adminer:mongo
     restart: always

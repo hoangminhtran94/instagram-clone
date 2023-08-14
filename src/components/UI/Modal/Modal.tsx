@@ -11,7 +11,7 @@ interface ModalProps {
   className?: string;
   onCancel?: MouseEventHandler;
 }
-const Backdrop: FC<BackdropProps> = ({ children, onCancel }) => {
+export const Backdrop: FC<BackdropProps> = ({ children, onCancel }) => {
   return (
     <div className="w-screen flex items-center justify-center h-screen fixed top-0 right-0 bg-[rgba(0,0,0,0.6)] z-50">
       <div

@@ -81,6 +81,7 @@ model User {
   views               View[]
   followers           Follow[]       @relation(name: "follower-relation")
   following           Follow[]       @relation(name: "following-relation")
+  CommentLike         CommentLike[]
 }
 
 model Follow {
@@ -140,16 +141,28 @@ model Like {
 }
 
 model Comment {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  post       Post?     @relation(fields: [postId], references: [id])
-  owner      User      @relation(fields: [ownerId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  postId     String?   @db.ObjectId
-  ownerId    String    @db.ObjectId
+  id         String        @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  post       Post?         @relation(fields: [postId], references: [id])
+  owner      User          @relation(fields: [ownerId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  postId     String?       @db.ObjectId
+  ownerId    String        @db.ObjectId
   replies    Reply[]
-  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
-  reelPostId String?   @db.ObjectId
+  reelPost   ReelPost?     @relation(fields: [reelPostId], references: [id])
+  reelPostId String?       @db.ObjectId
+  likes      CommentLike[]
+}
+
+model CommentLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  owner     User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  commentId String   @db.ObjectId
+  userId    String   @db.ObjectId
 }
 
 model Shared {
@@ -166,6 +179,7 @@ model Shared {
 
 model Reply {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  message   String
   comment   Comment  @relation(fields: [commentId], references: [id])
   owner     User     @relation(fields: [ownerId], references: [id])
   createdAt DateTime @default(now())
