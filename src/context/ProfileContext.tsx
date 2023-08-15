@@ -9,7 +9,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { UserData } from "@/app/(withsidebar)/[profileId]/page";
+import { UserData } from "@/app/(withsidebar)/[profileId]/layout";
 
 interface ProfileContextProps {
   userData: UserData | null;

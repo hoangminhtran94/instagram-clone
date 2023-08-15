@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { PostImage, Tag } from "@prisma/client";
+import { Tag, PostImage } from "@prisma/client";
 import { cookies } from "next/headers";
 import { FC, ReactNode } from "react";
 import jwt from "jsonwebtoken";
