@@ -1,7 +1,8 @@
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { useRef, useState } from "react";
-const PostDetailsComment = () => {
+
+const PostDetailsCommentInput = () => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggleEmoji, setToggleEmoji] = useState(false);
@@ -54,4 +55,4 @@ const PostDetailsComment = () => {
   );
 };
 
-export default PostDetailsComment;
+export default PostDetailsCommentInput;

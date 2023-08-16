@@ -20,8 +20,6 @@ RUN \
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
-COPY .env ./.env
-COPY prisma ./prisma
 COPY . .
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -62,4 +60,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOSTNAME localhost
 
-CMD ["node_modules/.bin/next", "start"]
+CMD ["npm", "start"]

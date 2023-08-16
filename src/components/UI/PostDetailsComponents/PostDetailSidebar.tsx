@@ -1,10 +1,11 @@
 import Image from "next/image";
 import PostDetailsLikes from "./PostDetailsLikes";
 import PostDate from "./PostDate";
-import PostDetailsComment from "./PostDetailsComment";
+import PostDetailsCommentInput from "./PostDetailsCommentInput";
 import PostAction from "../PostComponents/PostActions";
 import { FC } from "react";
 import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
+import PostComments from "./PostComments";
 const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
   return (
     <div className="flex flex-col max-w-[500px] min-w-[405px]">
@@ -62,10 +63,7 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
             <p className="text-xs"> {post.caption}</p>
           </div>
         </div>
-        <div className="flex-1 flex flex-col items-center justify-center w-full">
-          <h5>No comments yet</h5>
-          <p className="text-xs">Start the conversation</p>
-        </div>
+        <PostComments postId={post.id} />
       </div>
       <PostAction height={22} className="px-4" />
       <PostDetailsLikes
@@ -74,7 +72,7 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
         onLike={() => {}}
       />
       <PostDate createdDate={post.createdAt} />
-      <PostDetailsComment />
+      <PostDetailsCommentInput />
     </div>
   );
 };
