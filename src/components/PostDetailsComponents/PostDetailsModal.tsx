@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
 import PostDetailSideBar from "./PostDetailSidebar";
 import PostDetailsImages from "./PostDetailsImages";
+import PostCommentContextProvider from "@/context/PostDetailCommentContext";
 
 const PostDetailModal: FC<{ post: PostDetail | null }> = ({ post }) => {
   const router = useRouter();
@@ -21,7 +22,9 @@ const PostDetailModal: FC<{ post: PostDetail | null }> = ({ post }) => {
           ) : (
             <div className="flex h-full">
               <PostDetailsImages images={post.images} />
-              <PostDetailSideBar post={post} />
+              <PostCommentContextProvider postId={post.id}>
+                <PostDetailSideBar post={post} />
+              </PostCommentContextProvider>
             </div>
           )}
         </div>

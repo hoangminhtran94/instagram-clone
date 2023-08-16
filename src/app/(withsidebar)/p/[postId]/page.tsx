@@ -48,6 +48,10 @@ export interface PostComment {
     }[];
   };
   message: string;
+  _count: {
+    likes: number;
+    replies: number;
+  };
 }
 export interface PostDetail {
   id: string;

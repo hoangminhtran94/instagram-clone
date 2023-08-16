@@ -1,23 +1,16 @@
-import { FC, useEffect, useState } from "react";
-import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
-
+import { FC } from "react";
+import Spinner from "../UI/Spinner/Spinner";
+import PostComment from "./PostComment";
+import { usePostCommentContext } from "@/context/PostDetailCommentContext";
 interface PostCommentsProps {
   postId: string;
 }
 const PostComments: FC<PostCommentsProps> = ({ postId }) => {
-  const [comments, setComments] = useState<PostComment[]>([]);
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`/api/comment/${postId}`);
-        const data = await response.json();
-        setComments(data);
-      } catch (error) {
-        setComments([]);
-      }
-    };
-    fetchComments();
-  }, [postId]);
+  const { comments, loading } = usePostCommentContext();
+
+  if (loading) {
+    return <Spinner />;
+  }
   if (comments.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center w-full">
@@ -27,12 +20,10 @@ const PostComments: FC<PostCommentsProps> = ({ postId }) => {
     );
   }
   return (
-    <div className=" flex-1 flex w-full">
-      <ul>
-        {comments.map((comment) => (
-          <li key={comment.id}>{comment.message}</li>
-        ))}
-      </ul>
+    <div className=" flex-1 flex flex-col gap-2 w-full max-h-full">
+      {comments.map((comment) => (
+        <PostComment key={comment.id} comment={comment} />
+      ))}
     </div>
   );
 };

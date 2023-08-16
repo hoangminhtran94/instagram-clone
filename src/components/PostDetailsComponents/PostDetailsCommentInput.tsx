@@ -1,4 +1,6 @@
 import { addNewComment } from "@/actions/action";
+import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
+import { usePostCommentContext } from "@/context/PostDetailCommentContext";
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { FC, useRef, useState } from "react";
@@ -8,7 +10,7 @@ const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggleEmoji, setToggleEmoji] = useState(false);
   const [input, setInput] = useState("");
-
+  const { setComments } = usePostCommentContext();
   useClickOutside(emojiRef, () => {
     setToggleEmoji(false);
   });
@@ -53,11 +55,17 @@ const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
         className="flex items-center flex-1"
         action={async (e) => {
           try {
-            const res = await addNewComment({ message: input, postId });
-            console.log(res);
+            const res = (await addNewComment({
+              message: input,
+              postId,
+            })) as PostComment;
+            if (res) {
+              setComments((prev) => [...prev, res]);
+            }
           } catch (error) {
             console.log(error);
           }
+          setInput("");
         }}
       >
         <input

@@ -16,6 +16,9 @@ export const GET = async (
         id: true,
         message: true,
         createdAt: true,
+        _count: {
+          select: { likes: true, replies: true },
+        },
         owner: {
           select: {
             id: true,

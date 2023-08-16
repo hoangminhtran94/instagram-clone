@@ -139,6 +139,8 @@ model Like {
   updatedAt  DateTime  @updatedAt
   reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
   reelPostId String?   @db.ObjectId
+  comment    Comment?  @relation(fields: [commentId], references: [id])
+  commentId  String?   @db.ObjectId
 }
 
 model Comment {
@@ -154,6 +156,7 @@ model Comment {
   reelPost   ReelPost?     @relation(fields: [reelPostId], references: [id])
   reelPostId String?       @db.ObjectId
   likes      CommentLike[]
+  Like       Like[]
 }
 
 model CommentLike {
