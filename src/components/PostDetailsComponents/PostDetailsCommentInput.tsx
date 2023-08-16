@@ -1,5 +1,5 @@
 import { addNewComment } from "@/actions/action";
-import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostComment } from "@/models/post.models";
 import { usePostCommentContext } from "@/context/PostDetailCommentContext";
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";

@@ -1,12 +1,22 @@
-import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostComment } from "@/models/post.models";
 import { FC } from "react";
 import Image from "next/image";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
-
+import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
+import { useState } from "react";
 const PostComment: FC<{ comment: PostComment }> = ({ comment }) => {
+  const [hovering, setHovering] = useState(false);
   return (
     <div className="flex gap-4 w-full h-fit">
-      <div className="w-[32px] h-[32px]">
+      <div
+        className="w-[32px] h-[32px] cursor-pointer relative"
+        onMouseEnter={() => {
+          setHovering(true);
+        }}
+        onMouseLeave={() => {
+          setHovering(false);
+        }}
+      >
         <Image
           src={
             comment.owner.currentProfileImage
@@ -18,6 +28,7 @@ const PostComment: FC<{ comment: PostComment }> = ({ comment }) => {
           className=" w-full h-full rounded-full"
           alt={`${comment.owner.username}-profile`}
         />
+        <UserSummaryBox hovering={hovering} />
       </div>
 
       <div className=" flex flex-col mt-[6px] flex-1  gap-[2px]">

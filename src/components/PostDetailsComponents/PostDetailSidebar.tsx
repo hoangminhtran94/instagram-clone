@@ -4,7 +4,7 @@ import PostDate from "./PostDate";
 import PostDetailsCommentInput from "./PostDetailsCommentInput";
 import PostAction from "../PostComponents/PostActions";
 import { FC } from "react";
-import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostDetail } from "@/models/post.models";
 import PostComments from "./PostComments";
 import PostCaption from "./PostCaption";
 import PostHeader from "./PostHeader";

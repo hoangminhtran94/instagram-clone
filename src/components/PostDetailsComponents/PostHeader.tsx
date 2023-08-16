@@ -1,4 +1,4 @@
-import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostDetail } from "@/models/post.models";
 import { FC } from "react";
 import Image from "next/image";
 const PostHeader: FC<{ post: PostDetail }> = ({ post }) => {

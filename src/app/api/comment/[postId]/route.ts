@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostComment } from "@/models/post.models";
 
 export const GET = async (
   req: NextRequest,

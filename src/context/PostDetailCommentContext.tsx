@@ -8,7 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { PostComment } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostComment } from "@/models/post.models";
 interface PostCommentContextState {
   comments: PostComment[];
   setComments: Dispatch<SetStateAction<PostComment[]>>;
