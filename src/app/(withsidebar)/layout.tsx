@@ -1,4 +1,4 @@
-import SideBar from "@/components/UI/SideBarComponents/Sidebar";
+import SideBar from "@/components/SideBarComponents/Sidebar";
 import RootContextProvider from "@/context/RootContext";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/verifytoken";

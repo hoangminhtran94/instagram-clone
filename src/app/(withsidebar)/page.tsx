@@ -1,7 +1,7 @@
-import Posts from "@/components/UI/Posts";
-import TopReels from "@/components/TopReels";
-import SideSuggestion from "@/components/UI/SideSuggestion";
-import SideFooter from "@/components/UI/SideFooter";
+import Posts from "@/components/HomePageComponents/Posts";
+import TopReels from "@/components/HomePageComponents/TopReels";
+import SideSuggestion from "@/components/HomePageComponents/SideSuggestion";
+import SideFooter from "@/components/HomePageComponents/SideFooter";
 
 export default async function HomePage() {
   return (

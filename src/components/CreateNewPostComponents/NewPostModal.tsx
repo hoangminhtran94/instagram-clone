@@ -1,5 +1,5 @@
 "use client";
-import Modal from "../Modal/Modal";
+import Modal from "../UI/Modal/Modal";
 import { useState } from "react";
 import NewPostFileUpload from "./NewPostFileUpload";
 import PostImageEditor from "./PostImageEditor";
@@ -7,7 +7,7 @@ import { FC, MouseEventHandler } from "react";
 import NewPostHeader from "./NewPostHeader";
 import { useGlobalModalContext } from "@/context/globalModalContext";
 import CancelNewPostModal from "./CancelNewPostModal";
-import { useCreatePostContext } from "./../../../context/createPostContext";
+import { useCreatePostContext } from "../../context/createPostContext";
 import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
 import LoadingPage from "./LoadingPage";

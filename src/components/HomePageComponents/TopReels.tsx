@@ -1,4 +1,4 @@
-import TopReelItem from "./UI/TopReelComponents/TopReelItem";
+import TopReelItem from "../TopReelComponents/TopReelItem";
 const TopReels = () => {
   return (
     <div className="py-4 flex gap-3">

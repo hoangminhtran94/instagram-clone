@@ -1,10 +1,10 @@
 import { FC } from "react";
-import PostAction from "./PostComponents/PostActions";
-import PostComment from "./PostComponents/PostComments";
-import PostContent from "./PostComponents/PostContent";
-import PostHeader from "./PostComponents/PostHeader";
-import PostImages from "./PostComponents/PostImages";
-import PostLikes from "./PostComponents/PostLikes";
+import PostActions from "./PostActions";
+import PostComment from "./PostComments";
+import PostContent from "./PostContent";
+import PostHeader from "./PostHeader";
+import PostImages from "./PostImages";
+import PostLikes from "./PostLikes";
 import { Post, PostImage, User, Like, Comment } from "@prisma/client";
 
 export type PostProps = Post & {
@@ -18,7 +18,7 @@ const Post: FC<{ post: PostProps }> = ({ post }) => {
     <div className="w-full pb-4 border-b border-b-slate-300 ">
       <PostHeader creator={post.owner} createdDate={post.createdAt} />
       <PostImages images={post.images} />
-      <PostAction />
+      <PostActions />
       {post.likes && <PostLikes postId={post.id} likes={post.likes} />}
       <PostContent creator={post.owner} caption={post.caption} />
       {post.comments && <PostComment comments={post.comments} />}

@@ -1,6 +1,6 @@
 "use client";
 import { FC } from "react";
-import Post from "./Post";
+import Post from "../PostComponents/Post";
 import { useRootContext } from "@/context/RootContext";
 
 const Posts: FC = () => {

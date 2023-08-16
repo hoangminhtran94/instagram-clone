@@ -7,7 +7,7 @@ import {
   useContext,
   useState,
 } from "react";
-import { PostProps } from "@/components/UI/Post";
+import { PostProps } from "@/components/PostComponents/Post";
 
 interface RootContextProps {
   posts: PostProps[];

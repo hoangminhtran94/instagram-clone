@@ -72,7 +72,7 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
         onLike={() => {}}
       />
       <PostDate createdDate={post.createdAt} />
-      <PostDetailsCommentInput />
+      <PostDetailsCommentInput postId={post.id} />
     </div>
   );
 };

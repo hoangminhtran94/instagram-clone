@@ -1,11 +1,13 @@
+import { addNewComment } from "@/actions/action";
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
-import { useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 
-const PostDetailsCommentInput = () => {
+const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggleEmoji, setToggleEmoji] = useState(false);
+  const [input, setInput] = useState("");
 
   useClickOutside(emojiRef, () => {
     setToggleEmoji(false);
@@ -38,6 +40,7 @@ const PostDetailsCommentInput = () => {
               previewConfig={{ showPreview: false }}
               onEmojiClick={(e) => {
                 inputRef.current?.focus();
+                setInput((prev) => prev + e.emoji);
                 setToggleEmoji(false);
               }}
               width={300}
@@ -46,11 +49,36 @@ const PostDetailsCommentInput = () => {
           </div>
         )}
       </div>
-      <input
-        ref={inputRef}
-        className="flex-1 outline-none text-xs h-[24px]"
-        placeholder="Add a comment.."
-      />
+      <form
+        className="flex items-center flex-1"
+        action={async (e) => {
+          try {
+            const res = await addNewComment({ message: input, postId });
+            console.log(res);
+          } catch (error) {
+            console.log(error);
+          }
+        }}
+      >
+        <input
+          name="message"
+          value={input}
+          ref={inputRef}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
+          className="flex-1 outline-none text-xs h-[24px]"
+          placeholder="Add a comment.."
+        />
+        <button
+          className={`outline-none text-xs font-semibold text-blue-500 hover:text-blue-300 ${
+            input.length === 0 && "opacity-50 pointer-events-none"
+          }`}
+          disabled={input.length === 0}
+        >
+          Post
+        </button>
+      </form>
     </div>
   );
 };

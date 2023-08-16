@@ -1,4 +1,4 @@
-import PostDetailModal from "@/components/UI/PostDetailsComponents/PostDetailsModal";
+import PostDetailModal from "@/components/PostDetailsComponents/PostDetailsModal";
 import { FC } from "react";
 import { prisma } from "@/lib/prisma";
 import { PostImage, Tag } from "@prisma/client";

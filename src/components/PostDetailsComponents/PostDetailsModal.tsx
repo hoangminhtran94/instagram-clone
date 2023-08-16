@@ -1,6 +1,6 @@
 "use client";
 import { FC } from "react";
-import { Backdrop } from "../Modal/Modal";
+import { Backdrop } from "../UI/Modal/Modal";
 import { useRouter } from "next/navigation";
 import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
 import PostDetailSideBar from "./PostDetailSidebar";

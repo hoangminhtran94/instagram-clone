@@ -3,7 +3,7 @@ interface PostActionProps {
   height?: number;
   className?: string;
 }
-const PostAction: FC<PostActionProps> = ({ height = 24, className }) => {
+const PostActions: FC<PostActionProps> = ({ height = 24, className }) => {
   return (
     <div className={`flex justify-between py-3 ${className}`}>
       <div className="flex gap-5 items-center">
@@ -95,4 +95,4 @@ const PostAction: FC<PostActionProps> = ({ height = 24, className }) => {
   );
 };
 
-export default PostAction;
+export default PostActions;
