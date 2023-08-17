@@ -1,27 +1,31 @@
 import { UserSummary } from "@/models/user.models";
-import { FC, useState } from "react";
+import { FC } from "react";
 import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
-
+import useShowUserSummary from "@/hooks/useShowUserSummary";
+import Link from "next/link";
 const CommentFirstLine: FC<{ user: UserSummary; message: string }> = ({
   user,
   message,
 }) => {
-  const [hovering, setHovering] = useState(false);
+  const { hovering, mouseEnterHandler, mouseLeaveHandler } =
+    useShowUserSummary();
+
   return (
-    <div className="flex gap-2 relative">
-      <p
-        className=" font-semibold text-xs cursor-pointer"
-        onMouseEnter={() => {
-          setHovering(true);
-        }}
-        onMouseLeave={() => {
-          setHovering(false);
-        }}
+    <div className="flex gap-2 items-center">
+      <div
+        className="relative"
+        onMouseEnter={mouseEnterHandler}
+        onMouseLeave={mouseLeaveHandler}
       >
-        {user.username}
-      </p>
+        <Link
+          href={`/${user.id}`}
+          className=" font-semibold text-xs cursor-pointer flex items-center"
+        >
+          {user.username}
+        </Link>
+        <UserSummaryBox hovering={hovering} user={user} />
+      </div>
       <p className="text-xs"> {message}</p>
-      <UserSummaryBox hovering={hovering} user={user} />
     </div>
   );
 };

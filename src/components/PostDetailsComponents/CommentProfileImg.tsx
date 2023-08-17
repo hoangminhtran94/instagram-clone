@@ -1,18 +1,17 @@
-import { FC, useState } from "react";
+import { FC, useRef } from "react";
 import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
 import Image from "next/image";
 import { UserSummary } from "@/models/user.models";
+import useShowUserSummary from "@/hooks/useShowUserSummary";
 const CommentProfileImg: FC<{ user: UserSummary }> = ({ user }) => {
-  const [hovering, setHovering] = useState(false);
+  const { hovering, mouseEnterHandler, mouseLeaveHandler } =
+    useShowUserSummary();
+
   return (
     <div
-      className="w-[32px] h-[32px] cursor-pointer relative"
-      onMouseEnter={() => {
-        setHovering(true);
-      }}
-      onMouseLeave={() => {
-        setHovering(false);
-      }}
+      className="w-[32px] h-[32px]  relative"
+      onMouseEnter={mouseEnterHandler}
+      onMouseLeave={mouseLeaveHandler}
     >
       <Image
         src={
@@ -22,7 +21,7 @@ const CommentProfileImg: FC<{ user: UserSummary }> = ({ user }) => {
         }
         width={48}
         height={48}
-        className=" w-full h-full rounded-full"
+        className=" w-full h-full rounded-full cursor-pointer"
         alt={`${user.username}-profile`}
       />
       <UserSummaryBox hovering={hovering} user={user} />

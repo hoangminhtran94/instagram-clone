@@ -15,13 +15,15 @@ export type PostProps = Post & {
 };
 const Post: FC<{ post: PostProps }> = ({ post }) => {
   return (
-    <div className="w-full pb-4 border-b border-b-slate-300 ">
+    <div className="w-full border-b border-b-slate-300 ">
       <PostHeader creator={post.owner} createdDate={post.createdAt} />
       <PostImages images={post.images} />
       <PostActions />
       {post.likes && <PostLikes postId={post.id} likes={post.likes} />}
       <PostContent creator={post.owner} caption={post.caption} />
-      {post.comments && <PostComment comments={post.comments} />}
+      {post.comments && (
+        <PostComment postId={post.id} comments={post.comments} />
+      )}
     </div>
   );
 };

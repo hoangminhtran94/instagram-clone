@@ -20,7 +20,7 @@ const ProfileNoContents: FC<ProfileNoContentsProps> = ({
   body,
 }) => {
   return (
-    <div className="flex flex-col items-center gap-4 mt-20 max-w-[400px] ">
+    <div className="flex flex-col items-center gap-4 mt-20 mx-auto max-w-[400px] ">
       <div
         className={`w-[62px] h-[62px] ${action ? "cursor-pointer" : ""} `}
         onClick={action}

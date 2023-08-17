@@ -3,17 +3,23 @@ import { PostComment } from "@/models/post.models";
 import { usePostCommentContext } from "@/context/PostDetailCommentContext";
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggleEmoji, setToggleEmoji] = useState(false);
   const [input, setInput] = useState("");
-  const { setComments } = usePostCommentContext();
+  const { setComments, replyTo, setReplyTo } = usePostCommentContext();
   useClickOutside(emojiRef, () => {
     setToggleEmoji(false);
   });
+  useEffect(() => {
+    if (replyTo) {
+      setInput(`@${replyTo.username} `);
+      inputRef.current?.focus();
+    }
+  }, [replyTo]);
   return (
     <div className="flex px-4 py-3 items-center gap-4 w-full border-t">
       <div ref={emojiRef} className=" relative">
@@ -74,6 +80,11 @@ const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
           ref={inputRef}
           onChange={(e) => {
             setInput(e.target.value);
+            if (replyTo) {
+              if (e.target.value === "") {
+                setReplyTo(null);
+              }
+            }
           }}
           className="flex-1 outline-none text-xs h-[24px]"
           placeholder="Add a comment.."

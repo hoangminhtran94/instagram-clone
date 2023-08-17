@@ -14,13 +14,14 @@ const PostComment: FC<{
           username: string;
         };
       }[];
-}> = ({ comments }) => {
+  postId: string;
+}> = ({ comments, postId }) => {
   const [value, setValue] = useState("");
   const [toggleEmoji, setToggleEmoji] = useState(false);
 
   return (
     <div className="flex flex-col gap-3 py-1 text-sm">
-      <Link href="#">
+      <Link href={`p/${postId}`}>
         {comments.length === 0 ? "No comments" : "View all 10 comments"}
       </Link>
       <div className="flex ">
