@@ -1,46 +1,17 @@
 import { PostComment } from "@/models/post.models";
 import { FC } from "react";
-import Image from "next/image";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
-import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
-import { useState } from "react";
+import CommentProfileImg from "./CommentProfileImg";
+import CommentFirstLine from "./CommentFirstLine";
+import CommentSecondLine from "./CommentSecondLine";
 const PostComment: FC<{ comment: PostComment }> = ({ comment }) => {
-  const [hovering, setHovering] = useState(false);
   return (
     <div className="flex gap-4 w-full h-fit">
-      <div
-        className="w-[32px] h-[32px] cursor-pointer relative"
-        onMouseEnter={() => {
-          setHovering(true);
-        }}
-        onMouseLeave={() => {
-          setHovering(false);
-        }}
-      >
-        <Image
-          src={
-            comment.owner.currentProfileImage
-              ? comment.owner.currentProfileImage
-              : "/images/default-avatar.jpg"
-          }
-          width={48}
-          height={48}
-          className=" w-full h-full rounded-full"
-          alt={`${comment.owner.username}-profile`}
-        />
-        <UserSummaryBox hovering={hovering} />
-      </div>
+      <CommentProfileImg user={comment.owner} />
 
       <div className=" flex flex-col mt-[6px] flex-1  gap-[2px]">
-        <div className="flex gap-2 ">
-          <p className=" font-semibold text-xs">{comment.owner.username}</p>
-          <p className="text-xs"> {comment.message}</p>
-        </div>
-        <div className="flex gap-2 items-center">
-          <p className="text-xxs">{timeAgoOrDayAgo(comment.createdAt)}</p>
-          {comment._count.likes > 0 && <p className="text-xxs">0 likes</p>}
-          <span className="text-xs cursor-pointer">Reply</span>
-        </div>
+        <CommentFirstLine user={comment.owner} message={comment.message} />
+        <CommentSecondLine comment={comment} />
       </div>
       <div className="flex items-center">
         <svg

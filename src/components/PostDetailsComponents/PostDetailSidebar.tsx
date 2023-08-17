@@ -10,7 +10,7 @@ import PostCaption from "./PostCaption";
 import PostHeader from "./PostHeader";
 const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
   return (
-    <div className="flex flex-col max-w-[500px] min-w-[405px]">
+    <div className="flex flex-col max-w-[500px] min-w-[500px]">
       <PostHeader post={post} />
       <div className="border-b p-4 flex flex-1 flex-col items-start gap-4">
         <PostCaption post={post} />
