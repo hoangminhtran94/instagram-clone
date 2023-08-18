@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { PostDetail } from "@/models/post.models";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { getPostRecord } from "@/actions/firebase.service";
 interface Props {
   params: {
     postId: string;

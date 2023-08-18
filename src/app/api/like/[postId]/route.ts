@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { PostLike } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostLike } from "@/models/post.models";
 
 export const GET = async (
   req: NextRequest,

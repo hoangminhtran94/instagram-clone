@@ -1,4 +1,4 @@
-import { PostLike } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostLike } from "@/models/post.models";
 import { FC, MouseEventHandler } from "react";
 import Image from "next/image";
 

@@ -4,8 +4,10 @@ import { writeFile } from "fs/promises";
 import { Post, Location, User, PostImage } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
+import { fireStore } from "@/firebase.config";
 
 import path from "path";
+import { createPostRecord } from "@/actions/firebase.service";
 interface ImagesData {
   alt: string;
   filename: string;
@@ -122,6 +124,12 @@ export async function POST(req: NextRequest) {
 
       return post;
     });
+
+    try {
+      await createPostRecord(newPost.id);
+    } catch (error) {
+      console.log(error);
+    }
     return NextResponse.json(newPost, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Error" }, { status: 500 });
