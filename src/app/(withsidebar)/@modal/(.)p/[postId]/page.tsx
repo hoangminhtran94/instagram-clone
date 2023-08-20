@@ -1,10 +1,9 @@
-import PostDetailPage from "@/components/PostDetailsComponents/PostDetailPage";
+import PostDetailModal from "@/components/PostDetailsComponents/PostDetailsModal";
 import { FC } from "react";
 import { prisma } from "@/lib/prisma";
 import { PostDetail } from "@/models/post.models";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-
 interface Props {
   params: {
     postId: string;
@@ -64,13 +63,13 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
   }
 };
 
-const PostDetail: FC<Props> = async ({ params }) => {
+const PostModal: FC<Props> = async ({ params }) => {
   const post = await getPostDetail(params.postId);
   return (
     <div>
-      <PostDetailPage post={post} />
+      <PostDetailModal post={post} />
     </div>
   );
 };
 
-export default PostDetail;
+export default PostModal;

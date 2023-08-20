@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { AuthContextProvider } from "@/context/authContext";
 import GlobalModalContextProvider from "@/context/globalModalContext";
 import GlobalModal from "@/components/UI/Modal/GlobalModal";
+import React from "react";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -26,18 +27,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <AuthContextProvider>
-        <GlobalModalContextProvider>
-          <body
-            className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
-          >
+      <body
+        className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
+      >
+        <AuthContextProvider>
+          <GlobalModalContextProvider>
             {children}
             <GlobalModal />
             <div id="modal-hook"></div>
             <div id="modal-hook-global"></div>
-          </body>
-        </GlobalModalContextProvider>
-      </AuthContextProvider>
+          </GlobalModalContextProvider>
+        </AuthContextProvider>
+      </body>
     </html>
   );
 }

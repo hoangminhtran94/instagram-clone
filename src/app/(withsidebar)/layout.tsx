@@ -46,8 +46,10 @@ const getPosts = async (): Promise<
 
 const WithSideBarLayout = async ({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) => {
   await verifyToken({ redirectIf: "unauthenticated", path: "/accounts/login" });
   const posts = await getPosts();
@@ -57,6 +59,7 @@ const WithSideBarLayout = async ({
       <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
         {children}
       </main>
+      {modal}
     </RootContextProvider>
   );
 };

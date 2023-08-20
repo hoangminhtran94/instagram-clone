@@ -5,7 +5,6 @@ const useShowUserSummary = () => {
   let timeoutRef = useRef<NodeJS.Timeout | null>(null);
   let leaveTimeout = useRef<NodeJS.Timeout | null>(null);
   const mouseEnterHandler = () => {
-    console.log("in-");
     timeoutRef.current = setTimeout(() => {
       setHovering(true);
     }, 500);
