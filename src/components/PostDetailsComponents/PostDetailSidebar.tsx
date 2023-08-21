@@ -16,7 +16,12 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
         <PostCaption post={post} />
         <PostComments postId={post.id} />
       </div>
-      <PostAction height={22} className="px-4" />
+      <PostAction
+        youLikeThis={post.youLikeThis}
+        postId={post.id}
+        height={22}
+        className="px-4"
+      />
       <PostDetailsLikes
         counts={post._count.likes}
         like={post.likes[0]}

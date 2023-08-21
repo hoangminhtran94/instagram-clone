@@ -41,20 +41,20 @@ model Location {
 }
 
 model ReelPost {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  owner          User      @relation(fields: [ownerId], references: [id])
-  ownerId        String    @db.ObjectId
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  likes          Like[]
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  owner          User           @relation(fields: [ownerId], references: [id])
+  ownerId        String         @db.ObjectId
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   comments       Comment[]
   shared         Shared[]
-  video          Video     @relation(fields: [videoId], references: [id])
-  videoId        String    @unique @db.ObjectId
-  saved          Saved[]   @ignore
+  video          Video          @relation(fields: [videoId], references: [id])
+  videoId        String         @unique @db.ObjectId
+  saved          Saved[]        @ignore
   views          View[]
-  hideLikeView   Boolean   @default(false)
-  turnOffComment Boolean   @default(false)
+  hideLikeView   Boolean        @default(false)
+  turnOffComment Boolean        @default(false)
+  likes          ReelPostLike[]
 }
 
 model User {
@@ -82,7 +82,8 @@ model User {
   views               View[]
   followers           Follow[]       @relation(name: "follower-relation")
   following           Follow[]       @relation(name: "following-relation")
-  CommentLike         CommentLike[]
+  commentLikes        CommentLike[]
+  reelLikes           ReelPostLike[]
 }
 
 model Follow {
@@ -130,17 +131,23 @@ model Video {
 }
 
 model Like {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  post       Post?     @relation(fields: [postId], references: [id])
-  owner      User      @relation(fields: [ownerId], references: [id])
-  postId     String?   @db.ObjectId
-  ownerId    String    @db.ObjectId
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  reelPost   ReelPost? @relation(fields: [reelPostId], references: [id])
-  reelPostId String?   @db.ObjectId
-  comment    Comment?  @relation(fields: [commentId], references: [id])
-  commentId  String?   @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  post      Post     @relation(fields: [postId], references: [id])
+  owner     User     @relation(fields: [ownerId], references: [id])
+  postId    String   @db.ObjectId
+  ownerId   String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReelPostLike {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  owner      User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  reelPost   ReelPost @relation(fields: [reelPostId], references: [id])
+  userId     String   @db.ObjectId
+  reelPostId String   @db.ObjectId
 }
 
 model Comment {
@@ -156,7 +163,6 @@ model Comment {
   reelPost   ReelPost?     @relation(fields: [reelPostId], references: [id])
   reelPostId String?       @db.ObjectId
   likes      CommentLike[]
-  Like       Like[]
 }
 
 model CommentLike {

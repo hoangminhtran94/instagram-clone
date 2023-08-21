@@ -1,4 +1,4 @@
-import { PostDetail } from "@/app/(withsidebar)/p/[postId]/page";
+import { PostDetail } from "@/models/post.models";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
 import Image from "next/image";
 import { FC } from "react";

@@ -1,13 +1,33 @@
 import { FC } from "react";
+import { changeLikeCountHandler } from "@/actions/firebase.service";
+import { useTransition } from "react";
+import { useAuthContext } from "@/context/authContext";
+import { addNewLike } from "@/actions/action";
 interface PostActionProps {
   height?: number;
   className?: string;
+  postId: string;
+  youLikeThis: boolean;
 }
-const PostActions: FC<PostActionProps> = ({ height = 24, className }) => {
+const PostActions: FC<PostActionProps> = ({
+  height = 24,
+  className,
+  postId,
+  youLikeThis,
+}) => {
+  const [isPending, startTranstion] = useTransition();
+  console.log(youLikeThis);
+
+  const likeHandler = () => {
+    startTranstion(async () => {
+      await addNewLike(postId);
+      changeLikeCountHandler(postId, 1);
+    });
+  };
   return (
     <div className={`flex justify-between py-3 ${className}`}>
       <div className="flex gap-5 items-center">
-        <span className="cursor-pointer">
+        <span className="cursor-pointer" onClick={likeHandler}>
           <svg
             aria-label="Like"
             color="rgb(38, 38, 38)"

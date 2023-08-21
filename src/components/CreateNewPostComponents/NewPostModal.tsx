@@ -12,7 +12,7 @@ import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
 import LoadingPage from "./LoadingPage";
 import { useRootContext } from "@/context/RootContext";
-
+import { createPostRecordHandler } from "@/actions/firebase.service";
 const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpeg",

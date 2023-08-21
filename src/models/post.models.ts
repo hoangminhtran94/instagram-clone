@@ -32,6 +32,7 @@ export interface PostComment {
 export interface PostDetail {
   id: string;
   yourPost: boolean;
+  youLikeThis: boolean;
   caption: string;
   createdAt: Date;
   owner: {

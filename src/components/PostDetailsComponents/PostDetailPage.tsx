@@ -7,7 +7,7 @@ import PostCommentContextProvider from "@/context/PostDetailCommentContext";
 
 const PostDetailPage: FC<{ post: PostDetail | null }> = ({ post }) => {
   return (
-    <div className="w-[calc(100%-128px)] h-[90%] mx-auto flex items-center justify-center">
+    <div className="h-[600px] flex items-center justify-center border  ">
       <div className="bg-white z-50 overflow-hidden w-fit h-full  rounded-sm ">
         {!post ? (
           <div>Something wrong happened </div>

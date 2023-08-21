@@ -39,7 +39,7 @@ export const createAPostRecord = async (id: string) => {
 export const changeLikeCount = async (id: string, counter: 1 | -1) => {
   try {
     const postRecord = await getAPostRecordById(id);
-    const recordData = postRecord.data as unknown as PostRecord;
+    const recordData = postRecord.data() as unknown as PostRecord;
 
     return await updateDoc(postRef(id), {
       like_count: recordData.like_count + counter,
