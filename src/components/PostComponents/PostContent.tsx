@@ -1,7 +1,8 @@
+import { UserSummary } from "@/models/user.models";
 import { User } from "@prisma/client";
 import { FC } from "react";
 
-const PostContent: FC<{ caption: string; creator: User }> = ({
+const PostContent: FC<{ caption: string; creator: UserSummary }> = ({
   caption,
   creator,
 }) => {

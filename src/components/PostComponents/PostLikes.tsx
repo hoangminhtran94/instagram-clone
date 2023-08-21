@@ -1,14 +1,16 @@
+import { PostLike } from "@/models/post.models";
 import { Like } from "@prisma/client";
 import Link from "next/link";
 import { FC } from "react";
 
-const PostLikes: FC<{ likes: Like[]; postId: string }> = ({
-  likes,
+const PostLikes: FC<{ like: PostLike; postId: string; likeCount: number }> = ({
+  like,
   postId,
+  likeCount,
 }) => {
   return (
     <div className="py-1 text-sm">
-      {likes.length === 0 ? (
+      {likeCount === 0 ? (
         <div>
           Be the first to{" "}
           <button className="font-bold cursor-pointer">like this</button>
@@ -16,13 +18,17 @@ const PostLikes: FC<{ likes: Like[]; postId: string }> = ({
       ) : (
         <div>
           Liked by{" "}
-          <a className="font-bold" href="#">
-            Minh Hoang Tran
-          </a>{" "}
-          and{" "}
-          <Link href={`/p/${postId}`} className="font-bold cursor-pointer">
-            others
-          </Link>
+          <Link className="font-bold" href={`/${like.owner.id}`}>
+            {like.owner.username}
+          </Link>{" "}
+          {likeCount > 1 && (
+            <>
+              <span className="mx-1">and</span>
+              <Link href={`/p/${postId}`} className="font-bold cursor-pointer">
+                others
+              </Link>
+            </>
+          )}
         </div>
       )}
     </div>

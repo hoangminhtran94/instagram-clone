@@ -37,9 +37,11 @@ export interface PostDetail {
   createdAt: Date;
   owner: UserSummary;
   likes: PostLike[];
+  comments?: PostComment[];
   images: PostImage[];
   tags: Tag[];
-  _count: {
-    likes: number;
+  _count?: {
+    likes?: number;
+    comments?: number;
   };
 }

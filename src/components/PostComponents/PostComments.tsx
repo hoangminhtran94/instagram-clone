@@ -1,28 +1,21 @@
 "use client";
 import Link from "next/link";
-import { useState, useEffect, useRef, FC } from "react";
+import { useState, FC } from "react";
 import EmojiPicker from "emoji-picker-react";
-import { Comment } from "@prisma/client";
+
 const PostComment: FC<{
-  comments:
-    | Comment[]
-    | {
-        message: string;
-        createdAt: Date;
-        owner: {
-          currentProfileImage: string;
-          username: string;
-        };
-      }[];
+  commentCount: number;
   postId: string;
-}> = ({ comments, postId }) => {
+}> = ({ commentCount, postId }) => {
   const [value, setValue] = useState("");
   const [toggleEmoji, setToggleEmoji] = useState(false);
 
   return (
     <div className="flex flex-col gap-3 py-1 text-sm">
       <Link href={`p/${postId}`}>
-        {comments.length === 0 ? "No comments" : "View all 10 comments"}
+        {commentCount === 0
+          ? "No comments"
+          : `View all ${commentCount} comments`}
       </Link>
       <div className="flex ">
         <textarea

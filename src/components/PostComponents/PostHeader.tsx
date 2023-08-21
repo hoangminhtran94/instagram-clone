@@ -2,7 +2,8 @@ import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC } from "react";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
-const PostHeader: FC<{ creator: User; createdDate: Date }> = ({
+import { UserSummary } from "@/models/user.models";
+const PostHeader: FC<{ creator: UserSummary; createdDate: Date }> = ({
   creator,
   createdDate,
 }) => {

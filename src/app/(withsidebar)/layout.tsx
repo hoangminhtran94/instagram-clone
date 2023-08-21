@@ -1,44 +1,87 @@
+import { getUserFromToken } from "@/actions/action";
+import { onGetPostRecord } from "@/actions/firebase.service";
 import SideBar from "@/components/SideBarComponents/Sidebar";
 import RootContextProvider from "@/context/RootContext";
-import { prisma } from "@/lib/prisma";
+import { prisma, modifiedPrisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/verifytoken";
-import { Like, Post, PostImage, Comment } from "@prisma/client";
+import { PostDetail } from "@/models/post.models";
+import { PostRecord } from "@/repository/firebase";
 
-const getPosts = async (): Promise<
-  (Post & {
-    owner: any;
-    images: PostImage[];
-    likes?: Like[];
-    comments?: Comment[];
-  })[]
-> => {
+const getPosts = async (): Promise<PostDetail[]> => {
+  const userId = getUserFromToken();
   let posts = [];
   try {
     posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
-      include: {
-        owner: {
+      select: {
+        id: true,
+        images: true,
+        tags: true,
+        caption: true,
+        createdAt: true,
+        likes: {
+          take: 1,
           select: {
-            username: true,
-            currentProfileImage: true,
             id: true,
-            _count: {
+            owner: {
               select: {
-                followers: true,
-                following: true,
-                posts: true,
+                id: true,
+                username: true,
+                fullName: true,
+                currentProfileImage: true,
+                posts: {
+                  take: 3,
+                  select: {
+                    images: { take: 1, select: { src: true } },
+                  },
+                },
+                _count: {
+                  select: { posts: true, followers: true, following: true },
+                },
               },
             },
           },
         },
-        images: true,
-        likes: { where: { post: { hideLikeView: false } } },
-        comments: { where: { post: { turnOffComment: false } } },
+        owner: {
+          select: {
+            id: true,
+            currentProfileImage: true,
+            username: true,
+            fullName: true,
+            posts: {
+              take: 3,
+              select: { images: { take: 1, select: { src: true } } },
+            },
+            _count: {
+              select: { posts: true, followers: true, following: true },
+            },
+          },
+        },
       },
     });
-    return posts;
+
+    const returnPosts = await Promise.all(
+      posts.map(async (post) => {
+        const postRecord = await onGetPostRecord(post.id);
+        const postRecordData = postRecord.data() as unknown as PostRecord;
+        const checked = await modifiedPrisma.post.checkYourPostAndLike(
+          post.id,
+          userId
+        );
+        return {
+          ...post,
+          _count: {
+            likes: postRecordData.like_count,
+            comments: postRecordData.comment_count,
+          },
+          ...checked,
+        };
+      })
+    );
+
+    return returnPosts;
   } catch (error) {
     return [];
   }

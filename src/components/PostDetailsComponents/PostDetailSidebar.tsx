@@ -23,7 +23,7 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
         className="px-4"
       />
       <PostDetailsLikes
-        counts={post._count.likes}
+        counts={post._count?.likes ?? 0}
         like={post.likes[0]}
         onLike={() => {}}
       />

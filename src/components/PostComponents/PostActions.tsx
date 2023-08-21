@@ -15,7 +15,6 @@ const PostActions: FC<PostActionProps> = ({
   postId,
   youLikeThis,
 }) => {
-  console.log(youLikeThis);
   const [isPending, startTranstion] = useTransition();
   const [beingLiked, setBeingLiked] = useState(youLikeThis);
   const likeHandler = () => {
