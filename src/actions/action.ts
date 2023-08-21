@@ -5,7 +5,10 @@ import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { PostComment } from "@/models/post.models";
-import { changeLikeCountHandler } from "./firebase.service";
+import {
+  changeCommentCountHandler,
+  changeLikeCountHandler,
+} from "./firebase.service";
 export interface NewCommentDto {
   message: string;
   postId: string;
@@ -67,8 +70,8 @@ export const addNewComment = async (data: NewCommentDto) => {
         },
       },
     });
+    await changeCommentCountHandler(data.postId, 1);
   } catch (error) {
-    console.log(error);
     return NextResponse.json(
       { meesage: "Something wrong happenende" },
       { status: 500 }

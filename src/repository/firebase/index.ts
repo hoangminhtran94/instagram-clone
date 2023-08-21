@@ -56,7 +56,7 @@ export const changeCommentCount = async (id: string, counter: 1 | -1) => {
     const recordData = postRecord.data() as unknown as PostRecord;
 
     return await updateDoc(postRef(id), {
-      comment_count: recordData.like_count + counter,
+      comment_count: recordData.comment_count + counter,
       updated_at: Timestamp.now(),
     });
   } catch (error) {

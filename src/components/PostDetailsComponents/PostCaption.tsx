@@ -1,29 +1,16 @@
 import { PostDetail } from "@/models/post.models";
-import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
-import Image from "next/image";
 import { FC } from "react";
+import CommentProfileImg from "./CommentProfileImg";
+import CommentFirstLine from "./CommentFirstLine";
+import CommentSecondLine from "./CommentSecondLine";
 const PostCaption: FC<{ post: PostDetail }> = ({ post }) => {
   return (
     <div className="flex gap-4">
-      <div className="w-[32px] h-[32px]">
-        <Image
-          src={
-            post.owner.currentProfileImage
-              ? post.owner.currentProfileImage
-              : "/images/default-avatar.jpg"
-          }
-          width={48}
-          height={48}
-          className=" w-full h-full rounded-full"
-          alt={`${post.owner.username}-profile`}
-        />
-      </div>
-      <div className=" flex flex-col mt-[6px]">
-        <div className="flex gap-2">
-          <p className=" font-semibold text-xs">{post.owner.username}</p>
-          <p className="text-xs"> {post.caption}</p>
-        </div>
-        <p className="text-xxs">{timeAgoOrDayAgo(post.createdAt)}</p>
+      <CommentProfileImg user={post.owner} />
+
+      <div className=" flex flex-col mt-[6px] flex-1  gap-[2px]">
+        <CommentFirstLine user={post.owner} message={post.caption} />
+        <CommentSecondLine forCaption={{ createdAt: post.createdAt }} />
       </div>
     </div>
   );

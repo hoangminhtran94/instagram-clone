@@ -3,7 +3,7 @@ import { FC } from "react";
 import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
 import useShowUserSummary from "@/hooks/useShowUserSummary";
 import Link from "next/link";
-const CommentFirstLine: FC<{ user: UserSummary; message: string }> = ({
+const CommentFirstLine: FC<{ user: UserSummary; message?: string }> = ({
   user,
   message,
 }) => {
@@ -11,7 +11,7 @@ const CommentFirstLine: FC<{ user: UserSummary; message: string }> = ({
     useShowUserSummary();
 
   return (
-    <div className="flex gap-2 items-center">
+    <div className="flex gap-2 items-center flex-1">
       <div
         className="relative"
         onMouseEnter={mouseEnterHandler}
@@ -19,13 +19,13 @@ const CommentFirstLine: FC<{ user: UserSummary; message: string }> = ({
       >
         <Link
           href={`/${user.id}`}
-          className=" font-semibold text-xs cursor-pointer flex items-center"
+          className=" font-semibold text-xs cursor-pointer flex items-center hover:opacity-50"
         >
           {user.username}
         </Link>
         <UserSummaryBox hovering={hovering} user={user} />
       </div>
-      <p className="text-xs"> {message}</p>
+      {message && <p className="text-xs"> {message}</p>}
     </div>
   );
 };

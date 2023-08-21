@@ -35,11 +35,7 @@ export interface PostDetail {
   youLikeThis: boolean;
   caption: string;
   createdAt: Date;
-  owner: {
-    id: string;
-    username: string;
-    currentProfileImage: string;
-  };
+  owner: UserSummary;
   likes: PostLike[];
   images: PostImage[];
   tags: Tag[];

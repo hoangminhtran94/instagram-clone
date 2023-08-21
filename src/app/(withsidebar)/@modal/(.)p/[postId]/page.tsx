@@ -45,7 +45,19 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
           },
         },
         owner: {
-          select: { id: true, currentProfileImage: true, username: true },
+          select: {
+            id: true,
+            currentProfileImage: true,
+            username: true,
+            fullName: true,
+            posts: {
+              take: 3,
+              select: { images: { take: 1, select: { src: true } } },
+            },
+            _count: {
+              select: { posts: true, followers: true, following: true },
+            },
+          },
         },
         _count: { select: { likes: true } },
       },
@@ -59,7 +71,6 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
         })) !== null;
       yourPost = userId === post.owner.id;
     }
-
     return { ...post, yourPost, youLikeThis };
   } catch (error) {
     return null;
@@ -68,6 +79,7 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
 
 const PostModal: FC<Props> = async ({ params }) => {
   const post = await getPostDetail(params.postId);
+  console.log(post);
   return (
     <div>
       <PostDetailModal post={post} />

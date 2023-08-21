@@ -21,11 +21,13 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
   ...otherProps
 }) => {
   const [likes, setLikes] = useState(likeCount);
+  const [comments, setComments] = useState(commentCount);
   useEffect(() => {
     if (postId) {
       const unsub = onSnapshot(doc(fireStore, "Posts", postId), (doc) => {
         const data = doc.data() as unknown as PostRecord;
         setLikes(data.like_count);
+        setComments(data.comment_count);
       });
 
       return () => {
@@ -72,7 +74,7 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
               fill="white"
             />
           </svg>
-          <span>{commentCount}</span>
+          <span>{comments}</span>
         </div>
       </div>
     </div>
