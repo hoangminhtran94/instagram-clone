@@ -20,7 +20,7 @@ const ProfileButton: FC<ProfileButtonProps> = ({
           : "/images/default-avatar.jpg",
         alt: "profileImage",
       }}
-      href={user.id}
+      href={`/${user.id}`}
       path={path}
     >
       {!secondaryMode && "Profile"}

@@ -2,8 +2,7 @@ import PostDetailModal from "@/components/PostDetailsComponents/PostDetailsModal
 import { FC } from "react";
 import { prisma } from "@/lib/prisma";
 import { PostDetail } from "@/models/post.models";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { getUserFromToken } from "@/actions/action";
 interface Props {
   params: {
     postId: string;
@@ -11,8 +10,7 @@ interface Props {
 }
 
 const getPostDetail = async (id: string): Promise<PostDetail | null> => {
-  const jwt_token = cookies().get("jwt_token")?.value;
-  const secret = process.env.JWT_SECRET;
+  const userId = getUserFromToken();
 
   try {
     const post = await prisma.post.findFirstOrThrow({
@@ -53,11 +51,16 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
       },
     });
     let yourPost = false;
-    if (jwt_token && secret) {
-      const verifiedToken = jwt.verify(jwt_token, secret) as { userId: string };
-      yourPost = verifiedToken.userId === post.owner.id;
+    let youLikeThis = false;
+    if (userId) {
+      youLikeThis =
+        (await prisma.like.findFirst({
+          where: { ownerId: userId, postId: post.id },
+        })) !== null;
+      yourPost = userId === post.owner.id;
     }
-    return { ...post, yourPost };
+
+    return { ...post, yourPost, youLikeThis };
   } catch (error) {
     return null;
   }

@@ -1,9 +1,12 @@
 "use client";
 import Image from "next/image";
 import { ImageProps } from "next/image";
-import { FC, useState } from "react";
-
+import { FC, useEffect, useState } from "react";
+import { doc, onSnapshot } from "firebase/firestore";
+import { fireStore } from "@/firebase.config";
+import { PostRecord } from "@/repository/firebase";
 interface ExploreImageProps {
+  postId?: string;
   containerClass?: string;
   commentCount?: number;
   likeCount?: number;
@@ -12,10 +15,24 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
   containerClass,
   src,
   alt,
+  postId,
   commentCount = 0,
   likeCount,
   ...otherProps
 }) => {
+  const [likes, setLikes] = useState(likeCount);
+  useEffect(() => {
+    if (postId) {
+      const unsub = onSnapshot(doc(fireStore, "Posts", postId), (doc) => {
+        const data = doc.data() as unknown as PostRecord;
+        setLikes(data.like_count);
+      });
+
+      return () => {
+        unsub();
+      };
+    }
+  }, [postId]);
   return (
     <div
       className={`relative pb-[100%] cursor-pointer group ${containerClass}`}
@@ -23,7 +40,7 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
       <Image src={src} alt={alt} {...otherProps} />
 
       <div className=" group-hover:flex absolute top-0 right-0 w-full h-full bg-[rgba(0,0,0,0.3)] z-10 text-white hidden items-center justify-center gap-10 text-sm">
-        {!!likeCount && likeCount > 0 && (
+        {!!likes && likes > 0 && (
           <div className="flex gap-2 ">
             <svg
               width="21"
@@ -37,7 +54,7 @@ const ExploreImage: FC<ExploreImageProps & ImageProps> = ({
               />
             </svg>
 
-            <span>{likeCount}</span>
+            <span>{likes}</span>
           </div>
         )}
         <div className="flex gap-2 ">

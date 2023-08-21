@@ -30,6 +30,7 @@ const ViewPosts: FC<{
             <Link href={`p/${post.id}`} className="w-full" key={post.id}>
               <Image
                 fill
+                postId={post.id}
                 src={post.images[0].src}
                 commentCount={post._count.comments}
                 likeCount={post._count.likes}

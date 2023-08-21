@@ -7,7 +7,7 @@ const NEWPOST_RECORD = {
   comment_count: 0,
   updated_at: Timestamp.now(),
 };
-interface PostRecord {
+export interface PostRecord {
   like_count: number;
   comment_count: number;
   updated_date: Timestamp;

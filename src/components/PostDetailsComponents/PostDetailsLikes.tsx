@@ -22,22 +22,9 @@ const PostDetailsLikes: FC<{
   }
 
   return (
-    <div className="px-4">
-      <div className=" w-5 h-5">
-        <Image
-          src={
-            like.owner.currentProfileImage
-              ? like.owner.currentProfileImage
-              : "/images/default-avatar.jpg"
-          }
-          className="w-full h-full rounded-full"
-          width={60}
-          height={60}
-          alt={`${like.owner.username}-profile`}
-        />
-      </div>
+    <div className="text-xs px-4">
       Liked by
-      <span className="font-semibold">{like.owner.username}</span>
+      <span className="font-semibold ml-1">{like.owner.username}</span>
       {counts > 1 && <span>{`and ${counts} others`}</span>}
     </div>
   );

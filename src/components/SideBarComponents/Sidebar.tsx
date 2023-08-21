@@ -83,11 +83,13 @@ const SideBar = () => {
             active={viewNotifications}
           />
           <CreatePostButton secondaryMode={secondaryMode} />
-          {user && <ProfileButton
-            user={user}
-            path={path}
-            secondaryMode={secondaryMode}
-          />}
+          {user && (
+            <ProfileButton
+              user={user}
+              path={path}
+              secondaryMode={secondaryMode}
+            />
+          )}
         </div>
         <SideBarDropdown secondaryMode={secondaryMode} />
       </div>
