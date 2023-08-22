@@ -29,7 +29,11 @@ const Post: FC<{ post: PostProps }> = ({ post }) => {
   }, [post.id]);
   return (
     <div className="w-full border-b border-b-slate-300 ">
-      <PostHeader creator={post.owner} createdDate={post.createdAt} />
+      <PostHeader
+        creator={post.owner}
+        createdDate={post.createdAt}
+        postId={post.id}
+      />
       <PostImages images={post.images} />
       <PostActions postId={post.id} youLikeThis={post.youLikeThis} />
       {post.likes && (

@@ -59,7 +59,7 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
             },
           },
         },
-        _count: { select: { likes: true } },
+        _count: { select: { likes: true} },
       },
     });
     let yourPost = false;

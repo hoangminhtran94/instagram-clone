@@ -1,14 +1,36 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
 import { UserSummary } from "@/models/user.models";
-const PostHeader: FC<{ creator: UserSummary; createdDate: Date }> = ({
-  creator,
-  createdDate,
-}) => {
+import { useGlobalModalContext } from "@/context/globalModalContext";
+import PostOptionsBox from "./PostOptionsBox";
+
+const PostHeader: FC<{
+  creator: UserSummary;
+  createdDate: Date;
+  postId: string;
+}> = ({ creator, createdDate, postId }) => {
+  const globalModalContext = useGlobalModalContext();
+  const cancelCreationHandler = () => {
+    globalModalContext.toggleModal({
+      body: (
+        <PostOptionsBox
+          postId={postId}
+          creatorId={creator.id}
+          onCancel={() => {
+            globalModalContext.closeModal();
+          }}
+        />
+      ),
+      className: "rounded-lg",
+      onCancel: () => {
+        globalModalContext.closeModal();
+      },
+    });
+  };
   return (
-    <div className="flex justify-between items-center px-2 py-3 text-xs">
+    <div className="flex justify-between items-center py-3 text-xs">
       <div className="flex items-center gap-2">
         <div>
           <Image
@@ -49,7 +71,10 @@ const PostHeader: FC<{ creator: UserSummary; createdDate: Date }> = ({
           </div>
         </div>
       </div>
-      <div>
+      <div
+        className="cursor-pointer hover:opacity-50"
+        onClick={cancelCreationHandler}
+      >
         <svg
           aria-label="More options"
           color="rgb(0, 0, 0)"
