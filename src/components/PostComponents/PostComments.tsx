@@ -1,14 +1,18 @@
 "use client";
 import Link from "next/link";
-import { useState, FC } from "react";
-import EmojiPicker from "emoji-picker-react";
-
+import { useState, FC, useRef } from "react";
+import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
+import { addNewComment } from "@/actions/action";
+import { PostComment } from "@/models/post.models";
+import Comment from "../PostDetailsComponents/PostComment";
 const PostComment: FC<{
   commentCount: number;
   postId: string;
 }> = ({ commentCount, postId }) => {
-  const [value, setValue] = useState("");
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [input, setInput] = useState("");
   const [toggleEmoji, setToggleEmoji] = useState(false);
+  const [comment, setComment] = useState<PostComment | null>(null);
 
   return (
     <div className="flex flex-col gap-3 py-1 text-sm">
@@ -17,17 +21,41 @@ const PostComment: FC<{
           ? "No comments"
           : `View all ${commentCount} comments`}
       </Link>
-      <div className="flex ">
+      {comment && <Comment comment={comment} />}
+      <form
+        className="flex"
+        action={async (e) => {
+          try {
+            const res = (await addNewComment({
+              message: input,
+              postId,
+            })) as PostComment;
+            if (res) {
+              setComment((prev) => res);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          setInput("");
+        }}
+      >
         <textarea
-          value={value}
+          ref={inputRef}
+          value={input}
           className="flex-1 resize-none outline-none"
           placeholder="Add a comment..."
           onChange={(e) => {
-            setValue(e.target.value);
+            setInput(e.target.value);
           }}
         />
-        <div className="flex h-fit items-center">
-          <button className={`px-3 ${!value && "hidden"}`}>Post</button>
+        <div className="flex h-[20px] items-center">
+          <button
+            className={`text-[#1da1f2] hover:text-[#85d0ff] text-sm font-semibold ${
+              !input && "hidden"
+            }`}
+          >
+            Post
+          </button>
           <div className="px-2 cursor-pointer relative">
             <svg
               onClick={() => {
@@ -47,15 +75,23 @@ const PostComment: FC<{
             {toggleEmoji && (
               <div className="absolute bottom-full left-[110%] bg-white z-10">
                 <EmojiPicker
+                  searchDisabled
+                  skinTonesDisabled
+                  emojiStyle={EmojiStyle.NATIVE}
+                  previewConfig={{ showPreview: false }}
                   onEmojiClick={(e) => {
-                    setValue((prev) => prev + e.emoji);
+                    inputRef.current?.focus();
+                    setInput((prev) => prev + e.emoji);
+                    setToggleEmoji(false);
                   }}
+                  width={300}
+                  height={300}
                 />
               </div>
             )}
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

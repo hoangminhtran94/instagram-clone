@@ -9,7 +9,7 @@ const PostHeader: FC<{ post: PostDetail }> = ({ post }) => {
     <div className="border-b p-4 flex gap-4">
       <CommentProfileImg user={post.owner} />
 
-      <CommentFirstLine user={post.owner} />
+      <CommentFirstLine owner={post.owner} />
       <span className="flex items-center justify-center">
         <svg
           aria-label="More options"

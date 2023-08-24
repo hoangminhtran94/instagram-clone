@@ -9,7 +9,7 @@ const PostCaption: FC<{ post: PostDetail }> = ({ post }) => {
       <CommentProfileImg user={post.owner} />
 
       <div className=" flex flex-col mt-[6px] flex-1  gap-[2px]">
-        <CommentFirstLine user={post.owner} message={post.caption} />
+        <CommentFirstLine owner={post.owner} message={post.caption} />
         <CommentSecondLine forCaption={{ createdAt: post.createdAt }} />
       </div>
     </div>
