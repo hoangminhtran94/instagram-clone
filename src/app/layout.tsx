@@ -5,7 +5,9 @@ import { AuthContextProvider } from "@/context/authContext";
 import GlobalModalContextProvider from "@/context/globalModalContext";
 import GlobalModal from "@/components/UI/Modal/GlobalModal";
 import React from "react";
-import { getUserDataFromToken, getUserFromToken } from "@/actions/action";
+import { getUserDataFromToken } from "@/actions/action";
+import ReactQueryContextProvider from "@/context/ReactQueryContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,19 +29,22 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getUserDataFromToken();
+
   return (
     <html lang="en">
       <body
         className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
       >
-        <AuthContextProvider user={user}>
-          <GlobalModalContextProvider>
-            {children}
-            <GlobalModal />
-            <div id="modal-hook"></div>
-            <div id="modal-hook-global"></div>
-          </GlobalModalContextProvider>
-        </AuthContextProvider>
+        <ReactQueryContextProvider>
+          <AuthContextProvider user={user}>
+            <GlobalModalContextProvider>
+              {children}
+              <GlobalModal />
+              <div id="modal-hook"></div>
+              <div id="modal-hook-global"></div>
+            </GlobalModalContextProvider>
+          </AuthContextProvider>
+        </ReactQueryContextProvider>
       </body>
     </html>
   );

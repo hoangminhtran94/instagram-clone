@@ -2,11 +2,25 @@
 import { UserSummary } from "@/models/user.models";
 import { FC } from "react";
 import Image from "next/image";
-import { useTransition } from "react";
-import { followAction } from "@/actions/action";
-
+import { queryClient } from "@/context/ReactQueryContext";
+import { useMutation } from "@tanstack/react-query";
 const UserSuggestion: FC<{ user: UserSummary }> = ({ user }) => {
-  const [loading, startTransition] = useTransition();
+  const { mutate, isLoading, error, isError } = useMutation({
+    mutationFn: async (userId: string) => {
+      const response = await fetch("/api/users/following", {
+        method: "POST",
+        body: JSON.stringify({ followingId: userId }),
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error("Something wrong happened");
+      }
+      return await response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["suggestion"] });
+    },
+  });
   return (
     <div className="flex gap-3">
       <div>
@@ -29,9 +43,7 @@ const UserSuggestion: FC<{ user: UserSummary }> = ({ user }) => {
       <button
         className="px-3 text-blue-400 font-bold"
         onClick={() => {
-          startTransition(async () => {
-            await followAction(user.id);
-          });
+          mutate(user.id);
         }}
       >
         Follow

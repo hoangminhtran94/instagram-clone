@@ -1,9 +1,21 @@
+"use client";
 import Link from "next/link";
 import { getSuggestion } from "@/actions/action";
 import UserSuggestion from "./UserSuggestion";
 import { UserSummary } from "@/models/user.models";
-const SideSuggestion = async () => {
-  const suggestions = (await getSuggestion()) as UserSummary[];
+import { useQuery } from "@tanstack/react-query";
+const SideSuggestion = () => {
+  const { data, isError, isLoading, error } = useQuery<UserSummary[]>({
+    queryKey: ["suggestion"],
+    queryFn: async () => {
+      const response = await fetch("/api/users/suggestion");
+      if (!response.ok) {
+        throw Error("Failed to fetch");
+      }
+      const suggesstion = await response.json();
+      return suggesstion;
+    },
+  });
 
   return (
     <div className="w-full flex flex-col gap-5 text-xs">
@@ -13,7 +25,7 @@ const SideSuggestion = async () => {
           See all
         </Link>
       </div>
-      {suggestions.map((user) => (
+      {data?.map((user: any) => (
         <UserSuggestion key={user.id} user={user} />
       ))}
     </div>
