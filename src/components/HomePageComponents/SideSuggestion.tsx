@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getSuggestion } from "@/actions/action";
 import UserSuggestion from "./UserSuggestion";
 import { UserSummary } from "@/models/user.models";

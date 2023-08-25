@@ -1,14 +1,31 @@
+import { getExploreImages } from "@/actions/action";
 import ExploreImages from "@/components/ExploreComponents/ExploreImages";
 import ExploreTags from "@/components/ExploreComponents/ExploreTag";
-const ExplorePage = () => {
+import Spinner from "@/components/UI/Spinner/Spinner";
+import { Suspense } from "react";
+
+const ExplorePage = async () => {
+  const exploreImages = await getExploreImages();
   return (
     <div className="w-[975px] mx-auto px-4 py-5">
       <ExploreTags />
-      <div className="mt-5">
-        <ExploreImages odd={true} />
-        <ExploreImages odd={false} />
-        <ExploreImages odd={true} />
-      </div>
+      <Suspense
+        fallback={
+          <div className="h-[500px]">
+            <Spinner />
+          </div>
+        }
+      >
+        <div className="mt-5">
+          {exploreImages.map((imageGroup, index) => (
+            <ExploreImages
+              key={index}
+              posts={imageGroup}
+              odd={index % 2 === 0}
+            />
+          ))}
+        </div>
+      </Suspense>
     </div>
   );
 };

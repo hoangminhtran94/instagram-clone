@@ -1,18 +1,12 @@
-import { PostImage } from "@prisma/client";
 import { FC } from "react";
 import ProfileNoContents from "./ProfileNoContents";
 import Image from "../ExploreComponents/ExploreImage";
 import Link from "next/link";
-const ViewPosts: FC<{
-  posts: {
-    id: string;
-    _count: {
-      likes: number;
-      comments: number;
-    };
-    images: PostImage[];
-  }[];
-}> = ({ posts }) => {
+import { ExplorePost } from "@/models/post.models";
+export interface ViewPostsProps {
+  posts: ExplorePost[];
+}
+const ViewPosts: FC<ViewPostsProps> = ({ posts }) => {
   return (
     <div className="w-full">
       {posts.length === 0 ? (

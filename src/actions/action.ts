@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
-import { PostComment } from "@/models/post.models";
+import { ExplorePost, PostComment } from "@/models/post.models";
 import {
   changeCommentCountHandler,
   changeLikeCountHandler,
@@ -14,6 +14,17 @@ export interface NewCommentDto {
   postId: string;
 }
 import { sampleSize } from "lodash";
+const splitArray = <T>(arr: T[], chunkSize: number): T[][] => {
+  let result = [];
+
+  for (let i = 0; i < arr.length; i += chunkSize) {
+    let chunk = arr.slice(i, i + chunkSize);
+    result.push(chunk);
+  }
+
+  return result;
+};
+
 export const getUserFromToken = () => {
   const token = cookies().get("jwt_token")?.value;
   const secret = process.env.JWT_SECRET;
@@ -162,4 +173,15 @@ export const getSuggestion = async () => {
     },
   });
   return sampleSize(users, 3);
+};
+export const getExploreImages = async () => {
+  const posts = await prisma.post.findMany({
+    take: 20,
+    select: {
+      id: true,
+      images: { take: 1 },
+      _count: { select: { images: true, likes: true, comments: true } },
+    },
+  });
+  return splitArray<ExplorePost>(posts, 5);
 };

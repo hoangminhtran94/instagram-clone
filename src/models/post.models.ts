@@ -29,6 +29,17 @@ export interface PostComment {
     replies: number;
   };
 }
+
+export interface ExplorePost {
+  id: string;
+  _count: {
+    likes: number;
+    comments: number;
+    images?: number;
+  };
+  images: PostImage[];
+}
+
 export interface PostDetail {
   id: string;
   yourPost: boolean;

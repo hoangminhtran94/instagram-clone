@@ -1,56 +1,50 @@
+import { ExplorePost } from "@/models/post.models";
 import ExploreImage from "./ExploreImage";
 import { FC } from "react";
+import Link from "next/link";
 interface ExploreImagesProps {
+  posts: ExplorePost[];
   odd: boolean;
 }
-const ExploreImages: FC<ExploreImagesProps> = ({ odd = true }) => {
+
+const ExploreImages: FC<ExploreImagesProps> = ({ odd = true, posts }) => {
+  const renderImageGroup = () => {
+    return posts.map((post, index) => {
+      if (index === 0 || index === 2) {
+        const condition = index === 0 ? odd : !odd;
+        return (
+          <Link
+            href={`p/${post.id}`}
+            key={post.id}
+            className={condition ? "row-span-1" : "row-span-2"}
+          >
+            <ExploreImage
+              fill
+              postId={post.id}
+              containerClass={!odd ? "!pb-[calc(200%+4px)]" : ""}
+              className="object-cover"
+              src={post.images[0].src}
+              alt="anImage"
+            />
+          </Link>
+        );
+      }
+      return (
+        <Link href={`p/${post.id}`} key={post.id} className="row-span-1">
+          <ExploreImage
+            className="object-cover"
+            fill
+            postId={post.id}
+            src={post.images[0].src}
+            alt="anImage"
+          />
+        </Link>
+      );
+    });
+  };
   return (
     <div className="w-full mb-1">
-      <div className="grid grid-cols-3 gap-1">
-        <div className={odd ? "row-span-1" : "row-span-2"}>
-          <ExploreImage
-            fill
-            containerClass={!odd ? "!pb-[calc(200%+4px)]" : ""}
-            className="object-cover"
-            src="https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80"
-            alt="anImage"
-          />
-        </div>
-        <div className="row-span-1">
-          <ExploreImage
-            className="object-cover"
-            fill
-            src="https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80"
-            alt="anImage"
-          />
-        </div>
-
-        <div className={!odd ? "row-span-1" : "row-span-2"}>
-          <ExploreImage
-            className="object-cover "
-            containerClass={odd ? "!pb-[calc(200%+4px)]" : ""}
-            fill
-            src="https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80"
-            alt="anImage"
-          />
-        </div>
-        <div className="row-span-1">
-          <ExploreImage
-            className="object-cover"
-            fill
-            src="https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80"
-            alt="anImage"
-          />
-        </div>
-        <div className="row-span-1">
-          <ExploreImage
-            className="object-cover"
-            fill
-            src="https://images.unsplash.com/photo-1690151711465-2bfe4e69f241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=822&q=80"
-            alt="anImage"
-          />
-        </div>
-      </div>
+      <div className="grid grid-cols-3 gap-1">{renderImageGroup()}</div>
     </div>
   );
 };
