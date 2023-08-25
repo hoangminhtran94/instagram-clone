@@ -1,13 +1,18 @@
-import { prisma } from "@/lib/prisma";
+import { modifiedPrisma, prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { Post, Location, User, PostImage } from "@prisma/client";
 import jwt from "jsonwebtoken";
 import { revalidateTag } from "next/cache";
 import { fireStore } from "@/firebase.config";
-import { createPostRecordHandler } from "@/actions/firebase.service";
+import {
+  createPostRecordHandler,
+  onGetPostRecord,
+} from "@/actions/firebase.service";
 
 import path from "path";
+import { PostRecord } from "@/repository/firebase";
+import { getUserFromToken } from "@/actions/action";
 interface ImagesData {
   alt: string;
   filename: string;
@@ -134,34 +139,82 @@ export async function POST(req: NextRequest) {
 }
 
 export const GET = async (req: NextRequest) => {
+  const userId = getUserFromToken();
   let posts = [];
   try {
     posts = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
-      include: {
-        owner: {
+      select: {
+        id: true,
+        images: true,
+        tags: true,
+        caption: true,
+        createdAt: true,
+        likes: {
+          take: 1,
           select: {
-            username: true,
-            currentProfileImage: true,
             id: true,
-            _count: {
+            owner: {
               select: {
-                followers: true,
-                following: true,
-                posts: true,
+                id: true,
+                username: true,
+                fullName: true,
+                currentProfileImage: true,
+                posts: {
+                  take: 3,
+                  select: {
+                    images: { take: 1, select: { src: true } },
+                  },
+                },
+                _count: {
+                  select: { posts: true, followers: true, following: true },
+                },
               },
             },
           },
         },
-        images: true,
-        likes: { where: { post: { hideLikeView: false } } },
-        comments: { where: { post: { turnOffComment: false } } },
+        owner: {
+          select: {
+            id: true,
+            currentProfileImage: true,
+            username: true,
+            fullName: true,
+            posts: {
+              take: 3,
+              select: { images: { take: 1, select: { src: true } } },
+            },
+            _count: {
+              select: { posts: true, followers: true, following: true },
+            },
+          },
+        },
       },
     });
-    return NextResponse.json(posts, { status: 200 });
+
+    const returnPosts = await Promise.all(
+      posts.map(async (post) => {
+        const postRecord = await onGetPostRecord(post.id);
+        const postRecordData = postRecord.data() as unknown as PostRecord;
+        const checked = await modifiedPrisma.post.checkYourPostAndLike(
+          post.id,
+          userId
+        );
+        return {
+          ...post,
+          _count: {
+            likes: postRecordData.like_count,
+            comments: postRecordData.comment_count,
+          },
+          ...checked,
+        };
+      })
+    );
+
+    return NextResponse.json(returnPosts, { status: 200 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json([], { status: 200 });
   }
 };

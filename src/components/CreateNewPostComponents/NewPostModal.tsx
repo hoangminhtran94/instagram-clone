@@ -12,7 +12,9 @@ import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
 import LoadingPage from "./LoadingPage";
 import { useRootContext } from "@/context/RootContext";
-import { createPostRecordHandler } from "@/actions/firebase.service";
+import { useMutation } from "@tanstack/react-query";
+import { queryClient } from "@/context/ReactQueryContext";
+
 const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpeg",
@@ -29,7 +31,7 @@ interface CreateNewPostModalProps {
 const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const globalModalContext = useGlobalModalContext();
   const [currentEditPage, setCurrentEditPage] = useState(0);
-  const [uploading, setUploading] = useState(false);
+
   const {
     imageFiles,
     setImageFiles,
@@ -37,24 +39,8 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
     filteredImages,
     caption,
   } = useCreatePostContext();
-  const { addNewPost } = useRootContext();
-
-  const noImage = imageFiles.length === 0;
-  const croppingImage = !noImage && currentEditPage === 0;
-  const editingImage = !noImage && currentEditPage === 1;
-  const creatingPost = !noImage && currentEditPage === 2;
-  const loadingPage = !noImage && currentEditPage === 3;
-
-  const nextPageHandler = async () => {
-    if (!loadingPage) {
-      setCurrentEditPage((prev) => prev + 1);
-    }
-
-    if (croppingImage) {
-      saveCroppedImages();
-    }
-    if (creatingPost) {
-      setUploading(true);
+  const { mutate, isLoading } = useMutation({
+    mutationFn: async () => {
       try {
         const promises: Promise<Blob>[] = [];
         filteredImages.forEach((img) =>
@@ -77,14 +63,33 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
           body: formData,
         });
         if (res.ok) {
-          const newPost = await res.json();
-          addNewPost(newPost);
+          return await res.json();
         }
-
-        setUploading(false);
       } catch (error) {
-        console.log(error);
+        throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["home-page-posts"] });
+    },
+  });
+
+  const noImage = imageFiles.length === 0;
+  const croppingImage = !noImage && currentEditPage === 0;
+  const editingImage = !noImage && currentEditPage === 1;
+  const creatingPost = !noImage && currentEditPage === 2;
+  const loadingPage = !noImage && currentEditPage === 3;
+
+  const nextPageHandler = async () => {
+    if (!loadingPage) {
+      setCurrentEditPage((prev) => prev + 1);
+    }
+
+    if (croppingImage) {
+      saveCroppedImages();
+    }
+    if (creatingPost) {
+      mutate();
     }
   };
   const cancelCreationHandler = (discardAction: () => void) => {
@@ -136,7 +141,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
         <div className=" absolute top-0 right-0 w-full h-full flex flex-col">
           <NewPostHeader
             noImage={noImage}
-            uploading={uploading}
+            uploading={isLoading}
             creatingPost={creatingPost}
             croppingImage={croppingImage}
             editingImage={editingImage}
@@ -149,7 +154,7 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
             <PostImageEditor currentEditPage={currentEditPage} />
           )}
           {creatingPost && <CreatePostPage />}
-          {loadingPage && <LoadingPage uploading={uploading} />}
+          {loadingPage && <LoadingPage uploading={isLoading} />}
         </div>
       </div>
     </Modal>

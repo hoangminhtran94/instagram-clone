@@ -1,13 +1,34 @@
 "use client";
 import { FC } from "react";
 import Post from "../PostComponents/Post";
-import { useRootContext } from "@/context/RootContext";
-
+import { useQuery } from "@tanstack/react-query";
+import { PostDetail } from "@/models/post.models";
+import Spinner from "../UI/Spinner/Spinner";
 const Posts: FC = () => {
-  const { posts } = useRootContext();
+  const { data, isLoading } = useQuery<PostDetail[]>({
+    queryKey: ["home-page-posts"],
+    queryFn: async () => {
+      const controller = new AbortController();
+      try {
+        const response = await fetch("/api/post", {
+          signal: controller.signal,
+        });
+        return await response.json();
+      } catch (error) {
+        controller.abort();
+        throw error;
+      }
+    },
+  });
+  // const { posts } = useRootContext();
   return (
     <div className="w-[470px] mx-auto flex flex-col gap-5">
-      {posts.map((post) => (
+      {isLoading && (
+        <div className="h-[500px]">
+          <Spinner />{" "}
+        </div>
+      )}
+      {data?.map((post) => (
         <Post post={post} key={post.id} />
       ))}
     </div>
