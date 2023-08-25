@@ -5,6 +5,7 @@ import { AuthContextProvider } from "@/context/authContext";
 import GlobalModalContextProvider from "@/context/globalModalContext";
 import GlobalModal from "@/components/UI/Modal/GlobalModal";
 import React from "react";
+import { getUserDataFromToken, getUserFromToken } from "@/actions/action";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,17 +21,18 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getUserDataFromToken();
   return (
     <html lang="en">
       <body
         className={`flex  ${inter.className} max-h-screen overflow-y-scroll`}
       >
-        <AuthContextProvider>
+        <AuthContextProvider user={user}>
           <GlobalModalContextProvider>
             {children}
             <GlobalModal />

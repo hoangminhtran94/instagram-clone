@@ -1,3 +1,10 @@
+export interface LoginUser {
+  id: string;
+  username: string;
+  currentProfileImage: string;
+  email: string;
+  fullName: string;
+}
 export interface UserSummary {
   id: string;
   _count: {

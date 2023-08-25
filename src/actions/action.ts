@@ -40,6 +40,26 @@ export const getUserFromToken = () => {
     return null;
   }
 };
+export const getUserDataFromToken = async () => {
+  const userId = getUserFromToken();
+  if (userId) {
+    try {
+      return await prisma.user.findFirstOrThrow({
+        where: { id: userId },
+        select: {
+          id: true,
+          username: true,
+          currentProfileImage: true,
+          email: true,
+          fullName: true,
+        },
+      });
+    } catch (error) {
+      return null;
+    }
+  }
+  return null;
+};
 
 export const addNewComment = async (data: NewCommentDto) => {
   let newComment: PostComment | null;
@@ -154,9 +174,18 @@ export const getSuggestion = async () => {
       { status: 403 }
     );
   }
+  const followings = await prisma.follow.findMany({
+    where: { followerId: userId },
+  });
+
+  const condition =
+    followings.length > 0
+      ? followings.map((flw) => ({ followingId: flw.followingId }))
+      : undefined;
   const users = await prisma.user.findMany({
     where: {
       id: { not: userId },
+      following: condition ? { some: { NOT: condition } } : undefined,
     },
     select: {
       id: true,
@@ -184,4 +213,20 @@ export const getExploreImages = async () => {
     },
   });
   return splitArray<ExplorePost>(posts, 5);
+};
+
+export const followAction = async (followingId: string) => {
+  const userId = getUserFromToken();
+  if (!userId) {
+    return NextResponse.json(
+      { message: "Authentication failed" },
+      { status: 403 }
+    );
+  }
+  await prisma.follow.create({
+    data: {
+      follower: { connect: { id: userId } },
+      following: { connect: { id: followingId } },
+    },
+  });
 };

@@ -1,11 +1,11 @@
 import { FC } from "react";
 import SideBarItem from "./SideBarItem";
-import { User } from "@/models/auth.models";
+import { LoginUser } from "@/models/user.models";
 
 interface ProfileButtonProps {
   path: string;
   secondaryMode: boolean;
-  user: User;
+  user: LoginUser;
 }
 const ProfileButton: FC<ProfileButtonProps> = ({
   path,

@@ -1,8 +1,12 @@
+"use client";
 import { UserSummary } from "@/models/user.models";
 import { FC } from "react";
 import Image from "next/image";
+import { useTransition } from "react";
+import { followAction } from "@/actions/action";
 
 const UserSuggestion: FC<{ user: UserSummary }> = ({ user }) => {
+  const [loading, startTransition] = useTransition();
   return (
     <div className="flex gap-3">
       <div>
@@ -22,7 +26,16 @@ const UserSuggestion: FC<{ user: UserSummary }> = ({ user }) => {
         <p className="font-bold">{user.username}</p>
         <p className="">Suggested for you</p>
       </div>
-      <button className="px-3 text-blue-400 font-bold">Follow</button>
+      <button
+        className="px-3 text-blue-400 font-bold"
+        onClick={() => {
+          startTransition(async () => {
+            await followAction(user.id);
+          });
+        }}
+      >
+        Follow
+      </button>
     </div>
   );
 };

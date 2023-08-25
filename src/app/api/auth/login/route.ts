@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { LoginUser } from "@/models/user.models";
 
 export const POST = async (req: NextRequest) => {
   const formData = await req.formData();
@@ -29,7 +30,7 @@ export const POST = async (req: NextRequest) => {
         { status: 403 }
       );
     }
-    const returnUser = {
+    const returnUser: LoginUser = {
       username: user.username,
       id: user.id,
       currentProfileImage: user.currentProfileImage,
