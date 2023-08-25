@@ -4,6 +4,7 @@ import { getSuggestion } from "@/actions/action";
 import UserSuggestion from "./UserSuggestion";
 import { UserSummary } from "@/models/user.models";
 import { useQuery } from "@tanstack/react-query";
+import SuggestionLoading from "../UI/LoadingComponents/SuggestionLoading";
 const SideSuggestion = () => {
   const { data, isError, isLoading, error } = useQuery<UserSummary[]>({
     queryKey: ["suggestion"],
@@ -16,7 +17,15 @@ const SideSuggestion = () => {
       return suggesstion;
     },
   });
-
+  let content;
+  if (isLoading) {
+    content = <SuggestionLoading />;
+  }
+  if (!isLoading) {
+    content = data?.map((user: any) => (
+      <UserSuggestion key={user.id} user={user} />
+    ));
+  }
   return (
     <div className="w-full flex flex-col gap-5 text-xs">
       <div className="flex gap-3">
@@ -25,9 +34,7 @@ const SideSuggestion = () => {
           See all
         </Link>
       </div>
-      {data?.map((user: any) => (
-        <UserSuggestion key={user.id} user={user} />
-      ))}
+      {content}
     </div>
   );
 };

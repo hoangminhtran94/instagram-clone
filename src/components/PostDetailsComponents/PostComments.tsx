@@ -1,15 +1,32 @@
 import { FC } from "react";
 import Spinner from "../UI/Spinner/Spinner";
 import PostComment from "./PostComment";
-import { usePostCommentContext } from "@/context/PostDetailCommentContext";
+import { useQuery } from "@tanstack/react-query";
+import { PostComment as TypePostComment } from "@/models/post.models";
 interface PostCommentsProps {
   postId: string;
 }
 const PostComments: FC<PostCommentsProps> = ({ postId }) => {
-  const { comments, loading } = usePostCommentContext();
+  const { data: comments, isLoading } = useQuery<TypePostComment[]>({
+    queryKey: ["comments", postId],
+    queryFn: async () => {
+      try {
+        const response = await fetch(`/api/comment/${postId}`);
+        if (!response.ok) {
+          throw new Error("Something wrong happened");
+        }
+        return await response.json();
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
 
-  if (loading) {
+  if (isLoading) {
     return <Spinner />;
+  }
+  if (!comments) {
+    return <></>;
   }
   if (comments.length === 0) {
     return (
