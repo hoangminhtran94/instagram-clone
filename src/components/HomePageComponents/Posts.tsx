@@ -2,10 +2,9 @@
 import { FC } from "react";
 import Post from "../PostComponents/Post";
 import { useQuery } from "@tanstack/react-query";
-import { PostDetail } from "@/models/post.models";
 import Spinner from "../UI/Spinner/Spinner";
 const Posts: FC = () => {
-  const { data, isLoading } = useQuery<PostDetail[]>({
+  const { data, isLoading } = useQuery<string[]>({
     queryKey: ["home-page-posts"],
     queryFn: async () => {
       const controller = new AbortController();
@@ -28,8 +27,8 @@ const Posts: FC = () => {
           <Spinner />{" "}
         </div>
       )}
-      {data?.map((post) => (
-        <Post post={post} key={post.id} />
+      {data?.map((id) => (
+        <Post id={id} key={id} />
       ))}
     </div>
   );

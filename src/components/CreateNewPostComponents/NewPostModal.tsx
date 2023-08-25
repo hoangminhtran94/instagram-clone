@@ -11,10 +11,10 @@ import { useCreatePostContext } from "../../context/createPostContext";
 import CreatePostPage from "./CreatePostPage";
 import { v4 } from "uuid";
 import LoadingPage from "./LoadingPage";
-import { useRootContext } from "@/context/RootContext";
+import { useAuthContext } from "@/context/authContext";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/context/ReactQueryContext";
-
+import { useParams } from "next/navigation";
 const MIME_TYPES = {
   "image/jpg": "jpg",
   "image/jpeg": "jpeg",
@@ -30,6 +30,8 @@ interface CreateNewPostModalProps {
 }
 const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
   const globalModalContext = useGlobalModalContext();
+  const { user } = useAuthContext();
+  const params = useParams();
   const [currentEditPage, setCurrentEditPage] = useState(0);
 
   const {
@@ -71,6 +73,13 @@ const NewPostModal: FC<CreateNewPostModalProps> = ({ onCancel }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["home-page-posts"] });
+      if (params.profileId) {
+        if (user?.id === params.profileId) {
+          queryClient.invalidateQueries({
+            queryKey: ["user-profile", user.id],
+          });
+        }
+      }
     },
   });
 

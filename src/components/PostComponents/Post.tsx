@@ -5,18 +5,26 @@ import PostContent from "./PostContent";
 import PostHeader from "./PostHeader";
 import PostImages from "./PostImages";
 import PostLikes from "./PostLikes";
-import { PostDetail } from "@/models/post.models";
 import { doc, onSnapshot } from "firebase/firestore";
 import { fireStore } from "@/firebase.config";
 import { PostRecord } from "@/repository/firebase";
-
-export type PostProps = PostDetail;
-const Post: FC<{ post: PostProps }> = ({ post }) => {
-  const [likes, setLikes] = useState(post._count?.likes ?? 0);
-  const [comments, setComments] = useState(post._count?.comments ?? 0);
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../UI/Spinner/Spinner";
+import PostLoading from "../UI/LoadingComponents/PostLoading";
+const Post: FC<{ id: string }> = ({ id }) => {
+  console.log(id);
+  const [likes, setLikes] = useState(0);
+  const [comments, setComments] = useState(0);
+  const { data: post, isLoading } = useQuery({
+    queryKey: ["post", id],
+    queryFn: async () => {
+      const res = await fetch("/api/post/" + id);
+      return await res.json();
+    },
+  });
   useEffect(() => {
-    if (post) {
-      const unsub = onSnapshot(doc(fireStore, "Posts", post.id), (doc) => {
+    if (id) {
+      const unsub = onSnapshot(doc(fireStore, "Posts", id), (doc) => {
         const data = doc.data() as unknown as PostRecord;
         setLikes(data.like_count);
         setComments(data.comment_count);
@@ -26,7 +34,10 @@ const Post: FC<{ post: PostProps }> = ({ post }) => {
         unsub();
       };
     }
-  }, [post.id]);
+  }, [id]);
+  if (isLoading) {
+    return <PostLoading />;
+  }
   return (
     <div className="w-full border-b border-b-slate-300 ">
       <PostHeader

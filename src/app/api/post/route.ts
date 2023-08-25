@@ -139,82 +139,20 @@ export async function POST(req: NextRequest) {
 }
 
 export const GET = async (req: NextRequest) => {
-  const userId = getUserFromToken();
-  let posts = [];
+  let postsIds = [];
   try {
-    posts = await prisma.post.findMany({
+    postsIds = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
-      select: {
-        id: true,
-        images: true,
-        tags: true,
-        caption: true,
-        createdAt: true,
-        likes: {
-          take: 1,
-          select: {
-            id: true,
-            owner: {
-              select: {
-                id: true,
-                username: true,
-                fullName: true,
-                currentProfileImage: true,
-                posts: {
-                  take: 3,
-                  select: {
-                    images: { take: 1, select: { src: true } },
-                  },
-                },
-                _count: {
-                  select: { posts: true, followers: true, following: true },
-                },
-              },
-            },
-          },
-        },
-        owner: {
-          select: {
-            id: true,
-            currentProfileImage: true,
-            username: true,
-            fullName: true,
-            posts: {
-              take: 3,
-              select: { images: { take: 1, select: { src: true } } },
-            },
-            _count: {
-              select: { posts: true, followers: true, following: true },
-            },
-          },
-        },
-      },
+      select: { id: true },
     });
 
-    const returnPosts = await Promise.all(
-      posts.map(async (post) => {
-        const postRecord = await onGetPostRecord(post.id);
-        const postRecordData = postRecord.data() as unknown as PostRecord;
-        const checked = await modifiedPrisma.post.checkYourPostAndLike(
-          post.id,
-          userId
-        );
-        return {
-          ...post,
-          _count: {
-            likes: postRecordData.like_count,
-            comments: postRecordData.comment_count,
-          },
-          ...checked,
-        };
-      })
+    return NextResponse.json(
+      postsIds.map((idObj) => idObj.id),
+      { status: 200 }
     );
-
-    return NextResponse.json(returnPosts, { status: 200 });
   } catch (error) {
-    console.log(error);
     return NextResponse.json([], { status: 200 });
   }
 };

@@ -1,16 +1,33 @@
 "use client";
 import { useState } from "react";
 import ProfileNoContents from "./ProfileNoContents";
-import Image from "next/image";
-import { useProfileContext } from "@/context/ProfileContext";
 import ProfileInfo from "./ProfileInfo";
 import ProfileImage from "./ProfileImage";
 import ProfileTabs from "./ProfileTabs";
 import ViewPosts from "./ViewPosts";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../UI/Spinner/Spinner";
 const ProfileMainPage = () => {
-  const { userData } = useProfileContext();
-
+  const { profileId } = useParams();
+  const { data: userData, isLoading } = useQuery({
+    queryKey: ["user-profile", profileId],
+    queryFn: async () => {
+      const res = await fetch("/api/users/" + profileId);
+      if (!res.ok) {
+        return null;
+      }
+      return await res.json();
+    },
+  });
   const [currentTab, setCurrentTab] = useState(0);
+  if (isLoading) {
+    return (
+      <div className="h-[500px]">
+        <Spinner />
+      </div>
+    );
+  }
   if (!userData) {
     return <div>Something went wrong</div>;
   }
