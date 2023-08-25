@@ -9,13 +9,13 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { fireStore } from "@/firebase.config";
 import { PostRecord } from "@/repository/firebase";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "../UI/Spinner/Spinner";
 import PostLoading from "../UI/LoadingComponents/PostLoading";
+import { PostDetail } from "@/models/post.models";
 const Post: FC<{ id: string }> = ({ id }) => {
   console.log(id);
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
-  const { data: post, isLoading } = useQuery({
+  const { data: post, isLoading } = useQuery<PostDetail>({
     queryKey: ["post", id],
     queryFn: async () => {
       const res = await fetch("/api/post/" + id);
@@ -37,6 +37,9 @@ const Post: FC<{ id: string }> = ({ id }) => {
   }, [id]);
   if (isLoading) {
     return <PostLoading />;
+  }
+  if (!post) {
+    return <></>;
   }
   return (
     <div className="w-full border-b border-b-slate-300 ">

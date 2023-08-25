@@ -126,16 +126,32 @@ export const addNewLike = async (postId: string) => {
           owner: { connect: { id: userId } },
           post: { connect: { id: postId } },
         },
+        select: {
+          id: true,
+          owner: {
+            select: {
+              id: true,
+              username: true,
+              fullName: true,
+              currentProfileImage: true,
+              posts: {
+                take: 3,
+                select: {
+                  images: { take: 1, select: { src: true } },
+                },
+              },
+              _count: {
+                select: { posts: true, followers: true, following: true },
+              },
+            },
+          },
+        },
       });
       return like;
     });
     await changeLikeCountHandler(postId, 1);
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { meesage: "Something wrong happenende" },
-      { status: 500 }
-    );
+    throw error;
   }
 };
 
@@ -158,11 +174,7 @@ export const unLike = async (postId: string) => {
     });
     await changeLikeCountHandler(postId, -1);
   } catch (error) {
-    console.log(error);
-    return NextResponse.json(
-      { meesage: "Something wrong happenende" },
-      { status: 500 }
-    );
+    throw error;
   }
 };
 

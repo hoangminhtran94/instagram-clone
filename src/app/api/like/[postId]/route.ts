@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { PostLike } from "@/models/post.models";
+import { addNewLike, unLike } from "@/actions/action";
 
 export const GET = async (
   req: NextRequest,
@@ -33,5 +34,28 @@ export const GET = async (
     return NextResponse.json(likes, { status: 200 });
   } catch (error) {
     return NextResponse.json([], { status: 200 });
+  }
+};
+
+export const POST = async (
+  req: NextRequest,
+  context: { params: { postId: string } }
+) => {
+  try {
+    await addNewLike(context.params.postId);
+    return NextResponse.json({ message: "Liked" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed, try again" }, { status: 500 });
+  }
+};
+export const DELETE = async (
+  req: NextRequest,
+  context: { params: { postId: string } }
+) => {
+  try {
+    await unLike(context.params.postId);
+    return NextResponse.json({ message: "unLiked" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed, try again" }, { status: 500 });
   }
 };

@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { changeLikeCountHandler } from "@/actions/firebase.service";
-import { useTransition } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { addNewLike, unLike } from "@/actions/action";
+import { queryClient } from "@/context/ReactQueryContext";
 interface PostActionProps {
   height?: number;
   className?: string;
@@ -15,22 +15,46 @@ const PostActions: FC<PostActionProps> = ({
   postId,
   youLikeThis,
 }) => {
-  const [isPending, startTranstion] = useTransition();
   const [beingLiked, setBeingLiked] = useState(youLikeThis);
-  const likeHandler = () => {
-    setBeingLiked((prev) => !prev);
-    startTranstion(async () => {
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      let response;
       if (beingLiked) {
-        await unLike(postId);
+        response = await fetch("/api/like/" + postId, {
+          method: "POST",
+          body: null,
+        });
       } else {
-        await addNewLike(postId);
+        response = await fetch("/api/like/" + postId, {
+          method: "DELETE",
+          body: null,
+        });
       }
-    });
-  };
+      if (!response.ok) {
+        throw Error("Failed, try again");
+      }
+      return { message: "Success" };
+    },
+    onMutate: () => {
+      setBeingLiked((prev) => !prev);
+    },
+    onError: () => {
+      setBeingLiked((prev) => !prev);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+    },
+  });
+
   return (
     <div className={`flex justify-between py-3 ${className}`}>
       <div className="flex gap-5 items-center">
-        <span className="cursor-pointer" onClick={likeHandler}>
+        <span
+          className="cursor-pointer"
+          onClick={() => {
+            mutate();
+          }}
+        >
           {beingLiked ? (
             <svg
               aria-label="Unlike"

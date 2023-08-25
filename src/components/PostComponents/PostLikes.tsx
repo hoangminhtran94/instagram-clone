@@ -1,5 +1,4 @@
 import { PostLike } from "@/models/post.models";
-import { Like } from "@prisma/client";
 import Link from "next/link";
 import { FC } from "react";
 
@@ -18,12 +17,13 @@ const PostLikes: FC<{ like: PostLike; postId: string; likeCount: number }> = ({
       ) : (
         <div>
           Liked by{" "}
-          <Link className="font-bold" href={`/${like.owner.id}`}>
-            {like.owner.username}
+          <Link className="font-bold" href={`/${like?.owner.id}`}>
+            {like?.owner.username}
           </Link>{" "}
           {likeCount > 1 && (
             <>
               <span className="mx-1">and</span>
+
               <Link href={`/p/${postId}`} className="font-bold cursor-pointer">
                 others
               </Link>
