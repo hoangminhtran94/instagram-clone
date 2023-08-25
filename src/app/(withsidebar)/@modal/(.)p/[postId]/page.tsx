@@ -59,7 +59,7 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
             },
           },
         },
-        _count: { select: { likes: true} },
+        _count: { select: { likes: true } },
       },
     });
     let yourPost = false;
@@ -79,7 +79,6 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
 
 const PostModal: FC<Props> = async ({ params }) => {
   const post = await getPostDetail(params.postId);
-  console.log(post);
   return (
     <div>
       <PostDetailModal post={post} />

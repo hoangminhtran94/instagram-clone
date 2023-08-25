@@ -13,7 +13,7 @@ export interface NewCommentDto {
   message: string;
   postId: string;
 }
-
+import { sampleSize } from "lodash";
 export const getUserFromToken = () => {
   const token = cookies().get("jwt_token")?.value;
   const secret = process.env.JWT_SECRET;
@@ -133,4 +133,33 @@ export const unLike = async (postId: string) => {
       { status: 500 }
     );
   }
+};
+
+export const getSuggestion = async () => {
+  const userId = getUserFromToken();
+  if (!userId) {
+    return NextResponse.json(
+      { message: "Authentication failed" },
+      { status: 403 }
+    );
+  }
+  const users = await prisma.user.findMany({
+    where: {
+      id: { not: userId },
+    },
+    select: {
+      id: true,
+      currentProfileImage: true,
+      username: true,
+      fullName: true,
+      posts: {
+        take: 3,
+        select: { images: { take: 1, select: { src: true } } },
+      },
+      _count: {
+        select: { posts: true, followers: true, following: true },
+      },
+    },
+  });
+  return sampleSize(users, 3);
 };
