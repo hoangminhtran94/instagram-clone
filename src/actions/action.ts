@@ -242,3 +242,40 @@ export const followAction = async (followingId: string) => {
     },
   });
 };
+
+export const getStories = async () => {
+  const userId = getUserFromToken();
+  if (!userId) {
+    return NextResponse.json(
+      { message: "Authentication failed" },
+      { status: 403 }
+    );
+  }
+  const followings = await prisma.follow.findMany({
+    where: { follower: { id: userId } },
+    select: {
+      following: {
+        select: {
+          id: true,
+          username: true,
+          currentProfileImage: true,
+          _count: {
+            select: {
+              stories: {
+                where: {
+                  createdAt: { gt: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  if (followings.length > 0) {
+    return followings
+      .filter((data) => data.following._count.stories > 0)
+      .map((data) => data.following);
+  }
+  return [];
+};

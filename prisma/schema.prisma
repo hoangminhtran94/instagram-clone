@@ -40,6 +40,25 @@ model Location {
   posts   Post[]
 }
 
+model Story {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  owner     User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  likes     StoryLike[]
+  userId    String      @db.ObjectId
+}
+
+model StoryLike {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  owner     User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  story     Story    @relation(fields: [storyId], references: [id])
+  storyId   String   @db.ObjectId
+  userId    String   @db.ObjectId
+}
+
 model ReelPost {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
   owner          User           @relation(fields: [ownerId], references: [id])
@@ -84,6 +103,8 @@ model User {
   following           Follow[]       @relation(name: "following-relation")
   commentLikes        CommentLike[]
   reelLikes           ReelPostLike[]
+  stories             Story[]
+  storylikes          StoryLike[]
 }
 
 model Follow {
