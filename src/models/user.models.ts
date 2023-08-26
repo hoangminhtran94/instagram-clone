@@ -36,3 +36,10 @@ export interface UserProfile {
   yourProfile: boolean;
   _count: { posts: number; followers: number; following: number };
 }
+
+export interface UserSearchResult {
+  id: string;
+  username: string;
+  fullName: string;
+  currentProfileImage: string;
+}

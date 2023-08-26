@@ -6,15 +6,13 @@ import Spinner from "../UI/Spinner/Spinner";
 const Posts: FC = () => {
   const { data, isLoading } = useQuery<string[]>({
     queryKey: ["home-page-posts"],
-    queryFn: async () => {
-      const controller = new AbortController();
+    queryFn: async ({ signal }) => {
       try {
         const response = await fetch("/api/post", {
-          signal: controller.signal,
+          signal,
         });
         return await response.json();
       } catch (error) {
-        controller.abort();
         throw error;
       }
     },

@@ -5,7 +5,7 @@ import Logo from "./Logo";
 import SideBarDropdown from "./SideBarDropdown";
 import CreatePostButton from "./CreatePostButton";
 import SearchButton from "./SearchButton";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useParams } from "next/navigation";
 import ViewNotificationsButton from "./ViewNotificationsButton";
 import HomeButton from "./HomeButton";
@@ -16,12 +16,25 @@ import SearchBox from "./SearchBox";
 import NotificationBox from "./NotificationBox";
 import ProfileButton from "./ProfileButton";
 import { useAuthContext } from "@/context/authContext";
+import useClickOutside from "@/hooks/useClickoutside";
+
 const SideBar = () => {
   const { user } = useAuthContext();
+  const searchBoxRef = useRef<HTMLDivElement>(null);
+  const sideBarRef = useRef<HTMLDivElement>(null);
+  useClickOutside([searchBoxRef, sideBarRef], () => {
+    setSearching(false);
+  });
+
   const [searching, setSearching] = useState(false);
   const [viewNotifications, setViewNotifications] = useState(false);
   const path = usePathname();
-
+  useEffect(() => {
+    if (path) {
+      setSearching(false);
+      setViewNotifications(false);
+    }
+  }, [path]);
   const secondaryMode = searching || viewNotifications;
 
   const toggleFirstMode = () => {
@@ -31,6 +44,7 @@ const SideBar = () => {
   return (
     <>
       <div
+        ref={sideBarRef}
         className={` ${
           !secondaryMode ? "w-[350px]" : "w-fit items-center"
         } z-20  fixed box-border left-0 top-0 border-r bg-white border-slate-300 flex flex-col p-5 h-screen`}
@@ -94,7 +108,7 @@ const SideBar = () => {
         <SideBarDropdown secondaryMode={secondaryMode} />
       </div>
       <AnimatePresence mode="sync">
-        {searching && <SearchBox key={"search"} />}
+        {searching && <SearchBox ref={searchBoxRef} key={"search"} />}
         {viewNotifications && <NotificationBox key={"notification"} />}
       </AnimatePresence>
     </>

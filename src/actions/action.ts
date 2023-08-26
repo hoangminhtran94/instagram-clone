@@ -14,6 +14,7 @@ export interface NewCommentDto {
   postId: string;
 }
 import { sampleSize } from "lodash";
+import { UserSearchResult } from "@/models/user.models";
 const splitArray = <T>(arr: T[], chunkSize: number): T[][] => {
   let result = [];
 
@@ -288,4 +289,37 @@ export const getStories = async () => {
       .map((data) => data.following);
   }
   return [];
+};
+
+export const searchUsers = async (formData: FormData) => {
+  const userId = getUserFromToken();
+  if (!userId) {
+    return NextResponse.json(
+      { message: "Authentication failed" },
+      { status: 403 }
+    );
+  }
+  const query = formData.get("search-query") as unknown as string;
+  if (!query) {
+    return [];
+  }
+  try {
+    return await prisma.user.findMany({
+      where: {
+        id: { not: userId },
+        OR: [
+          { username: { contains: query } },
+          { fullName: { contains: query } },
+        ],
+      },
+      select: {
+        id: true,
+        username: true,
+        fullName: true,
+        currentProfileImage: true,
+      },
+    });
+  } catch (error) {
+    return [];
+  }
 };

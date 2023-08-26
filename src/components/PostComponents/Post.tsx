@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 import PostLoading from "../UI/LoadingComponents/PostLoading";
 import { PostDetail } from "@/models/post.models";
 const Post: FC<{ id: string }> = ({ id }) => {
-  console.log(id);
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState(0);
   const { data: post, isLoading } = useQuery<PostDetail>({
