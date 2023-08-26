@@ -2,8 +2,6 @@ import PostDetailPage from "@/components/PostDetailsComponents/PostDetailPage";
 import { FC } from "react";
 import { prisma } from "@/lib/prisma";
 import { PostDetail } from "@/models/post.models";
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
 import { getUserFromToken } from "@/actions/action";
 
 interface Props {

@@ -191,13 +191,11 @@ export const getSuggestion = async () => {
   });
 
   const condition =
-    followings.length > 0
-      ? followings.map((flw) => ({ followingId: flw.followingId }))
-      : undefined;
+    followings.length > 0 ? followings.map((flw) => flw.followingId) : [];
+
   const users = await prisma.user.findMany({
     where: {
-      id: { not: userId },
-      following: condition ? { some: { NOT: condition } } : undefined,
+      id: { notIn: [userId, ...condition] },
     },
     select: {
       id: true,
@@ -235,12 +233,24 @@ export const followAction = async (followingId: string) => {
       { status: 403 }
     );
   }
-  await prisma.follow.create({
-    data: {
-      follower: { connect: { id: userId } },
-      following: { connect: { id: followingId } },
-    },
-  });
+  try {
+    await prisma.$transaction(async (ctx) => {
+      const checkedFollow = await ctx.follow.findFirst({
+        where: { followerId: userId, followingId },
+      });
+      if (checkedFollow) {
+        return null;
+      }
+      await ctx.follow.create({
+        data: {
+          follower: { connect: { id: userId } },
+          following: { connect: { id: followingId } },
+        },
+      });
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 
 export const getStories = async () => {

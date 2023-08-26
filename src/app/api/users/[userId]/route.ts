@@ -17,6 +17,10 @@ export const GET = async (
         username: true,
         fullName: true,
         currentProfileImage: true,
+        followers: {
+          where: { followerId: currentUserId! },
+          select: { id: true },
+        },
         posts: {
           select: {
             images: true,
@@ -24,13 +28,18 @@ export const GET = async (
             _count: { select: { likes: true, comments: true } },
           },
         },
-        saved: true,
+        saved: yourProfile ? true : false,
         taggedPosts: true,
         _count: { select: { posts: true, followers: true, following: true } },
       },
       where: { id: targetUserId },
     });
-    return NextResponse.json({ ...user, yourProfile }, { status: 200 });
+    const { followers, ...rest } = user;
+
+    return NextResponse.json(
+      { ...rest, youAreFollower: followers.length > 0, yourProfile },
+      { status: 200 }
+    );
   } catch (error) {
     return NextResponse.json(null, { status: 500 });
   }

@@ -8,9 +8,10 @@ import ViewPosts from "./ViewPosts";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Spinner from "../UI/Spinner/Spinner";
+import { UserProfile } from "@/models/user.models";
 const ProfileMainPage = () => {
   const { profileId } = useParams();
-  const { data: userData, isLoading } = useQuery({
+  const { data: userData, isLoading } = useQuery<UserProfile>({
     queryKey: ["user-profile", profileId],
     queryFn: async () => {
       const res = await fetch("/api/users/" + profileId);
@@ -31,18 +32,15 @@ const ProfileMainPage = () => {
   if (!userData) {
     return <div>Something went wrong</div>;
   }
+  console.log(userData.youAreFollower)
   return (
     <div className="flex flex-col">
-      <div className="flex gap-[80px] items-center justify-center p-10 ">
+      <div className="flex gap-[80px] items-center p-10 pt-2 ">
         <ProfileImage
           image={userData.currentProfileImage ?? "/images/default-avatar.jpg"}
         />
         <ProfileInfo
-          username={userData.username}
-          postCount={userData._count.posts}
-          followerCount={userData._count.followers}
-          followingCount={userData._count.following}
-          fullName={userData.fullName}
+          user={userData}
         />
       </div>
       <ProfileTabs currentTab={currentTab} setCurrentTab={setCurrentTab} />

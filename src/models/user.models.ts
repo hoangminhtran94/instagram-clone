@@ -1,3 +1,6 @@
+import { PostImage, Saved, Tag } from "@prisma/client";
+import { ExplorePost } from "./post.models";
+
 export interface LoginUser {
   id: string;
   username: string;
@@ -20,4 +23,16 @@ export interface UserSummary {
       src: string;
     }[];
   }[];
+}
+
+export interface UserProfile {
+  username: string;
+  fullName: string;
+  currentProfileImage: string;
+  posts: ExplorePost[];
+  saved?: Saved[];
+  taggedPosts?: Tag[];
+  youAreFollower: boolean;
+  yourProfile: boolean;
+  _count: { posts: number; followers: number; following: number };
 }
