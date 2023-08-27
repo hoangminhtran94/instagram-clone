@@ -1,7 +1,7 @@
 import { FC } from "react";
 import SideBarItem from "./SideBarItem";
 import { useState } from "react";
-import MoreDropdown from "../UI/MoreDropdown/MoreDropdown";
+import MoreDropdown from "../../MoreDropdown/MoreDropdown";
 interface SideBarDropdownProps {
   secondaryMode: boolean;
 }

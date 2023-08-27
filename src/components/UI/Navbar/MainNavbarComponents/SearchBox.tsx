@@ -5,8 +5,8 @@ import { searchUsers } from "@/actions/action";
 import { debounce } from "lodash";
 import { UserSearchResult } from "@/models/user.models";
 import Image from "next/image";
-import SearchResults from "../SearchBoxComponents/SearchResults";
-import SearchBoxInput from "../UI/SearchBoxInput";
+import SearchResults from "../../../SearchBoxComponents/SearchResults";
+import SearchBoxInput from "../../SearchBoxInput";
 interface SearchBoxProps {}
 
 const SearchBox = forwardRef<HTMLDivElement>((props: SearchBoxProps, ref) => {

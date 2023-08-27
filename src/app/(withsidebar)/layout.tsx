@@ -1,4 +1,3 @@
-import SideBar from "@/components/SideBarComponents/Sidebar";
 import { verifyToken } from "@/lib/verifytoken";
 
 const WithSideBarLayout = async ({
@@ -12,10 +11,7 @@ const WithSideBarLayout = async ({
 
   return (
     <>
-      <SideBar />
-      <main className="mx-auto w-[calc(100vw-350px)] ml-[350px]">
-        {children}
-      </main>
+      {children}
       {modal}
     </>
   );

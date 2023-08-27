@@ -1,24 +1,24 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import Logo from "./Logo";
-import SideBarDropdown from "./SideBarDropdown";
-import CreatePostButton from "./CreatePostButton";
-import SearchButton from "./SearchButton";
+import Logo from "./MainNavbarComponents/Logo";
+import SideBarDropdown from "./MainNavbarComponents/SideBarDropdown";
+import CreatePostButton from "./MainNavbarComponents/CreatePostButton";
+import SearchButton from "./MainNavbarComponents/SearchButton";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useParams } from "next/navigation";
-import ViewNotificationsButton from "./ViewNotificationsButton";
-import HomeButton from "./HomeButton";
-import ExploreButton from "./ExploreButton";
-import ReelsButton from "./ReelsButton";
-import ChatButton from "./ChatButton";
-import SearchBox from "./SearchBox";
-import NotificationBox from "./NotificationBox";
-import ProfileButton from "./ProfileButton";
+import ViewNotificationsButton from "./MainNavbarComponents/ViewNotificationsButton";
+import HomeButton from "./MainNavbarComponents/HomeButton";
+import ExploreButton from "./MainNavbarComponents/ExploreButton";
+import ReelsButton from "./MainNavbarComponents/ReelsButton";
+import ChatButton from "./MainNavbarComponents/ChatButton";
+import SearchBox from "./MainNavbarComponents/SearchBox";
+import NotificationBox from "./MainNavbarComponents/NotificationBox";
+import ProfileButton from "./MainNavbarComponents/ProfileButton";
 import { useAuthContext } from "@/context/authContext";
 import useClickOutside from "@/hooks/useClickoutside";
 
-const SideBar = () => {
+const MainNavBar = () => {
   const { user } = useAuthContext();
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const sideBarRef = useRef<HTMLDivElement>(null);
@@ -115,4 +115,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default MainNavBar;
