@@ -4,14 +4,7 @@ import { User } from "@/models/auth.models";
 import { LoginUser } from "@/models/user.models";
 import cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import {
-  FC,
-  ReactNode,
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import { FC, ReactNode, createContext, useContext, useState } from "react";
 
 interface AuthContextState {
   user: LoginUser | null;
@@ -43,6 +36,7 @@ export const AuthContextProvider: FC<{
   const logout = () => {
     setUser(null);
     cookies.remove("jwt_token");
+    router.push("/accounts/login");
   };
   return (
     <AuthContext.Provider value={{ user: authUser, login, logout }}>

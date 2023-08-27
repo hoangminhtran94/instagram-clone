@@ -1,8 +1,12 @@
 import { UserProfile } from "@/models/user.models";
 import { FC } from "react";
+import OptionButtonWrapper from "../UI/OptionButtonWrapper";
+import ProfileOptionsBox from "./ProfileOptionsBox";
+import { useGlobalModalContext } from "@/context/globalModalContext";
 const ProfileInfo: FC<{
   user: UserProfile;
 }> = ({ user }) => {
+  const globalModalContext = useGlobalModalContext();
   let profileButton;
   let optionIcon;
   if (user.yourProfile) {
@@ -65,7 +69,18 @@ const ProfileInfo: FC<{
     <div className="flex flex-col gap-4">
       <div className="flex gap-5 items-center">
         <p className="text-lg-">{user.username}</p> {profileButton}
-        <div className=" cursor-pointer">{optionIcon}</div>
+        <OptionButtonWrapper
+          optionBox={
+            <ProfileOptionsBox
+              yourProfile={user.yourProfile}
+              onCancel={() => {
+                globalModalContext.closeModal();
+              }}
+            />
+          }
+        >
+          {optionIcon}
+        </OptionButtonWrapper>
       </div>
       <div className="flex gap-5 text-sm">
         <p>

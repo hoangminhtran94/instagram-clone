@@ -1,10 +1,12 @@
 import { User } from "@prisma/client";
 import Image from "next/image";
 import { FC, useState } from "react";
+import OptionButtonWrapper from "../UI/OptionButtonWrapper";
 import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
 import { UserSummary } from "@/models/user.models";
 import { useGlobalModalContext } from "@/context/globalModalContext";
 import PostOptionsBox from "./PostOptionsBox";
+import HoverWrapper from "../UI/UsernameWrapper/UsernameWrapper";
 
 const PostHeader: FC<{
   creator: UserSummary;
@@ -12,23 +14,7 @@ const PostHeader: FC<{
   postId: string;
 }> = ({ creator, createdDate, postId }) => {
   const globalModalContext = useGlobalModalContext();
-  const cancelCreationHandler = () => {
-    globalModalContext.toggleModal({
-      body: (
-        <PostOptionsBox
-          postId={postId}
-          creatorId={creator.id}
-          onCancel={() => {
-            globalModalContext.closeModal();
-          }}
-        />
-      ),
-      className: "rounded-lg",
-      onCancel: () => {
-        globalModalContext.closeModal();
-      },
-    });
-  };
+
   return (
     <div className="flex justify-between items-center py-3 text-xs">
       <div className="flex items-center gap-2">
@@ -48,7 +34,9 @@ const PostHeader: FC<{
         <div className="flex gap-2 items-center">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-1">
-              <p className="font-bold">{creator.username}</p>
+              <HoverWrapper user={creator}>
+                <p className="font-bold hover:opacity-50">{creator.username}</p>
+              </HoverWrapper>
               <svg
                 aria-label="Verified"
                 color="rgb(0, 149, 246)"
@@ -71,9 +59,16 @@ const PostHeader: FC<{
           </div>
         </div>
       </div>
-      <div
-        className="cursor-pointer hover:opacity-50"
-        onClick={cancelCreationHandler}
+      <OptionButtonWrapper
+        optionBox={
+          <PostOptionsBox
+            postId={postId}
+            creatorId={creator.id}
+            onCancel={() => {
+              globalModalContext.closeModal();
+            }}
+          />
+        }
       >
         <svg
           aria-label="More options"
@@ -88,7 +83,7 @@ const PostHeader: FC<{
           <circle cx="6" cy="12" r="1.5"></circle>
           <circle cx="18" cy="12" r="1.5"></circle>
         </svg>
-      </div>
+      </OptionButtonWrapper>
     </div>
   );
 };

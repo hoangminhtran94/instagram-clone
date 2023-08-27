@@ -1,7 +1,7 @@
 import { PostLike } from "@/models/post.models";
 import Link from "next/link";
 import { FC } from "react";
-
+import { queryClient } from "@/context/ReactQueryContext";
 const PostLikes: FC<{ like: PostLike; postId: string; likeCount: number }> = ({
   like,
   postId,
