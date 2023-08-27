@@ -4,13 +4,13 @@ import { usePostCommentContext } from "@/context/PostDetailCommentContext";
 import useClickOutside from "@/hooks/useClickoutside";
 import EmojiPicker, { EmojiStyle } from "emoji-picker-react";
 import { FC, useEffect, useRef, useState } from "react";
-
+import { queryClient } from "@/context/ReactQueryContext";
 const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
   const emojiRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [toggleEmoji, setToggleEmoji] = useState(false);
   const [input, setInput] = useState("");
-  const { setComments, replyTo, setReplyTo } = usePostCommentContext();
+  const { replyTo, setReplyTo } = usePostCommentContext();
   useClickOutside(emojiRef, () => {
     setToggleEmoji(false);
   });
@@ -66,7 +66,7 @@ const PostDetailsCommentInput: FC<{ postId: string }> = ({ postId }) => {
               postId,
             })) as PostComment;
             if (res) {
-              setComments((prev) => [...prev, res]);
+              queryClient.invalidateQueries({ queryKey: ["comments", postId] });
             }
           } catch (error) {
             console.log(error);

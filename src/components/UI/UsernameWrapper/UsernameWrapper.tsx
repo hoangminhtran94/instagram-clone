@@ -3,10 +3,12 @@ import { ComponentPropsWithoutRef, FC } from "react";
 import UserSummaryBox from "../UserSummaryBox/UserSummaryBox";
 import { UserSummary } from "@/models/user.models";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const UsernameWrapper: FC<
   ComponentPropsWithoutRef<"div"> & { user: UserSummary }
 > = ({ className, children, user, ...props }) => {
+  const router = useRouter();
   const { hovering, mouseEnterHandler, mouseLeaveHandler } =
     useShowUserSummary();
 
@@ -17,9 +19,14 @@ const UsernameWrapper: FC<
       onMouseLeave={mouseLeaveHandler}
       {...props}
     >
-      <Link className="font-bold text-xs " href={"/" + user.id}>
+      <div
+        className="font-bold text-xs "
+        onClick={() => {
+          router.push("/" + user.id);
+        }}
+      >
         {children}
-      </Link>
+      </div>
       <UserSummaryBox hovering={hovering} user={user} />
     </div>
   );

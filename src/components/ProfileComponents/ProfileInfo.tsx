@@ -3,6 +3,7 @@ import { FC } from "react";
 import OptionButtonWrapper from "../UI/OptionButtonWrapper";
 import ProfileOptionsBox from "./ProfileOptionsBox";
 import { useGlobalModalContext } from "@/context/globalModalContext";
+import Link from "next/link";
 const ProfileInfo: FC<{
   user: UserProfile;
 }> = ({ user }) => {
@@ -10,7 +11,11 @@ const ProfileInfo: FC<{
   let profileButton;
   let optionIcon;
   if (user.yourProfile) {
-    profileButton = <button className="btn-grey">Edit Profile</button>;
+    profileButton = (
+      <Link href="/accounts/edit" className="btn-grey">
+        Edit Profile
+      </Link>
+    );
     optionIcon = (
       <svg
         aria-label="Options"
