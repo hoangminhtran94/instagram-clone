@@ -215,8 +215,14 @@ export const getSuggestion = async () => {
   return sampleSize(users, 3);
 };
 export const getExploreImages = async () => {
+  const userId = getUserFromToken();
+
+  if (!userId) {
+    return [];
+  }
   const posts = await prisma.post.findMany({
     take: 20,
+    where: { ownerId: { not: userId } },
     select: {
       id: true,
       images: { take: 1 },

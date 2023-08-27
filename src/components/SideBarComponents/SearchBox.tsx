@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, useEffect } from "react";
 import { useRef } from "react";
 import { searchUsers } from "@/actions/action";
 import { debounce } from "lodash";

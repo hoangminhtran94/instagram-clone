@@ -21,7 +21,7 @@ const ExploreImages: FC<ExploreImagesProps> = ({ odd = true, posts }) => {
             <ExploreImage
               fill
               postId={post.id}
-              containerClass={!odd ? "!pb-[calc(200%+4px)]" : ""}
+              containerClass={!condition ? "!pb-[calc(200%+4px)]" : ""}
               className="object-cover"
               src={post.images[0].src}
               alt="anImage"

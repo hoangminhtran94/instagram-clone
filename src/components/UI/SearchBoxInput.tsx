@@ -8,7 +8,7 @@ const SearchBoxInput: FC<ComponentPropsWithoutRef<"input">> = ({
   ...props
 }) => {
   const [focus, setFocus] = useState(false);
-  const [input, setInput] = useState("");
+
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (focus) {
@@ -54,13 +54,7 @@ const SearchBoxInput: FC<ComponentPropsWithoutRef<"input">> = ({
       </div>
       <div className={`relative ${!focus && "hidden"}`}>
         <input
-          value={input}
-          onChange={(e) => {
-            if (onChange) {
-              onChange(e);
-            }
-            setInput(e.target.value);
-          }}
+          onChange={onChange}
           ref={inputRef}
           className={`input-search ${className}`}
           onKeyDown={onKeyDown}
@@ -68,9 +62,11 @@ const SearchBoxInput: FC<ComponentPropsWithoutRef<"input">> = ({
         />
         <span
           className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-          onClick={() => {
+          onClick={(e) => {
             setFocus(false);
-            setInput("");
+            if (inputRef.current) {
+              inputRef.current.value = "";
+            }
           }}
         >
           <svg
