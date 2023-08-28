@@ -1,6 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useAuthContext } from "@/context/authContext";
+import OptionButtonWrapper from "@/components/UI/OptionButtonWrapper";
+import ChangePhotoOptionsBox from "./ChangePhotoOptionsBox";
 const ChangeProfileImage = () => {
   const authContext = useAuthContext();
 
@@ -24,7 +26,12 @@ const ChangeProfileImage = () => {
       <div className="col-span-3 flex flex-col  ">
         <div>{authContext.user?.username}</div>
         <div>
-          <button>Change profile photo</button>
+          <OptionButtonWrapper
+            optionBox={<ChangePhotoOptionsBox />}
+            className="link-primary-light text-xs"
+          >
+            Change profile photo
+          </OptionButtonWrapper>
         </div>
       </div>
     </div>

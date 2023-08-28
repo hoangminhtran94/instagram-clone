@@ -43,6 +43,9 @@
   .post-tab.active {
     @apply opacity-100 relative before:top-0 before:w-[80%] before:left-[10%] before:content-[""] before:absolute before:h-[1px]  before:bg-black;
   }
+  .link-primary-light {
+    @apply  text-blue-400 font-semibold hover:text-blue-950
+  }
 }
 
 a {

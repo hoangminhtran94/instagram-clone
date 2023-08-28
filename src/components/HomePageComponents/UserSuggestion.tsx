@@ -41,7 +41,7 @@ const UserSuggestion: FC<{ user: UserSummary }> = ({ user }) => {
         <p className="">Suggested for you</p>
       </div>
       <button
-        className="px-3 text-blue-400 font-bold"
+        className="px-3 link-primary-light"
         onClick={() => {
           mutate(user.id);
         }}

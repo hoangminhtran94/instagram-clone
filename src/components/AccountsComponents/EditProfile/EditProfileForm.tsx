@@ -1,6 +1,6 @@
 const EditProfileForm = () => {
   return (
-    <form className="flex flex-col gap-4 mt-10">
+    <form className="flex flex-col gap-4 mt-4">
       <div className="grid grid-cols-4  gap-7 text-sm">
         <label className="flex justify-end col-span-1">Website</label>
         <div className="flex flex-col col-span-3">
@@ -44,6 +44,13 @@ const EditProfileForm = () => {
             profile, and whether your account can be suggested on other
             profiles.[?]
           </p>
+        </div>
+      </div>
+      <div className="grid grid-cols-4  gap-7 text-sm">
+        <div className=" col-span-1 " />
+
+        <div className="flex items-center col-span-3 gap-2">
+          <button className="btn-primary-light text-xs px-4">Submit</button>
         </div>
       </div>
     </form>
