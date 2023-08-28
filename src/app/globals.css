@@ -34,6 +34,9 @@
   .input-search {
     @apply bg-gray-100 placeholder:font-thin outline-none text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white;
   }
+  .input-form {
+    @apply border-gray-200 border disabled:bg-gray-100 disabled:cursor-not-allowed  placeholder:text-gray-400 outline-none text-gray-900 text-xs rounded-[4px] block w-full px-2.5 py-1.5 dark:bg-gray-700 dark:placeholder-gray-400 dark:text-white;
+  }
   .post-tab {
     @apply py-4 text-xs flex gap-2 items-center opacity-60;
   }
