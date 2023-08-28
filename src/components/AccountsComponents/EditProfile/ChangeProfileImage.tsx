@@ -13,7 +13,7 @@ const ChangeProfileImage = () => {
           <Image
             width={80}
             height={80}
-            className="rounded-full"
+            className=" w-full h-full rounded-full object-cover"
             alt="Profile-image"
             src={
               authContext.user?.currentProfileImage

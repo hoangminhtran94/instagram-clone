@@ -4,17 +4,27 @@ import { User } from "@/models/auth.models";
 import { LoginUser } from "@/models/user.models";
 import cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import { FC, ReactNode, createContext, useContext, useState } from "react";
+import {
+  Dispatch,
+  FC,
+  ReactNode,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from "react";
 
 interface AuthContextState {
   user: LoginUser | null;
   login: (user: User, token: string) => void;
+  setUser: Dispatch<SetStateAction<LoginUser | null>>;
   logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextState>({
   user: null,
   login: (user, token) => {},
+  setUser: () => {},
   logout: () => {},
 });
 
@@ -39,7 +49,7 @@ export const AuthContextProvider: FC<{
     router.push("/accounts/login");
   };
   return (
-    <AuthContext.Provider value={{ user: authUser, login, logout }}>
+    <AuthContext.Provider value={{ user: authUser, login, logout, setUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,10 +1,11 @@
 "use server";
-
+import fs from "fs";
+import path from "path";
 import { prisma } from "@/lib/prisma";
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
 import { ExplorePost, PostComment } from "@/models/post.models";
+import httpError from "http-errors";
 import {
   changeCommentCountHandler,
   changeLikeCountHandler,
@@ -66,10 +67,7 @@ export const addNewComment = async (data: NewCommentDto) => {
   let newComment: PostComment | null;
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   try {
     newComment = await prisma.comment.create({
@@ -104,10 +102,7 @@ export const addNewComment = async (data: NewCommentDto) => {
     });
     await changeCommentCountHandler(data.postId, 1);
   } catch (error) {
-    return NextResponse.json(
-      { meesage: "Something wrong happenende" },
-      { status: 500 }
-    );
+    return { error: "Something wrong happened" };
   }
   return newComment;
 };
@@ -115,10 +110,7 @@ export const addNewComment = async (data: NewCommentDto) => {
 export const addNewLike = async (postId: string) => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   try {
     await prisma.$transaction(async (ctx) => {
@@ -159,10 +151,7 @@ export const addNewLike = async (postId: string) => {
 export const unLike = async (postId: string) => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   try {
     await prisma.$transaction(async (ctx) => {
@@ -182,10 +171,7 @@ export const unLike = async (postId: string) => {
 export const getSuggestion = async () => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   const followings = await prisma.follow.findMany({
     where: { followerId: userId },
@@ -235,10 +221,7 @@ export const getExploreImages = async () => {
 export const followAction = async (followingId: string) => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   try {
     await prisma.$transaction(async (ctx) => {
@@ -263,10 +246,7 @@ export const followAction = async (followingId: string) => {
 export const getStories = async () => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   const followings = await prisma.follow.findMany({
     where: { follower: { id: userId } },
@@ -300,10 +280,7 @@ export const getStories = async () => {
 export const searchUsers = async (formData: FormData) => {
   const userId = getUserFromToken();
   if (!userId) {
-    return NextResponse.json(
-      { message: "Authentication failed" },
-      { status: 403 }
-    );
+    return { error: "Unauthenticated" };
   }
   const query = formData.get("search-query") as unknown as string;
   if (!query) {
@@ -327,5 +304,36 @@ export const searchUsers = async (formData: FormData) => {
     });
   } catch (error) {
     return [];
+  }
+};
+
+export const changeProfileImage = async (formData: FormData) => {
+  const user = await getUserDataFromToken();
+  if (!user) {
+    return { error: "Unauthenticated" };
+  }
+
+  const file = formData.get("profile-image") as unknown as File;
+  if (!file) {
+    return { error: "Upload failed" };
+  }
+
+  const arrayBuffer = await file.arrayBuffer();
+  const data = Buffer.from(arrayBuffer);
+  const filePath = path.join("public", "upload", "profile-image", file.name);
+  const savedFilePath = "/upload/profile-image/" + file.name;
+  try {
+    fs.writeFileSync(filePath, data);
+    if (user.currentProfileImage) {
+      fs.unlinkSync("public/" + user.currentProfileImage);
+    }
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { currentProfileImage: savedFilePath },
+    });
+    return { currentProfileImage: savedFilePath };
+  } catch (error) {
+    fs.unlinkSync(filePath);
+    return { error: "Upload failed" };
   }
 };

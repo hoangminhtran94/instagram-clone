@@ -3,11 +3,14 @@ import { useAuthContext } from "@/context/authContext";
 import { FC, useRef, useState } from "react";
 import { useGlobalModalContext } from "@/context/globalModalContext";
 import Image from "next/image";
+import { changeProfileImage } from "@/actions/action";
+import { NextResponse } from "next/server";
 const ChangePhotoOptionsBox: FC<{}> = () => {
   const authContext = useAuthContext();
   const inputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const modalContext = useGlobalModalContext();
+  const formRef = useRef<HTMLFormElement>(null);
   const CHANGE_PHOTO_OPTIONS: OptionButton[] = [
     {
       label: "Upload Photo",
@@ -31,7 +34,7 @@ const ChangePhotoOptionsBox: FC<{}> = () => {
       label: "OK",
       textBlue: true,
       action: (e) => {
-        inputRef.current?.click();
+        formRef.current?.requestSubmit();
       },
     },
   ];
@@ -41,7 +44,7 @@ const ChangePhotoOptionsBox: FC<{}> = () => {
         <Image
           width={56}
           height={56}
-          className="w-full h-full rounded-full"
+          className="w-full h-full rounded-full object-cover"
           alt="profile-image"
           src={
             authContext.user?.currentProfileImage
@@ -70,7 +73,24 @@ const ChangePhotoOptionsBox: FC<{}> = () => {
       }}
     >
       <>
-        <form className="hidden">
+        <form
+          action={async (formData) => {
+            const data = await changeProfileImage(formData);
+            if (data.currentProfileImage) {
+              authContext.setUser((prev) => {
+                if (prev) {
+                  return {
+                    ...prev,
+                    currentProfileImage: data.currentProfileImage,
+                  };
+                }
+                return prev;
+              });
+            }
+          }}
+          ref={formRef}
+          className="hidden"
+        >
           <input
             ref={inputRef}
             name="profile-image"

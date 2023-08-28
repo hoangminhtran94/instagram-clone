@@ -84,7 +84,6 @@ model User {
   password            String
   currentProfileImage String         @default("")
   postImages          PostImage[]
-  profileImages       ProfileImage[]
   videos              Video[]
   posts               Post[]
   createdAt           DateTime       @default(now())
@@ -113,16 +112,6 @@ model Follow {
   follower    User   @relation(name: "following-relation", fields: [followerId], references: [id])
   followerId  String @db.ObjectId
   followingId String @db.ObjectId
-}
-
-model ProfileImage {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  alt       String
-  src       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String   @db.ObjectId
 }
 
 model PostImage {
