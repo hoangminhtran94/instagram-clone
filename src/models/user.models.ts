@@ -29,9 +29,6 @@ export interface UserProfile {
   username: string;
   fullName: string;
   currentProfileImage: string;
-  posts: ExplorePost[];
-  saved?: Saved[];
-  taggedPosts?: Tag[];
   youAreFollower: boolean;
   yourProfile: boolean;
   _count: { posts: number; followers: number; following: number };

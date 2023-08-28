@@ -1,20 +1,25 @@
-import { FC } from "react";
+import { FC, useRef } from "react";
 import SideBarItem from "./SideBarItem";
 import { useState } from "react";
 import MoreDropdown from "../../MoreDropdown/MoreDropdown";
+import useClickOutside from "@/hooks/useClickoutside";
 interface SideBarDropdownProps {
   secondaryMode: boolean;
 }
 
 const SideBarDropdown: FC<SideBarDropdownProps> = ({ secondaryMode }) => {
   const [toggle, setToggle] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useClickOutside(ref, () => {
+    setToggle(false);
+  });
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <SideBarItem
         onClick={() => {
           setToggle((prev) => !prev);
         }}
-        className={`${secondaryMode ? "w-fit" : ""} `}
+        className={`${secondaryMode ? "w-fit" : "w-full"} `}
         icon={
           <svg
             aria-label="Settings"

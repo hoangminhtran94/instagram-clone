@@ -1,16 +1,22 @@
-import { Dispatch, FC, SetStateAction } from "react";
+"use client";
+import { FC } from "react";
+import Link from "next/link";
+import {
+  useSelectedLayoutSegment,
+  useSelectedLayoutSegments,
+  useParams,
+} from "next/navigation";
+const ProfileTabs: FC = () => {
+  const segment = useSelectedLayoutSegment();
+  const segments = useSelectedLayoutSegments();
+  const params = useParams();
 
-const ProfileTabs: FC<{
-  setCurrentTab: Dispatch<SetStateAction<number>>;
-  currentTab: number;
-}> = ({ setCurrentTab, currentTab }) => {
+  console.log(segments);
   return (
     <div className=" flex gap-10 justify-center border-t">
-      <button
-        onClick={() => {
-          setCurrentTab(0);
-        }}
-        className={`post-tab  ${currentTab === 0 && "active"}`}
+      <Link
+        href={`/${params.profileId}`}
+        className={`post-tab  ${segment === null && "active"}`}
       >
         <svg
           aria-label=""
@@ -78,12 +84,10 @@ const ProfileTabs: FC<{
           ></line>
         </svg>
         POSTS
-      </button>
-      <button
-        onClick={() => {
-          setCurrentTab(1);
-        }}
-        className={`post-tab ${currentTab === 1 && "active"}`}
+      </Link>
+      <Link
+        href={`/${params.profileId}/saved`}
+        className={`post-tab ${segment === "saved" && "active"}`}
       >
         <svg
           aria-label=""
@@ -104,12 +108,10 @@ const ProfileTabs: FC<{
           ></polygon>
         </svg>
         SAVED
-      </button>
-      <button
-        onClick={() => {
-          setCurrentTab(2);
-        }}
-        className={`post-tab ${currentTab === 2 && "active"}`}
+      </Link>
+      <Link
+        href={`/${params.profileId}/tagged`}
+        className={`post-tab ${segment === "tagged" && "active"}`}
       >
         <svg
           aria-label=""
@@ -148,7 +150,7 @@ const ProfileTabs: FC<{
           ></circle>
         </svg>
         TAGGED
-      </button>
+      </Link>
     </div>
   );
 };

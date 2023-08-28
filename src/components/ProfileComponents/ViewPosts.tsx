@@ -8,7 +8,7 @@ export interface ViewPostsProps {
 }
 const ViewPosts: FC<ViewPostsProps> = ({ posts }) => {
   return (
-    <div className="w-full">
+    <div className="w-full mt-4">
       {posts.length === 0 ? (
         <ProfileNoContents
           src="/images/no-post.png"

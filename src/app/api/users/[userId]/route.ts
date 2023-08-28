@@ -21,15 +21,6 @@ export const GET = async (
           where: { followerId: currentUserId! },
           select: { id: true },
         },
-        posts: {
-          select: {
-            images: true,
-            id: true,
-            _count: { select: { likes: true, comments: true } },
-          },
-        },
-        saved: yourProfile ? true : false,
-        taggedPosts: true,
         _count: { select: { posts: true, followers: true, following: true } },
       },
       where: { id: targetUserId },
