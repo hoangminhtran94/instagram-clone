@@ -20,9 +20,7 @@ const AccountNavbar = () => {
         <AccountNavLink href="/accounts/how_others_can_interact_with_you">
           How others can interact with you
         </AccountNavLink>
-        <AccountNavLink href="/settings/help">
-          How others can interact with you
-        </AccountNavLink>
+        <AccountNavLink href="/settings/help">Help</AccountNavLink>
       </div>
     </div>
   );

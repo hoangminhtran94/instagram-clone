@@ -147,3 +147,7 @@ li {
     opacity: 0;
   }
 }
+
+.hide-scroll-bar::-webkit-scrollbar {
+  display: none;
+}

@@ -1,5 +1,5 @@
 import { FC, MouseEventHandler } from "react";
-import OptionBox, { OptionButton } from "../UI/OptionBox/OptionBox";
+import OptionBox, { OptionButton } from "../UI/OptionBox";
 import { useAuthContext } from "@/context/authContext";
 const ProfileOptionsBox: FC<{
   onCancel: MouseEventHandler;

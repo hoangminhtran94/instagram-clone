@@ -1,5 +1,5 @@
 import { UserSummary } from "@/models/user.models";
-import HoverWrapper from "../UI/UsernameWrapper/UsernameWrapper";
+import HoverWrapper from "../UI/UsernameWrapper";
 import { FC } from "react";
 
 const PostContent: FC<{ caption: string; creator: UserSummary }> = ({

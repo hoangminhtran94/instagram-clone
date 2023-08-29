@@ -1,4 +1,4 @@
-import { UserSummary } from "./../../../models/user.models";
+import { UserSummary } from "../../models/user.models";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { forwardRef } from "react";

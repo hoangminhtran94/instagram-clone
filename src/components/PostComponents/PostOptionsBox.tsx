@@ -1,6 +1,6 @@
 import { FC, MouseEventHandler } from "react";
-import { OptionButton } from "../UI/OptionBox/OptionBox";
-import OptionBox from "../UI/OptionBox/OptionBox";
+import { OptionButton } from "../UI/OptionBox";
+import OptionBox from "../UI/OptionBox";
 import { useRouter } from "next/navigation";
 const PostOptionsBox: FC<{
   postId: string;

@@ -1,4 +1,4 @@
-import OptionBox, { OptionButton } from "@/components/UI/OptionBox/OptionBox";
+import OptionBox, { OptionButton } from "@/components/UI/OptionBox";
 import { useAuthContext } from "@/context/authContext";
 import { FC, useRef, useState } from "react";
 import { useGlobalModalContext } from "@/context/globalModalContext";

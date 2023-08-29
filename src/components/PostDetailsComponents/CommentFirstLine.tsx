@@ -1,9 +1,9 @@
 import { UserSummary } from "@/models/user.models";
 import { FC } from "react";
-import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
+import UserSummaryBox from "../UI/UserSummaryBox";
 import useShowUserSummary from "@/hooks/useShowUserSummary";
 import Link from "next/link";
-import HoverWrapper from "../UI/UsernameWrapper/UsernameWrapper";
+import HoverWrapper from "../UI/UsernameWrapper";
 const CommentFirstLine: FC<{ owner: UserSummary; message?: string }> = ({
   owner,
   message,

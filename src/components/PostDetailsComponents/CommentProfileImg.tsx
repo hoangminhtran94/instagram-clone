@@ -1,5 +1,5 @@
 import { FC, useRef } from "react";
-import UserSummaryBox from "../UI/UserSummaryBox/UserSummaryBox";
+import UserSummaryBox from "../UI/UserSummaryBox";
 import Image from "next/image";
 import { UserSummary } from "@/models/user.models";
 import useShowUserSummary from "@/hooks/useShowUserSummary";

@@ -6,7 +6,7 @@ import { timeAgoOrDayAgo } from "@/lib/timeCalculation";
 import { UserSummary } from "@/models/user.models";
 import { useGlobalModalContext } from "@/context/globalModalContext";
 import PostOptionsBox from "./PostOptionsBox";
-import HoverWrapper from "../UI/UsernameWrapper/UsernameWrapper";
+import HoverWrapper from "../UI/UsernameWrapper";
 
 const PostHeader: FC<{
   creator: UserSummary;

@@ -1,6 +1,6 @@
 import useShowUserSummary from "@/hooks/useShowUserSummary";
 import { ComponentPropsWithoutRef, FC } from "react";
-import UserSummaryBox from "../UserSummaryBox/UserSummaryBox";
+import UserSummaryBox from "./UserSummaryBox";
 import { UserSummary } from "@/models/user.models";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
