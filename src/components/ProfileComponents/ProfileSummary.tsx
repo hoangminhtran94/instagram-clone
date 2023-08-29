@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import ProfileImage from "./ProfileImage";
 import ProfileInfo from "./ProfileInfo";
 import Spinner from "../UI/Spinner/Spinner";
+import ProfileLoading from "../UI/LoadingComponents/ProfileLoading";
 
 const ProfileSummary = () => {
   const { profileId } = useParams();
@@ -20,11 +21,7 @@ const ProfileSummary = () => {
     },
   });
   if (isLoading) {
-    return (
-      <div className="h-[500px]">
-        <Spinner />
-      </div>
-    );
+    return <ProfileLoading />;
   }
   if (!userData) {
     return <div>Something went wrong</div>;

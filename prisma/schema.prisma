@@ -30,6 +30,18 @@ model Post {
   saved          Saved[]     @ignore
   locationId     String?     @db.ObjectId
   views          View[]
+  hashTagIds     String[]    @db.ObjectId
+  hashTags       HashTag[]   @relation(fields: [hashTagIds], references: [id])
+}
+
+model HashTag {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  message    String
+  restricted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  postIds    String[] @db.ObjectId
+  posts      Post[]   @relation(fields: [postIds], references: [id])
 }
 
 model Location {

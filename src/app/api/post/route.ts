@@ -13,6 +13,7 @@ import {
 import path from "path";
 import { PostRecord } from "@/repository/firebase";
 import { getUserFromToken } from "@/actions/action";
+import { extractHashtags } from "@/lib/utilsFunctions";
 interface ImagesData {
   alt: string;
   filename: string;
@@ -72,6 +73,9 @@ export async function POST(req: NextRequest) {
   const data = Object.fromEntries(formdata) as unknown as Post &
     Location &
     PostImage;
+
+  const caption = data.caption;
+  const hashtags = extractHashtags(caption);
 
   try {
     const newPost = await prisma.$transaction(async (ctx) => {
