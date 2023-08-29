@@ -8,10 +8,8 @@ import {
 } from "next/navigation";
 const ProfileTabs: FC = () => {
   const segment = useSelectedLayoutSegment();
-  const segments = useSelectedLayoutSegments();
   const params = useParams();
 
-  console.log(segments);
   return (
     <div className=" flex gap-10 justify-center border-t">
       <Link

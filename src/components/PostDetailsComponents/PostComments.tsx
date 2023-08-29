@@ -37,7 +37,7 @@ const PostComments: FC<PostCommentsProps> = ({ postId }) => {
     );
   }
   return (
-    <div className=" flex-1 flex flex-col gap-6 w-full max-h-full">
+    <div className=" flex-1 flex flex-col gap-6 w-full ">
       {comments.map((comment) => (
         <PostComment key={comment.id} comment={comment} />
       ))}

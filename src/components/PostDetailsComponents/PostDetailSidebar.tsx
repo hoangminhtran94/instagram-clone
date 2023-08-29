@@ -12,7 +12,7 @@ const PostDetailSideBar: FC<{ post: PostDetail }> = ({ post }) => {
   return (
     <div className="flex flex-col max-w-[500px] min-w-[500px]">
       <PostHeader post={post} />
-      <div className="border-b p-4 flex flex-1 flex-col items-start gap-4">
+      <div className="border-b p-4 flex flex-1 flex-col items-start gap-4 overflow-scroll hide-scroll-bar ">
         <PostCaption post={post} />
         <PostComments postId={post.id} />
       </div>

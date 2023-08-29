@@ -21,7 +21,7 @@ const CommentProfileImg: FC<{ user: UserSummary }> = ({ user }) => {
         }
         width={48}
         height={48}
-        className=" w-full h-full rounded-full cursor-pointer"
+        className=" w-full h-full rounded-full cursor-pointer object-cover"
         alt={`${user.username}-profile`}
       />
       <UserSummaryBox hovering={hovering} user={user} />

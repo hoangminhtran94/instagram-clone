@@ -1,27 +1,40 @@
 import { UserSummary } from "../../models/user.models";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { forwardRef } from "react";
+import { RefObject, forwardRef, useEffect } from "react";
 import { useAuthContext } from "@/context/authContext";
+import { useState } from "react";
 
 interface UserSummaryBoxProps {
   className?: string;
   hovering: boolean;
   user: UserSummary;
+  parentRef: RefObject<HTMLDivElement>;
 }
 
 const UserSummaryBox = forwardRef<HTMLDivElement, UserSummaryBoxProps>(
-  ({ className, hovering, user }, ref) => {
+  ({ className, hovering, user, parentRef }, ref) => {
     const { user: loginUser } = useAuthContext();
+    const [top, setTop] = useState(0);
+    const [left, setLeft] = useState(0);
+
+    const rect = parentRef?.current?.getBoundingClientRect();
+    useEffect(() => {
+      if (rect) {
+        setLeft(rect.left);
+        setTop(rect.top);
+      }
+    }, [rect]);
     return (
       <AnimatePresence>
         {hovering && (
           <motion.div
+            style={{ transform: `translate(${left}px,${top + 20}px)` }}
             ref={ref}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute top-[calc(100%+10px)] py-4 drop-shadow-2xl flex flex-col gap-4 rounded-md bg-white  w-[360px] min-h-[300px] z-50"
+            className="fixed top-0 left-0 py-4 drop-shadow-2xl flex flex-col gap-4 rounded-md bg-white  w-[360px] min-h-[300px] z-50"
           >
             <div className="flex px-4 items-center gap-4">
               <div className=" w-[60px] h-[60px]">
@@ -34,7 +47,7 @@ const UserSummaryBox = forwardRef<HTMLDivElement, UserSummaryBoxProps>(
                   alt="profile-picture"
                   width={120}
                   height={120}
-                  className="w-full h-full rounded-full"
+                  className="w-full h-full rounded-full object-cover"
                 />
               </div>
               <div>
