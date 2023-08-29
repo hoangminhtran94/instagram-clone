@@ -93,6 +93,7 @@ const VideoPlayer: FC<{ children?: ReactNode }> = ({ children }) => {
               </motion.span>
             )}
           </AnimatePresence>
+          {children}
         </div>
         <video
           ref={videoRef}
@@ -101,7 +102,7 @@ const VideoPlayer: FC<{ children?: ReactNode }> = ({ children }) => {
         >
           <source src="/upload/videos/1.mp4" type="video/mp4"></source>
         </video>
-        {children}
+
         <div ref={bottomRef} className="h-5 absolute top-1/2 w-full -z-10 " />
       </div>
     </div>
