@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { Backdrop } from "../UI/Modal/Modal";
 import { useRouter } from "next/navigation";
-import PostDetail from "@/app/(withsidebar)/(withfooter)/(otherPages)/p/[postId]/page";
+import PostDetail from "@/app/(withsidebar)/(withfooter)/p/[postId]/page";
 import PostDetailSideBar from "./PostDetailSidebar";
 import PostDetailsImages from "./PostDetailsImages";
 import PostCommentContextProvider from "@/context/PostDetailCommentContext";
