@@ -1,9 +1,10 @@
 import Image from "next/image";
 import VideoPlayer from "../UI/VideoPlayer/VideoPlayer";
-const ReelVideoPlayer = () => {
+import { FC } from "react";
+const ReelVideoPlayer: FC<{ src: string }> = ({ src }) => {
   return (
     <div className="flex">
-      <VideoPlayer>
+      <VideoPlayer src={src}>
         <div className="absolute bottom-0 items-start w-full py-4 px-6  flex flex-col gap-2 text-xs text-white select-none ">
           <div className="flex gap-3 font-semibold  items-center">
             <div className=" w-8 h-8 ">
@@ -69,8 +70,8 @@ const ReelVideoPlayer = () => {
               d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"
               fill="none"
               stroke="currentColor"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinejoin="round"
+              strokeWidth="2"
             ></path>
           </svg>
           1,506
@@ -89,8 +90,8 @@ const ReelVideoPlayer = () => {
             <line
               fill="none"
               stroke="currentColor"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinejoin="round"
+              strokeWidth="2"
               x1="22"
               x2="9.218"
               y1="3"
@@ -100,8 +101,8 @@ const ReelVideoPlayer = () => {
               fill="none"
               points="11.698 20.334 22 3.001 2 3.001 9.218 10.084 11.698 20.334"
               stroke="currentColor"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinejoin="round"
+              strokeWidth="2"
             ></polygon>
           </svg>
         </div>
@@ -120,9 +121,9 @@ const ReelVideoPlayer = () => {
               fill="none"
               points="20 21 12 13.44 4 21 4 3 20 3 20 21"
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
             ></polygon>
           </svg>
         </div>
