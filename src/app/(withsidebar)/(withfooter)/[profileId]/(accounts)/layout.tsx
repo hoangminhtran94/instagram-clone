@@ -4,7 +4,7 @@ const AccountLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <div className="flex flex-1">
       <AccountNavbar />
-      <main className=" mt-14 px-10"> {children}</main>
+      <main className=" mt-14 px-10 flex-1"> {children}</main>
     </div>
   );
 };
