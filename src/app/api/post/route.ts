@@ -76,6 +76,16 @@ export async function POST(req: NextRequest) {
 
   const caption = data.caption;
   const hashtags = extractHashtags(caption);
+  let createOrConnectHashTags: {
+    where: { message: string };
+    create: { message: string };
+  }[];
+  if (hashtags.length > 0) {
+    createOrConnectHashTags = hashtags.map((tag) => ({
+      where: { message: tag },
+      create: { message: tag },
+    }));
+  }
 
   try {
     const newPost = await prisma.$transaction(async (ctx) => {
@@ -95,6 +105,7 @@ export async function POST(req: NextRequest) {
                   },
                 }
               : undefined,
+          hashTags: { connectOrCreate: createOrConnectHashTags },
         },
         include: {
           owner: {

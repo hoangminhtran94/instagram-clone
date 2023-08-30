@@ -1,4 +1,4 @@
-import { getExploreImages } from "@/actions/action";
+import { getExploreImages, getHashTags } from "@/actions/action";
 import ExploreImages from "@/components/ExploreComponents/ExploreImages";
 import ExploreTags from "@/components/ExploreComponents/ExploreTag";
 import Spinner from "@/components/UI/Spinner/Spinner";
@@ -6,9 +6,10 @@ import { Suspense } from "react";
 
 const ExplorePage = async () => {
   const exploreImages = await getExploreImages();
+  const hashTags = await getHashTags();
   return (
     <div className="w-[975px] mx-auto px-4 py-5">
-      <ExploreTags />
+      <ExploreTags tags={hashTags} />
       <Suspense
         fallback={
           <div className="h-[500px]">

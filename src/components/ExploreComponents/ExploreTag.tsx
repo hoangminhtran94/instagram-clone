@@ -1,11 +1,12 @@
+import { FC } from "react";
 import ExploreTag from "./ExploreTags";
-
-const ExploreTags = () => {
+import { HashTag } from "@prisma/client";
+const ExploreTags: FC<{ tags: HashTag[] }> = ({ tags }) => {
   return (
     <div className="flex gap-3 flex-wrap text-sm font-semibold">
-      <ExploreTag />
-      <ExploreTag />
-      <ExploreTag />
+      {tags.map((tag) => (
+        <ExploreTag key={tag.id} tag={tag} />
+      ))}
     </div>
   );
 };

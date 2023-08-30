@@ -200,6 +200,11 @@ export const getSuggestion = async () => {
   });
   return sampleSize(users, 3);
 };
+
+export const getHashTags = async () => {
+  const hashtags = await prisma.hashTag.findMany();
+  return hashtags;
+};
 export const getExploreImages = async () => {
   const userId = getUserFromToken();
 
