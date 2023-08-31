@@ -79,11 +79,7 @@ const getPostDetail = async (id: string): Promise<PostDetail | null> => {
 
 const PostModal: FC<Props> = async ({ params }) => {
   const post = await getPostDetail(params.postId);
-  return (
-    <div>
-      <PostDetailModal post={post} />
-    </div>
-  );
+  return <PostDetailModal post={post} />;
 };
 
 export default PostModal;

@@ -1,14 +1,17 @@
 "use client";
 import { FC } from "react";
 import { Backdrop } from "../UI/Modal/Modal";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import PostDetail from "@/app/(withsidebar)/(withfooter)/p/[postId]/page";
 import PostDetailSideBar from "./PostDetailSidebar";
 import PostDetailsImages from "./PostDetailsImages";
 import PostCommentContextProvider from "@/context/PostDetailCommentContext";
-
 const PostDetailModal: FC<{ post: PostDetail | null }> = ({ post }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  if (!pathname.includes("/p/")) {
+    return null;
+  }
   return (
     <Backdrop
       onCancel={() => {

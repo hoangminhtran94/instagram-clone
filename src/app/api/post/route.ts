@@ -1,18 +1,10 @@
-import { modifiedPrisma, prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
-import { Post, Location, User, PostImage } from "@prisma/client";
+import { Post, Location, PostImage } from "@prisma/client";
 import jwt from "jsonwebtoken";
-import { revalidateTag } from "next/cache";
-import { fireStore } from "@/firebase.config";
-import {
-  createPostRecordHandler,
-  onGetPostRecord,
-} from "@/actions/firebase.service";
-
+import { createPostRecordHandler } from "@/actions/firebase.service";
 import path from "path";
-import { PostRecord } from "@/repository/firebase";
-import { getUserFromToken } from "@/actions/action";
 import { extractHashtags } from "@/lib/utils-functions-server";
 interface ImagesData {
   alt: string;
@@ -153,13 +145,20 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (
+  req: NextRequest,
+  context: { searchParams: { page: number } }
+) => {
+  const page = new URL(req.url).searchParams.get("page") ?? 1;
+
   let postsIds = [];
   try {
     postsIds = await prisma.post.findMany({
       orderBy: {
         createdAt: "desc",
       },
+      take: +page * 5,
+      skip: (+page - 1) * 5,
       select: { id: true },
     });
 
