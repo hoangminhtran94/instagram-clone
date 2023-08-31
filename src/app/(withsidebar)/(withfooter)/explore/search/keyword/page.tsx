@@ -1,15 +1,21 @@
-import { getExploreImages, getHashTags } from "@/actions/action";
+import {
+  getExploreImages,
+  getExploreImagesByHashTag,
+  getHashTags,
+} from "@/actions/action";
 import ExploreImages from "@/components/ExploreComponents/ExploreImages";
 import ExploreTags from "@/components/ExploreComponents/ExploreTag";
 import Spinner from "@/components/UI/Spinner/Spinner";
-import { Suspense } from "react";
+import { FC, Suspense } from "react";
 
-const ExplorePage = async () => {
-  const exploreImages = await getExploreImages();
-  const hashTags = await getHashTags();
+const SearchByHashTag: FC<{ searchParams: any }> = async ({ searchParams }) => {
+  const exploreImages = searchParams
+    ? await getExploreImagesByHashTag(searchParams.q)
+    : [];
+
   return (
     <div className="w-[975px] mx-auto px-4 py-5">
-      <ExploreTags tags={hashTags} />
+      <div className="text-lg">{searchParams?.q}</div>
       <Suspense
         fallback={
           <div className="h-[500px]">
@@ -31,4 +37,8 @@ const ExplorePage = async () => {
   );
 };
 
-export default ExplorePage;
+export default SearchByHashTag;
+
+//Tag - HashTag
+//Search by content
+//Infinite scroll

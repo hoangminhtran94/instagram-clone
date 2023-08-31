@@ -14,7 +14,7 @@ const ExploreImages: FC<ExploreImagesProps> = ({ odd = true, posts }) => {
         const condition = index === 0 ? odd : !odd;
         return (
           <Link
-            href={`p/${post.id}`}
+            href={`/p/${post.id}`}
             key={post.id}
             className={condition ? "row-span-1" : "row-span-2"}
           >
@@ -30,7 +30,7 @@ const ExploreImages: FC<ExploreImagesProps> = ({ odd = true, posts }) => {
         );
       }
       return (
-        <Link href={`p/${post.id}`} key={post.id} className="row-span-1">
+        <Link href={`/p/${post.id}`} key={post.id} className="row-span-1">
           <ExploreImage
             className="object-cover"
             fill

@@ -13,7 +13,7 @@ import {
 import path from "path";
 import { PostRecord } from "@/repository/firebase";
 import { getUserFromToken } from "@/actions/action";
-import { extractHashtags } from "@/lib/utilsFunctions";
+import { extractHashtags } from "@/lib/utils-functions-server";
 interface ImagesData {
   alt: string;
   filename: string;

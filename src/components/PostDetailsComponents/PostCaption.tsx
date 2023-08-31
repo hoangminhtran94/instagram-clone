@@ -3,6 +3,7 @@ import { FC } from "react";
 import CommentProfileImg from "./CommentProfileImg";
 import CommentFirstLine from "./CommentFirstLine";
 import CommentSecondLine from "./CommentSecondLine";
+
 const PostCaption: FC<{ post: PostDetail }> = ({ post }) => {
   return (
     <div className="flex gap-4">

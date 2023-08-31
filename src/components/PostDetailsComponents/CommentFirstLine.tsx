@@ -1,15 +1,15 @@
 import { UserSummary } from "@/models/user.models";
 import { FC } from "react";
-import UserSummaryBox from "../UI/UserSummaryBox";
-import useShowUserSummary from "@/hooks/useShowUserSummary";
 import Link from "next/link";
 import HoverWrapper from "../UI/UsernameWrapper";
-const CommentFirstLine: FC<{ owner: UserSummary; message?: string }> = ({
+import { includeHashTags } from "@/lib/utils-functions-client";
+const CommentFirstLine: FC<{ owner: UserSummary; message: string }> = ({
   owner,
-  message,
+  message = "",
 }) => {
+  const mappedCaption = includeHashTags(message);
   return (
-    <div className="flex gap-2 items-center flex-1">
+    <div className="flex gap-2 items-center flex-1 text-xs">
       <HoverWrapper user={owner}>
         <Link
           href={`/${owner?.id}`}
@@ -18,7 +18,7 @@ const CommentFirstLine: FC<{ owner: UserSummary; message?: string }> = ({
           {owner?.username}
         </Link>
       </HoverWrapper>
-      {message && <p className="text-xs"> {message}</p>}
+      {message && <div className="text-xs">{mappedCaption}</div>}
     </div>
   );
 };

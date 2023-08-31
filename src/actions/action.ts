@@ -222,6 +222,26 @@ export const getExploreImages = async () => {
   });
   return splitArray<ExplorePost>(posts, 5);
 };
+export const getExploreImagesByHashTag = async (hashtag: string) => {
+  const userId = getUserFromToken();
+
+  if (!userId) {
+    return [];
+  }
+  const posts = await prisma.post.findMany({
+    take: 20,
+    where: {
+      ownerId: { not: userId },
+      hashTags: { some: { message: hashtag } },
+    },
+    select: {
+      id: true,
+      images: { take: 1 },
+      _count: { select: { images: true, likes: true, comments: true } },
+    },
+  });
+  return splitArray<ExplorePost>(posts, 5);
+};
 
 export const followAction = async (followingId: string) => {
   const userId = getUserFromToken();

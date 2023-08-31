@@ -67,6 +67,7 @@ export const GET = async (
       post.id,
       userId
     );
+
     return NextResponse.json(
       {
         ...post,
